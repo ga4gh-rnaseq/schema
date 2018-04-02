@@ -1,0 +1,422 @@
+swagger: "2.0"
+info:
+  description: "RNA API for GA4GH consideration."
+  version: "1.0.0"
+  title: "GA4GH RNASeq API"
+host: "ga4gh.org"
+basePath: "/rna"
+tags:
+- name: "project"
+  description: "High level collection of studies"
+  externalDocs:
+    description: "Find out more"
+    url: "http://ga4gh.org"
+- name: "study"
+  description: "Collection of associated uniformly processed RNA samples"
+  externalDocs:
+    description: "Find out more"
+    url: "http://ga4gh.org"
+- name: "expression"
+  description: "Expression data"
+  externalDocs:
+    description: "Find out more"
+    url: "http://ga4gh.org"
+- name: "getVersions"
+  description: "Returns database release versions"
+  externalDocs:
+    description: "Find out more"
+    url: "http://ga4gh.org"
+- name: "changelog"
+  description: "Returns change log for a release version"
+  externalDocs:
+    description: "Find out more"
+    url: "http://ga4gh.org"
+- name: "file"
+  description: "Returns files"
+  externalDocs:
+    description: "Find out more"
+    url: "http://ga4gh.org"
+schemes:
+- "http"
+paths:
+  /project/search:
+    get:
+      tags:
+      - "project"
+      summary: "Finds Projects by tags"
+      description: "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."
+      operationId: "findProjectsByTags"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Project"
+        400:
+          description: "Invalid tag value"
+      security:
+      - rna_auth:
+        - "read:expression"
+  /project/{projectId}:
+    get:
+      tags:
+      - "project"
+      summary: "Find project by ID"
+      description: "Returns a single project"
+      operationId: "getProjectById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of project to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Project"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Project not found"
+      security:
+      - api_key: []
+  /study/search:
+    get:
+      tags:
+      - "study"
+      summary: "Finds Studies by tags"
+      description: "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."
+      operationId: "findStudiesByTags"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Study"
+        400:
+          description: "Invalid tag value"
+      security:
+      - rna_auth:
+        - "read:expression"
+  /study/{studyId}:
+    get:
+      tags:
+      - "study"
+      summary: "Find study by ID"
+      description: "Returns a single study"
+      operationId: "getStudyById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "studyId"
+        in: "path"
+        description: "ID of study to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Study"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Study not found"
+      security:
+      - api_key: []
+  /expression/{expressionId}:
+    get:
+      tags:
+      - "expression"
+      summary: "Find expression data by ID"
+      description: "Returns a single expression matrix"
+      operationId: "getExpressionById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "expressionId"
+        in: "path"
+        description: "ID of expression to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Expression"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Expression not found"
+      security:
+      - api_key: []
+  /expression/search:
+    get:
+      tags:
+      - "expression"
+      summary: "Finds Expression data by tags"
+      description: "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."
+      operationId: "findExpressionByTags"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Expression"
+        400:
+          description: "Invalid tag value"
+      security:
+      - rna_auth:
+        - "read:expression"
+  /getVersions:
+    get:
+      tags:
+      - "getVersions"
+      summary: "Get release versions of database"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            additionalProperties:
+              type: "string"
+        400:
+          description: "Invalid tag value"
+      security:
+      - rna_auth:
+        - "read:expression"
+  /changelog/{version}:
+    get:
+      tags:
+      - "changelog"
+      summary: "Get change log for a specific release version"
+      description: "Returns changes associated with version"
+      operationId: "getChangeLog"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "version"
+        in: "path"
+        description: "release version"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ChangeLog"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Change log not found"
+      security:
+      - api_key: []
+  /file/{fileID}:
+    get:
+      tags:
+      - "file"
+      summary: "Get specific file"
+      description: "Returns download URL for file"
+      operationId: "getFile"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "fileID"
+        in: "path"
+        description: "file ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/File"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "File not found"
+      security:
+      - api_key: []
+  /file/search:
+    get:
+      tags:
+      - "file"
+      summary: "Finds files by tags"
+      description: "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."
+      operationId: "findFileByTags"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Tags to filter by"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/File"
+        400:
+          description: "Invalid tag value"
+      security:
+      - rna_auth:
+        - "read:expression"
+securityDefinitions:
+  rna_auth:
+    type: "oauth2"
+    authorizationUrl: "http://ga4gh.org/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      read:expression: "read expression"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  Project:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      version:
+        type: "string"
+    xml:
+      name: "Project"
+  Study:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      version:
+        type: "string"
+      organism:
+        type: "string"
+    xml:
+      name: "Study"
+  Expression:
+    type: "object"
+    description: "Matrix of expression values."
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      organism:
+        type: "string"
+      version:
+        type: "string"
+      sampleID:
+        type: "string"
+      expressionMatrix:
+        type: "array"
+        items:
+          type: "array"
+          items:
+            type: "number"
+            format: "float"
+      rowLabels:
+        type: "array"
+        items:
+          type: "string"
+      columnLabels:
+        type: "array"
+        items:
+          type: "string"
+    xml:
+      name: "Expression"
+  ChangeLog:
+    type: "object"
+    properties:
+      version:
+        type: "string"
+    xml:
+      name: "ChangeLog"
+  File:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      version:
+        type: "string"
+      fileFormat:
+        type: "string"
+      studyID:
+        type: "integer"
+        format: "int64"
+      URL:
+        type: "string"
+    xml:
+      name: "File"
+externalDocs:
+  description: "Find out more about GA4GH"
+  url: "http://ga4gh.org"
