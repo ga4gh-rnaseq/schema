@@ -17,7 +17,7 @@ tags:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
 - name: "expressions"
-  description: "Expression data"
+  description: "Feature level expression data"
   externalDocs:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
@@ -80,7 +80,7 @@ paths:
       tags:
       - "projects"
       summary: "Find project by ID"
-      description: "Returns a single project"
+      description: "Returns a single specified project"
       operationId: "getProjectById"
       produces:
       - "application/xml"
@@ -143,7 +143,7 @@ paths:
       tags:
       - "studies"
       summary: "Find study by ID"
-      description: "Returns a single study"
+      description: "Returns a single specified study"
       operationId: "getStudyById"
       produces:
       - "application/xml"
@@ -170,7 +170,7 @@ paths:
       tags:
       - "expressions"
       summary: "Find expression data by ID"
-      description: "Returns a single expression matrix"
+      description: "Returns a single specified expression matrix"
       operationId: "getExpressionById"
       produces:
       - "application/xml"
@@ -216,6 +216,16 @@ paths:
         description: "organism to match"
         required: false
         type: "string"
+      - name: "reference"
+        in: "query"
+        description: "genomic reference to filter by"
+        required: false
+        type: "string"
+      - name: "annotation"
+        in: "query"
+        description: "annotation to filter by"
+        required: false
+        type: "string"
       - name: "tissue"
         in: "query"
         description: "tissue type to match"
@@ -226,9 +236,38 @@ paths:
         description: "sampleID to match"
         required: false
         type: "string"
+      - name: "projectID"
+        in: "query"
+        description: "project to filter by"
+        required: false
+        type: "string"
+      - name: "studyID"
+        in: "query"
+        description: "study to filter by"
+        required: false
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "version to filter by"
+        required: false
+        type: "string"
+      - name: "geneNameList"
+        in: "query"
+        description: "return only values for listed genes"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+      - name: "geneAccessionList"
+        in: "query"
+        description: "return only values for listed accession numbers"
+        required: false
+        type: "array"
+        items:
+          type: "string"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "array"
             items:
@@ -248,7 +287,7 @@ paths:
       - "application/json"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "object"
             additionalProperties:
@@ -263,7 +302,7 @@ paths:
       tags:
       - "changelog"
       summary: "Get change log for a specific release version"
-      description: "Returns changes associated with version"
+      description: "Returns changes associated with specified database release version"
       operationId: "getChangeLog"
       produces:
       - "application/xml"
@@ -276,7 +315,7 @@ paths:
         type: "string"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             $ref: "#/definitions/changeLog"
         400:
@@ -303,7 +342,7 @@ paths:
         type: "string"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             $ref: "#/definitions/file"
         400:
@@ -317,7 +356,7 @@ paths:
       tags:
       - "files"
       summary: "Search for files matching filters"
-      description: "Search for files matching filters"
+      description: "Search for files matching filters.  Returns download URL or manifest of download URLs for matching file(s)"
       operationId: "searchFiles"
       produces:
       - "application/xml"
@@ -331,9 +370,24 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
+      - name: "projectID"
+        in: "query"
+        description: "ProjectID to filter by"
+        required: false
+        type: "string"
+      - name: "studyID"
+        in: "query"
+        description: "StudyID to filter by"
+        required: false
+        type: "string"
+      - name: "fileType"
+        in: "query"
+        description: "File type to filter by"
+        required: false
+        type: "string"
       responses:
         200:
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "array"
             items:
@@ -370,6 +424,10 @@ definitions:
         type: "string"
       description:
         type: "string"
+      studyList:
+        type: "array"
+        items:
+          type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
@@ -390,6 +448,18 @@ definitions:
         type: "string"
       description:
         type: "string"
+      expressionList:
+        type: "array"
+        items:
+          type: "string"
+      patientList:
+        type: "array"
+        items:
+          type: "string"
+      sampleList:
+        type: "array"
+        items:
+          type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
@@ -410,6 +480,8 @@ definitions:
       organism:
         type: "string"
       tissue:
+        type: "string"
+      units:
         type: "string"
       sampleID:
         type: "string"
@@ -433,8 +505,65 @@ definitions:
       url: "https://github.com/ga4gh-rnaseq/schema"
     xml:
       name: "expression"
+  sequenceAnnotation:
+    type: "object"
+    description: "top level genomic annotation object corresponding to a single GFF file"
+    properties:
+      id:
+        type: "string"
+      version:
+        type: "string"
+      tags:
+        type: "array"
+        items:
+          type: "string"
+      referenceGenomeID:
+        type: "string"
+      name:
+        type: "string"
+      featureList:
+        type: "array"
+        items:
+          type: "string"
+    externalDocs:
+      description: "Find out more"
+      url: "https://github.com/ga4gh-rnaseq/schema"
+    xml:
+      name: "sequenceAnnotation"
+  feature:
+    type: "object"
+    description: "equivalent to a line of a GFF file"
+    properties:
+      id:
+        type: "string"
+      version:
+        type: "string"
+      tags:
+        type: "array"
+        items:
+          type: "string"
+      accession:
+        type: "string"
+      name:
+        type: "string"
+      seqName:
+        type: "string"
+      start:
+        type: "integer"
+      end:
+        type: "integer"
+      strand:
+        type: "string"
+      featureType:
+        type: "string"
+    externalDocs:
+      description: "Find out more"
+      url: "https://github.com/ga4gh-rnaseq/schema"
+    xml:
+      name: "feature"
   changeLog:
     type: "object"
+    description: "list of changes to the database associated with a version update"
     properties:
       version:
         type: "string"
@@ -445,6 +574,7 @@ definitions:
       name: "changeLog"
   file:
     type: "object"
+    description: "URL and type for raw data and analysis pipeline files"
     properties:
       id:
         type: "string"
@@ -454,7 +584,7 @@ definitions:
         type: "array"
         items:
           type: "string"
-      fileFormat:
+      fileType:
         type: "string"
       studyID:
         type: "string"
