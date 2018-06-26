@@ -424,10 +424,6 @@ definitions:
         type: "string"
       description:
         type: "string"
-      studyList:
-        type: "array"
-        items:
-          type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
@@ -448,10 +444,8 @@ definitions:
         type: "string"
       description:
         type: "string"
-      expressionList:
-        type: "array"
-        items:
-          type: "string"
+      parentProjectID:
+        type: "string"
       patientList:
         type: "array"
         items:
@@ -472,6 +466,8 @@ definitions:
       id:
         type: "string"
       version:
+        type: "string"
+      parentStudyID:
         type: "string"
       tags:
         type: "array"
