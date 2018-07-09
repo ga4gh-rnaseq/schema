@@ -1,25 +1,22 @@
 ---
 layout: default
-title: rnaseq expression protocol
+title: sequence annotation protocol
 suppress_footer: true
 ---
 
-# RNA-seq expression API spec v0.1.0
+# Sequence Annotation API spec v0.1.0
 
 # Design principles
 
-This API provides a means of retrieving RNA-seq expression data via a client/server model.
+This API provides a means of retrieving genomic sequence annotation data via a client/server model.
 
 Features of this API include:
 
-* A matrix representation for expression data to allow for efficient retrieval of large numbers of results
-* Support for a hierarchical data model which provides the option for servers to associate expression data for discovery and retrieval
-* Support for accessing subsets of expression data through slicing operations on the expression matrix and/or query filters to specify features to be included
+* A method to return annotated genomic features in a format compatible with the standard GFF/GTF format
 * A method to return per-base values over an interval which could be a subset of the genome or the entire genome similar to a wiggle representation used for visualization
 
 Out of the scope if this API are:
 
-* A means of retrieving primary read sequence data.  Expression matrices provide a means to link to their input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.
 * A means of retrieving reference sequences.  Expression matrices provide a means to link to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.
 
 # Protocol essentials
@@ -32,11 +29,11 @@ The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when a
 
 # Request
 
-## Project Methods
+## Sequence Annotation Methods
 
-The recommended endpoint to return project data is:
+The recommended endpoint to return sequence annotation data is:
 
-    GET /projects/<id>
+    GET /annotations/<id>
 
 ## URL parameters
 
@@ -50,15 +47,15 @@ A string identifying which records to return.  If left blank all available proje
 
 The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
 
-* some-projectId or /byContributor/some-projectId
+* some-annotationId or /byGenome/some-annotationId
 </td></tr>
 </table>
 
-## Project Search Methods
+## Sequence Annotation Search Methods
 
 The recommended search endpoint is:
 
-    GET /projects/search
+    GET /annotations/search
 
 ## Search Query Filters
 
@@ -77,13 +74,20 @@ _string_
 </td><td>
 Version to return
 </td></tr>
+<tr markdown="block"><td>
+`reference`
+</td><td>
+_string_
+</td><td>
+return annotations for specified referenceID
+</td></tr>
 </table>
 
-## Study Methods
+## Feature Methods
 
-The recommended endpoint to return study data is:
+The recommended endpoint to return specific feature data is:
 
-    GET /studies/<id>
+    GET /features/<id>
 
 ## URL parameters
 
@@ -97,15 +101,15 @@ A string identifying which records to return.  If left blank all available studi
 
 The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
 
-* some-studyId or /byProject/some-studyId
+* some-featureId or /byAnnotation/some-featureId
 </td></tr>
 </table>
 
-## Study Search Methods
+## Feature Search Methods
 
 The recommended search endpoint is:
 
-    GET /studies/search
+    GET /features/search
 
 ## Search Query Filters
 
@@ -124,13 +128,41 @@ _string_
 </td><td>
 Version to return
 </td></tr>
+<tr markdown="block"><td>
+`gene`
+</td><td>
+_string_  
+</td><td>
+gene name of feature to filter by
+</td></tr>
+<tr markdown="block"><td>
+`accession`
+</td><td>
+_string_  
+</td><td>
+accession number of feature to filter by
+</td></tr>
+<tr markdown="block"><td>
+`type`
+</td><td>
+_string_  
+</td><td>
+feature type to filter by
+</td></tr>
+<tr markdown="block"><td>
+`reference`
+</td><td>
+_string_  
+</td><td>
+referenceID to filter by
+</td></tr>
 </table>
 
-## RNA Expression Methods
+## Continuous Value Methods
 
-The recommended endpoint to return expression data is:
+The recommended endpoint to return continuous data is:
 
-    GET /expressions/<id>
+    GET /continuous/<id>
 
 ## URL parameters
 
@@ -145,15 +177,15 @@ A string identifying which record to return.
 
 The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
 
-* some-expressionId or /bySample/some-expressionId
+* some-continuousId or /bySample/some-continuousId
 </td></tr>
 </table>
 
-## Expression Search Methods
+## Continuous Value Search Methods
 
 The recommended search endpoint is:
 
-    GET /expressions/search
+    GET /continuous/search
 
 ## Search Query Filters
 
@@ -173,67 +205,27 @@ _string_
 Version to return
 </td></tr>
 <tr markdown="block"><td>
-`organism`
-</td><td>
-_string_  
-</td><td>
-organism to match
-</td></tr>
-<tr markdown="block"><td>
 `reference`
 </td><td>
 _string_  
 </td><td>
-genomic reference to filter by
+return continuous for specified referenceID
 </td></tr>
 <tr markdown="block"><td>
-`annotation`
+`start`
 </td><td>
-_string_  
+_integer_  
 </td><td>
-annotation to filter by
+starting coordinate of open interval to filter by
+
+Default: `0`
 </td></tr>
 <tr markdown="block"><td>
-`tissue`
+`end`
 </td><td>
-_string_  
+_integer_  
 </td><td>
-tissue type to match
-</td></tr>
-<tr markdown="block"><td>
-`sampleID`
-</td><td>
-_string_  
-</td><td>
-sampleID to match
-</td></tr>
-<tr markdown="block"><td>
-`projectID`
-</td><td>
-_string_  
-</td><td>
-project to filter by
-</td></tr>
-<tr markdown="block"><td>
-`studyID`
-</td><td>
-_string_  
-</td><td>
-study to filter by
-</td></tr>
-<tr markdown="block"><td>
-`geneNameList`
-</td><td>
-_string_  
-</td><td>
-return only values for listed genes
-</td></tr>
-<tr markdown="block"><td>
-`geneAccessionList`
-</td><td>
-_string_  
-</td><td>
-return only values for listed accession numbers
+ending coordinate of open interval to filter by
 </td></tr>
 </table>
 
@@ -326,13 +318,10 @@ The format of this identifier is left to the discretion of the API provider, inc
 
 ## Responses
 
-## Project
-The project is the top level of the model hierarchy and contains a set of related studies.  Example projects include:
+## Sequence Annotation
+The sequence annotation is a top level genomic annotation object corresponding to a single GFF file.
 
-* all data submitted by contributor X
-* the local mirror of the European Nucleotide Archive data
-
-The response to a project query is an array in which each element has the following fields:
+The sequence annotation has the following fields:
 
 <table>
 <tr markdown="block"><td>
@@ -365,21 +354,124 @@ _string_
 Short, readable name
 </td></tr>
 <tr markdown="block"><td>
-`description`
+`referenceGenomeID`
+_required_
 </td><td>
 _string_
 </td><td>
-Detailed description of the object
+ID of the annotation reference
 </td></tr>
-</table>
+<table>
 
-## Study
-The study is a set of related RNA expression values.  The samples in a study have been processed uniformly.  Example studies include:
+## Feature
+A feature is an element within a sequence annotation and corresponds to a single line of a GFF file.
 
-* multiple tissues from all patients enrolled in clinical trial X
-* a collection of liver samples from several sources which have been uniformly reprocessed for differential analysis
+A feature has the following fields:
 
-The response to a study query is an array in which each element has the following fields:
+<table>
+<tr markdown="block"><td>
+`id`
+_required_
+</td><td>
+_string_
+</td><td>
+A unique identifier assigned to this object
+</td></tr>
+<tr markdown="block"><td>
+`version`
+</td><td>
+_string_
+</td><td>
+Version number of the object
+</td></tr>
+<tr markdown="block"><td>
+`tags`
+</td><td>
+_string_ array
+</td><td>
+List of tags associated with the object
+</td></tr>
+<tr markdown="block"><td>
+`accession`
+_required_
+</td><td>
+_string_
+</td><td>
+Accession number
+</td></tr>
+<tr markdown="block"><td>
+`name`
+</td><td>
+_string_
+</td><td>
+Short, readable name
+</td></tr>
+<tr markdown="block"><td>
+`seqName`
+_required_
+</td><td>
+_string_
+</td><td>
+Name of the reference
+</td></tr>
+<tr markdown="block"><td>
+`start`
+_required_
+</td><td>
+_int_
+</td><td>
+Zero-based start coordinate
+</td></tr>
+<tr markdown="block"><td>
+`end`
+_required_
+</td><td>
+_int_
+</td><td>
+Zero-based end coordinate
+</td></tr>
+<tr markdown="block"><td>
+`strand`
+</td><td>
+_string_
+</td><td>
+Strand feature is located on.  Default: `+`
+</td></tr>
+<tr markdown="block"><td>
+`featureType`
+_required_
+</td><td>
+_string_
+</td><td>
+Type of feature.
+</td></tr>
+<tr markdown="block"><td>
+`parentID`
+</td><td>
+_string_
+</td><td>
+ID of the parent feature, if any.
+</td></tr>
+<tr markdown="block"><td>
+`childIDs`
+</td><td>
+_string_ array
+</td><td>
+ID(s) of any child feature(s)
+</td></tr>
+<tr markdown="block"><td>
+`attributes`
+</td><td>
+_string_ array
+</td><td>
+List of feature attributes in `key`:`value` format
+</td></tr>
+<table>
+
+## Continuous Annotation
+A continuous annotation is an array of values for a contiguous interval of bases.  There is a single value for each base in the interval.  This is analogous to a wiggle file.
+
+A continuous annotation has the following fields:
 
 <table>
 <tr markdown="block"><td>
@@ -412,128 +504,36 @@ _string_
 Short, readable name
 </td></tr>
 <tr markdown="block"><td>
-`description`
+`seqName`
+_required_
 </td><td>
 _string_
 </td><td>
-Detailed description of the object
+Name of the reference
 </td></tr>
 <tr markdown="block"><td>
-`parentProjectID`
+`start`
+</td><td>
+_int_
+</td><td>
+Zero-based start coordinate.  Default: `0`
+</td></tr>
+<tr markdown="block"><td>
+`strand`
 </td><td>
 _string_
 </td><td>
-ID of the project containing the study
+Strand of the feature.  Default: `+`
 </td></tr>
 <tr markdown="block"><td>
-`patientList`
+`values`
+_required_
 </td><td>
-_string_ array
+_float_ array
 </td><td>
-ID(s) of patients supplying the samples in the study
+Numeric value for each base beginning at `start` with no skipped positions.  The length of `values` defines the interval
 </td></tr>
-<tr markdown="block"><td>
-`sampleList`
-</td><td>
-_string_ array
-</td><td>
-ID(s) of samples which provided the read data for the study
-</td></tr>
-</table>
-
-## Expression
-The expression is a matrix of calculated expression values.
-
-The response to an expression query is an array in which each element has the following fields:
-
 <table>
-<tr markdown="block"><td>
-`id`
-_required_
-</td><td>
-_string_
-</td><td>
-A unique identifier assigned to this object
-</td></tr>
-<tr markdown="block"><td>
-`version`
-</td><td>
-_string_
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-`tags`
-</td><td>
-_string_ array
-</td><td>
-List of tags associated with the object
-</td></tr>
-<tr markdown="block"><td>
-`parentStudyID`
-</td><td>
-_string_
-</td><td>
-ID of containing study
-</td></tr>
-<tr markdown="block"><td>
-`organism`
-</td><td>
-_string_
-</td><td>
-Organism of the sample
-</td></tr>
-<tr markdown="block"><td>
-`tissue`
-</td><td>
-_string_
-</td><td>
-Sample tissue type
-</td></tr>
-<tr markdown="block"><td>
-`units`
-_required_
-</td><td>
-_string_
-</td><td>
-Units of the measurement.  Examples are:
-
-* counts
-* FPKM
-* TPM
-</td></tr>
-<tr markdown="block"><td>
-`sampleID`
-</td><td>
-_string_
-</td><td>
-ID of the source sample
-</td></tr>
-<tr markdown="block"><td>
-`expressionMatrix`
-_required_
-</td><td>
-array of _float_ array
-</td><td>
-Numeric expression values in an array of arrays.
-</td></tr>
-<tr markdown="block"><td>
-`rowLabels`
-_required_
-</td><td>
-_string_ array
-</td><td>
-List of labels for the row axis of the expression matrix.
-</td></tr>
-<tr markdown="block"><td>
-`columnLabels`
-_required_
-</td><td>
-_string_ array
-</td><td>
-List of labels for the column axis of the expression matrix.
-</td></tr>
-</table>
 
 ## File
 The file response is a URL for downloading the requested file.  Supported files include input and interim processing pipeline files.  Example files include:
@@ -570,7 +570,7 @@ _string_
 </td><td>
 Type of file.  Examples include:
 
-* BAM
+* GTF
 </td></tr>
 <tr markdown="block"><td>
 `studyID`
@@ -611,3 +611,6 @@ _string_ array
 List of the specific changes made to the DB
 </td></tr>
 <table>
+
+
+

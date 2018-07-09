@@ -1,23 +1,23 @@
 swagger: "2.0"
 info:
-  description: "RNA API for GA4GH consideration."
+  description: "Sequence Annotation API for GA4GH consideration."
   version: "0.1.0"
-  title: "GA4GH RNA-seq API"
+  title: "GA4GH Sequence Annotation API"
 host: "ga4gh.org"
-basePath: "/rna"
+basePath: "/sequenceannotation"
 tags:
-- name: "projects"
-  description: "High level collection of studies"
+- name: "annotations"
+  description: "High level collection of annotated features"
   externalDocs:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "studies"
-  description: "Collection of associated uniformly processed RNA samples"
+- name: "features"
+  description: "single annotated sequence"
   externalDocs:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "expressions"
-  description: "Feature level expression data"
+- name: "continuous"
+  description: "Numerical value for each base in an interval"
   externalDocs:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
@@ -39,13 +39,13 @@ tags:
 schemes:
 - "http"
 paths:
-  /projects/search:
+  /annotations/search:
     get:
       tags:
-      - "projects"
-      summary: "Search for projects matching filters"
-      description: "Search for projects matching filters"
-      operationId: "searchProjects"
+      - "annotations"
+      summary: "Search for annotations matching filters"
+      description: "Search for annotations matching filters"
+      operationId: "searchAnnotations"
       produces:
       - "application/xml"
       - "application/json"
@@ -61,222 +61,213 @@ paths:
       - name: "version"
         in: "query"
         description: "version to return"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/project"
-        400:
-          description: "Error"
-      security:
-      - rna_auth:
-        - "read:expression"
-  /projects/{projectId}:
-    get:
-      tags:
-      - "projects"
-      summary: "Find project by ID"
-      description: "Returns a single specified project"
-      operationId: "getProjectById"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of project to return"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/project"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Project not found"
-      security:
-      - api_key: []
-  /studies/search:
-    get:
-      tags:
-      - "studies"
-      summary: "Search for studies matching filters"
-      description: "Search for studies matching filters"
-      operationId: "searchStudies"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "tags"
-        in: "query"
-        description: "Comma separated tag list to filter by"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "version"
-        in: "query"
-        description: "version to return"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/study"
-        400:
-          description: "Error"
-      security:
-      - rna_auth:
-        - "read:expression"
-  /studies/{studyId}:
-    get:
-      tags:
-      - "studies"
-      summary: "Find study by ID"
-      description: "Returns a single specified study"
-      operationId: "getStudyById"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "studyId"
-        in: "path"
-        description: "ID of study to return"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/study"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Study not found"
-      security:
-      - api_key: []
-  /expressions/{expressionId}:
-    get:
-      tags:
-      - "expressions"
-      summary: "Find expression data by ID"
-      description: "Returns a single specified expression matrix"
-      operationId: "getExpressionById"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "expressionId"
-        in: "path"
-        description: "ID of expression to return"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/expression"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Expression not found"
-      security:
-      - api_key: []
-  /expressions/search:
-    get:
-      tags:
-      - "expressions"
-      summary: "Search for expressions matching filters"
-      description: "Search for expressions matching filters"
-      operationId: "searchExpressions"
-      produces:
-      - "application/xml"
-      - "application/json"
-      parameters:
-      - name: "tags"
-        in: "query"
-        description: "Comma separated tag list to filter by"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "multi"
-      - name: "organism"
-        in: "query"
-        description: "organism to match"
         required: false
         type: "string"
       - name: "reference"
         in: "query"
-        description: "genomic reference to filter by"
+        description: "return annotations for specified referenceID"
         required: false
         type: "string"
-      - name: "annotation"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/annotation"
+        400:
+          description: "Error"
+      security:
+      - rna_auth:
+        - "read:annotation"
+  /annotations/{annotationId}:
+    get:
+      tags:
+      - "annotations"
+      summary: "Find annotation by ID"
+      description: "Returns a single specified annotation"
+      operationId: "getAnnotationById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "annotationId"
+        in: "path"
+        description: "ID of annotation to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/annotation"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Annotation not found"
+      security:
+      - api_key: []
+  /features/search:
+    get:
+      tags:
+      - "features"
+      summary: "Search for features matching filters"
+      description: "Search for features matching filters"
+      operationId: "searchFeatures"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
         in: "query"
-        description: "annotation to filter by"
+        description: "Comma separated tag list to filter by"
         required: false
-        type: "string"
-      - name: "tissue"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "version"
         in: "query"
-        description: "tissue type to match"
+        description: "version to return"
         required: false
         type: "string"
-      - name: "sampleID"
+      - name: "gene"
         in: "query"
-        description: "sampleID to match"
+        description: "gene name of feature to filter by"
         required: false
         type: "string"
-      - name: "projectID"
+      - name: "accession"
         in: "query"
-        description: "project to filter by"
+        description: "accession number of feature to filter by"
         required: false
         type: "string"
-      - name: "studyID"
+      - name: "type"
         in: "query"
-        description: "study to filter by"
+        description: "feature type to filter by"
         required: false
         type: "string"
+      - name: "reference"
+        in: "query"
+        description: "referenceID to filter by"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/feature"
+        400:
+          description: "Error"
+      security:
+      - rna_auth:
+        - "read:annotation"
+  /features/{featureId}:
+    get:
+      tags:
+      - "features"
+      summary: "Find feature by ID"
+      description: "Returns a single specified feature"
+      operationId: "getFeatureById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "featureId"
+        in: "path"
+        description: "ID of feature to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/feature"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Feature not found"
+      security:
+      - api_key: []
+  /continuous/{continuousId}:
+    get:
+      tags:
+      - "continuous"
+      summary: "Find continuous data by ID"
+      description: "Returns a single specified continuous matrix"
+      operationId: "getContinuousById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "continuousId"
+        in: "path"
+        description: "ID of continuous to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/continuous"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Continuous not found"
+      security:
+      - api_key: []
+  /continuous/search:
+    get:
+      tags:
+      - "continuous"
+      summary: "Search for continuous matching filters"
+      description: "Search for continuous matching filters"
+      operationId: "searchContinuous"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "tags"
+        in: "query"
+        description: "Comma separated tag list to filter by"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      - name: "reference"
+        in: "query"
+        description: "return continuous for specified referenceID"
+        required: false
+        type: "string"
+      - name: "start"
+        in: "query"
+        description: "starting coordinate of open interval to filter by"
+        required: false
+        type: "integer"
+      - name: "end"
+        in: "query"
+        description: "ending coordinate of open interval to filter by"
+        required: false
+        type: "integer"
       - name: "version"
         in: "query"
         description: "version to filter by"
         required: false
         type: "string"
-      - name: "geneNameList"
-        in: "query"
-        description: "return only values for listed genes"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-      - name: "geneAccessionList"
-        in: "query"
-        description: "return only values for listed accession numbers"
-        required: false
-        type: "array"
-        items:
-          type: "string"
       responses:
         200:
           description: "Successful operation"
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/expression"
+              $ref: "#/definitions/continuous"
         400:
           description: "Error"
       security:
       - rna_auth:
-        - "read:expression"
+        - "read:annotation"
   /getVersions:
     get:
       tags:
@@ -296,7 +287,7 @@ paths:
           description: "Invalid tag value"
       security:
       - rna_auth:
-        - "read:expression"
+        - "read:annotation"
   /changelog/{version}:
     get:
       tags:
@@ -370,14 +361,14 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "projectID"
+      - name: "annotationID"
         in: "query"
-        description: "ProjectID to filter by"
+        description: "AnnotationID to filter by"
         required: false
         type: "string"
-      - name: "studyID"
+      - name: "featureID"
         in: "query"
-        description: "StudyID to filter by"
+        description: "FeatureID to filter by"
         required: false
         type: "string"
       - name: "fileType"
@@ -396,20 +387,21 @@ paths:
           description: "Error"
       security:
       - rna_auth:
-        - "read:expression"
+        - "read:annotation"
 securityDefinitions:
   rna_auth:
     type: "oauth2"
     authorizationUrl: "http://ga4gh.org/oauth/dialog"
     flow: "implicit"
     scopes:
-      read:expression: "read expression"
+      read:annotation: "read annotation"
   api_key:
     type: "apiKey"
     name: "api_key"
     in: "header"
 definitions:
-  project:
+  annotation:
+    description: "top level genomic annotation object corresponding to a single GFF file"
     type: "object"
     properties:
       id:
@@ -424,13 +416,16 @@ definitions:
         type: "string"
       description:
         type: "string"
+      referenceID:
+        type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
     xml:
-      name: "project"
-  study:
+      name: "annotation"
+  continuous:
     type: "object"
+    description: "List of continuous values along an interval"
     properties:
       id:
         type: "string"
@@ -440,67 +435,50 @@ definitions:
         type: "array"
         items:
           type: "string"
+      continuousValues:
+        type: "array"
+        items:
+          type: "number"
+          format: "float"
+      start:
+        type: "number"
+        format: "float"
+    externalDocs:
+      description: "Find out more"
+      url: "https://github.com/ga4gh-rnaseq/schema"
+    xml:
+      name: "continuous"
+  feature:
+    type: "object"
+    description: "equivalent to a line of a GFF file"
+    properties:
+      id:
+        type: "string"
+      version:
+        type: "string"
+      tags:
+        type: "array"
+        items:
+          type: "string"
+      accession:
+        type: "string"
       name:
         type: "string"
-      description:
+      seqName:
         type: "string"
-      parentProjectID:
+      start:
+        type: "integer"
+      end:
+        type: "integer"
+      strand:
         type: "string"
-      patientList:
-        type: "array"
-        items:
-          type: "string"
-      sampleList:
-        type: "array"
-        items:
-          type: "string"
+      featureType:
+        type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
     xml:
-      name: "study"
-  expression:
-    type: "object"
-    description: "Matrix of expression values."
-    properties:
-      id:
-        type: "string"
-      version:
-        type: "string"
-      parentStudyID:
-        type: "string"
-      tags:
-        type: "array"
-        items:
-          type: "string"
-      organism:
-        type: "string"
-      tissue:
-        type: "string"
-      units:
-        type: "string"
-      sampleID:
-        type: "string"
-      expressionMatrix:
-        type: "array"
-        items:
-          type: "array"
-          items:
-            type: "number"
-            format: "float"
-      rowLabels:
-        type: "array"
-        items:
-          type: "string"
-      columnLabels:
-        type: "array"
-        items:
-          type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "expression"
+      name: "feature"
   changeLog:
     type: "object"
     description: "list of changes to the database associated with a version update"
@@ -526,7 +504,7 @@ definitions:
           type: "string"
       fileType:
         type: "string"
-      studyID:
+      featureID:
         type: "string"
       URL:
         type: "string"
