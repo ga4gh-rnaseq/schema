@@ -491,18 +491,6 @@ _string_
 Sample tissue type
 </td></tr>
 <tr markdown="block"><td>
-`units`
-_required_
-</td><td>
-_string_
-</td><td>
-Units of the measurement.  Examples are:
-
-* counts
-* FPKM
-* TPM
-</td></tr>
-<tr markdown="block"><td>
 `sampleID`
 </td><td>
 _string_
@@ -510,28 +498,12 @@ _string_
 ID of the source sample
 </td></tr>
 <tr markdown="block"><td>
-`expressionMatrix`
+`expressionDataURL`
 _required_
 </td><td>
-array of _float_ array
+_string_
 </td><td>
-Numeric expression values in an array of arrays.
-</td></tr>
-<tr markdown="block"><td>
-`rowLabels`
-_required_
-</td><td>
-_string_ array
-</td><td>
-List of labels for the row axis of the expression matrix.
-</td></tr>
-<tr markdown="block"><td>
-`columnLabels`
-_required_
-</td><td>
-_string_ array
-</td><td>
-List of labels for the column axis of the expression matrix.
+URL for download of expression data bundle
 </td></tr>
 </table>
 

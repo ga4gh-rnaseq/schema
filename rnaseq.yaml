@@ -477,25 +477,10 @@ definitions:
         type: "string"
       tissue:
         type: "string"
-      units:
-        type: "string"
       sampleID:
         type: "string"
-      expressionMatrix:
-        type: "array"
-        items:
-          type: "array"
-          items:
-            type: "number"
-            format: "float"
-      rowLabels:
-        type: "array"
-        items:
-          type: "string"
-      columnLabels:
-        type: "array"
-        items:
-          type: "string"
+      expressionDataURL:
+        type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
