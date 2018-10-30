@@ -15,12 +15,12 @@ Features of this API include:
 * A matrix representation for expression data to allow for efficient retrieval of large numbers of results
 * Support for a hierarchical data model which provides the option for servers to associate expression data for discovery and retrieval
 * Support for accessing subsets of expression data through slicing operations on the expression matrix and/or query filters to specify features to be included
-* A method to return per-base values over an interval which could be a subset of the genome or the entire genome similar to a wiggle representation used for visualization
 
-Out of the scope if this API are:
+Out of the scope of this API are:
 
-* A means of retrieving primary read sequence data.  Expression matrices provide a means to link to their input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.
-* A means of retrieving reference sequences.  Expression matrices provide a means to link to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.
+* A means of retrieving primary (raw) read sequence data.  Expression matrices provide a means to link each included sample to the corresponding input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.
+* A means of retrieving reference sequences.  Expression matrices provide a means to link each included sample to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.
+* A means of retrieving feature annotation details.  Expression matrices provide a means to link each mapped feature to the corresponding annotation.  Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
 # Protocol essentials
 
@@ -32,13 +32,17 @@ The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when a
 
 # Request
 
-## Project Methods
+This section lists the recommended URL endpoints a server SHOULD implement in order to navigate the RNA-seq data hierarchy and allow retrieval of expression data.
+
+Endpoints are described as HTTP GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handles these types of queries it is recommended that servers SHOULD implement parallel HTTP POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
+
+## Project Get Methods
 
 The recommended endpoint to return project data is:
 
     GET /projects/<id>
 
-## URL parameters
+### URL parameters
 
 <table>
 <tr markdown="block"><td>
@@ -60,7 +64,7 @@ The recommended search endpoint is:
 
     GET /projects/search
 
-## Search Query Filters
+### Search Query Filters
 
 <table>
 <tr markdown="block"><td>
@@ -79,13 +83,18 @@ Version to return
 </td></tr>
 </table>
 
-## Study Methods
+## Project Search Filters
+The recommended endpoint for retrieving search filters is:
+
+    GET /projects/search/filters
+
+## Study Get Methods
 
 The recommended endpoint to return study data is:
 
     GET /studies/<id>
 
-## URL parameters
+### URL parameters
 
 <table>
 <tr markdown="block"><td>
@@ -107,11 +116,11 @@ The recommended search endpoint is:
 
     GET /studies/search
 
-## Search Query Filters
+### Search Query Filters
 
 <table>
 <tr markdown="block"><td>
-`tags`  
+`tags`
 </td><td>
 _string_
 </td><td>
@@ -126,13 +135,18 @@ Version to return
 </td></tr>
 </table>
 
-## RNA Expression Methods
+## Study Search Filters
+The recommended endpoint for retrieving search filters is:
+
+    GET /studies/search/filters
+
+## RNA Expression Get Methods
 
 The recommended endpoint to return expression data is:
 
     GET /expressions/<id>
 
-## URL parameters
+### URL parameters
 
 <table>
 <tr markdown="block"><td>
@@ -155,7 +169,7 @@ The recommended search endpoint is:
 
     GET /expressions/search
 
-## Search Query Filters
+### Search Query Filters
 
 <table>
 <tr markdown="block"><td>
@@ -171,34 +185,6 @@ Comma separated tag list to filter by
 _string_  
 </td><td>
 Version to return
-</td></tr>
-<tr markdown="block"><td>
-`organism`
-</td><td>
-_string_  
-</td><td>
-organism to match
-</td></tr>
-<tr markdown="block"><td>
-`reference`
-</td><td>
-_string_  
-</td><td>
-genomic reference to filter by
-</td></tr>
-<tr markdown="block"><td>
-`annotation`
-</td><td>
-_string_  
-</td><td>
-annotation to filter by
-</td></tr>
-<tr markdown="block"><td>
-`tissue`
-</td><td>
-_string_  
-</td><td>
-tissue type to match
 </td></tr>
 <tr markdown="block"><td>
 `sampleID`
@@ -222,28 +208,106 @@ _string_
 study to filter by
 </td></tr>
 <tr markdown="block"><td>
-`geneNameList`
+`featureIDList`
 </td><td>
 _string_  
 </td><td>
-return only values for listed genes
+return only values for listed feature ID values
 </td></tr>
 <tr markdown="block"><td>
-`geneAccessionList`
+`featureNameList`
+</td><td>
+_string_  
+</td><td>
+return only values for listed features
+</td></tr>
+<tr markdown="block"><td>
+`featureAccessionList`
 </td><td>
 _string_  
 </td><td>
 return only values for listed accession numbers
 </td></tr>
+<tr markdown="block"><td>
+`minExpression`
+</td><td>
+_threshold_ array  
+</td><td>
+return only samples with expression values greater than listed threshold for each corresponding feature in the array
+</td></tr>
+<tr markdown="block"><td>
+`maxExpression`
+</td><td>
+_threshold_ array  
+</td><td>
+return only samples with expression values less than listed threshold for each corresponding feature in the array
+</td></tr>
 </table>
 
-## File Methods
+### Expression Threshold
+
+<table>
+<tr markdown="block"><td>
+`threshold`  
+</td><td>
+_float_
+</td><td>
+Numeric value to compare to expression value when filtering
+</td></tr>
+<tr markdown="block"><td>
+`featureID`
+</td><td>
+_string_  
+</td><td>
+ID of feature this threshold corresponds to
+</td></tr>
+<tr markdown="block"><td>
+`featureName`
+</td><td>
+_string_  
+</td><td>
+Name of feature this threshold corresponds to
+</td></tr>
+<tr markdown="block"><td>
+`featureAccession`
+</td><td>
+_string_  
+</td><td>
+Accession of feature this threshold corresponds to
+</td></tr>
+</table>
+
+## Expression Search Filters
+The recommended endpoint for retrieving search filters is:
+
+    GET /expressions/search/filters
+
+### URL parameters
+
+<table>
+<tr markdown="block"><td>
+`type`
+</td><td>
+_string_
+</td><td>
+A string identifying the type of filters to return.  This is one of two values:
+
+feature - returns filters on the feature axis of the matrix
+
+sample - returns filters on the sample axis of the matrix
+
+If not present both lists will be returned.
+
+</td></tr>
+</table>
+
+## File Get Methods
 
 The recommended endpoint to return file retrieval URLs is:
 
     GET /files/<id>
 
-## URL parameters
+### URL parameters
 
 <table>
 <tr markdown="block"><td>
@@ -266,7 +330,7 @@ The recommended search endpoint is:
 
     GET /files/search
 
-## Search Query Filters
+### Search Query Filters
 
 <table>
 <tr markdown="block"><td>
@@ -301,13 +365,13 @@ File type to filter by
 
 ## Additional Methods
 
-## Database Methods
+## Database Get Methods
 The recommended endpoints to return database related data are:
 
     GET /getVersions
     GET /changeLog/<version>
 
-## Changelog URL parameters
+### Changelog URL parameters
 
 <table>
 <tr markdown="block"><td>
@@ -324,7 +388,7 @@ The format of this identifier is left to the discretion of the API provider, inc
 </td></tr>
 </table>
 
-## Responses
+# Responses
 
 ## Project
 The project is the top level of the model hierarchy and contains a set of related studies.  Example projects include:
@@ -370,6 +434,22 @@ Short, readable name
 _string_
 </td><td>
 Detailed description of the object
+</td></tr>
+</table>
+
+## Project Filters
+To support flexible search this provides a means of identifying the search filters supported by the data provider.
+
+The response to a project filter query is an array in which each element has the following fields:
+
+<table>
+<tr markdown="block"><td>
+`filter`
+_required_
+</td><td>
+_string_
+</td><td>
+A unique name for the filter for use in search query URLs
 </td></tr>
 </table>
 
@@ -426,18 +506,27 @@ _string_
 ID of the project containing the study
 </td></tr>
 <tr markdown="block"><td>
-`patientList`
-</td><td>
-_string_ array
-</td><td>
-ID(s) of patients supplying the samples in the study
-</td></tr>
-<tr markdown="block"><td>
 `sampleList`
 </td><td>
 _string_ array
 </td><td>
 ID(s) of samples which provided the read data for the study
+</td></tr>
+</table>
+
+## Study Filters
+To support flexible search this provides a means of identifying the search filters supported by the data provider.
+
+The response to a study filter query is an array in which each element has the following fields:
+
+<table>
+<tr markdown="block"><td>
+`filter`
+_required_
+</td><td>
+_string_
+</td><td>
+A unique name for the filter for use in search query URLs
 </td></tr>
 </table>
 
@@ -448,62 +537,38 @@ The response to an expression query is an array in which each element has the fo
 
 <table>
 <tr markdown="block"><td>
-`id`
-_required_
-</td><td>
-_string_
-</td><td>
-A unique identifier assigned to this object
-</td></tr>
-<tr markdown="block"><td>
-`version`
-</td><td>
-_string_
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-`tags`
-</td><td>
-_string_ array
-</td><td>
-List of tags associated with the object
-</td></tr>
-<tr markdown="block"><td>
-`parentStudyID`
-</td><td>
-_string_
-</td><td>
-ID of containing study
-</td></tr>
-<tr markdown="block"><td>
-`organism`
-</td><td>
-_string_
-</td><td>
-Organism of the sample
-</td></tr>
-<tr markdown="block"><td>
-`tissue`
-</td><td>
-_string_
-</td><td>
-Sample tissue type
-</td></tr>
-<tr markdown="block"><td>
-`sampleID`
-</td><td>
-_string_
-</td><td>
-ID of the source sample
-</td></tr>
-<tr markdown="block"><td>
 `expressionDataURL`
 _required_
 </td><td>
 _string_
 </td><td>
-URL for download of expression data bundle
+URL for download or stream of expression data bundle
+</td></tr>
+</table>
+
+## Expression Filters
+To support flexible search this provides a means of identifying the search filters supported by the data provider.
+
+The response to an expression filter query is an array in which each element has the following fields:
+
+<table>
+<tr markdown="block"><td>
+`filterType`
+_required_
+</td><td>
+_string_
+</td><td>
+Identifies the axis to which these filter apply.  One of:
+
+feature, sample
+
+</td></tr>
+<tr markdown="block"><td>
+`filters`
+</td><td>
+_string_ array
+</td><td>
+List of unique names for the filters to be used in search query URLs
 </td></tr>
 </table>
 
