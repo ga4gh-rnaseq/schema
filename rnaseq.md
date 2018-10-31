@@ -36,6 +36,8 @@ This section lists the recommended URL endpoints a server SHOULD implement in or
 
 Endpoints are described as HTTP GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handles these types of queries it is recommended that servers SHOULD implement parallel HTTP POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
 
+When processing requests containing multiple filters, the data provider SHOULD use a logical `AND` for selecting the results to return.
+
 ## Project Get Methods
 
 The recommended endpoint to return project data is:
@@ -276,6 +278,8 @@ _string_
 Accession of feature this threshold corresponds to
 </td></tr>
 </table>
+
+For each threshold tuple the request SHOULD provide only one of `featureID`, `featureName` or `featureAccession`.
 
 ## Expression Search Filters
 The recommended endpoint for retrieving search filters is:
