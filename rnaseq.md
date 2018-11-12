@@ -50,7 +50,7 @@ The recommended endpoint to return project data is:
 <tr markdown="block"><td>
 `id`
 </td><td>
-_string_
+_optional string_
 </td><td>
 A string identifying which records to return.  If left blank all available projects will be returned.
 
@@ -72,14 +72,14 @@ The recommended search endpoint is:
 <tr markdown="block"><td>
 `tags`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
 `version`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Version to return
 </td></tr>
@@ -102,7 +102,7 @@ The recommended endpoint to return study data is:
 <tr markdown="block"><td>
 `id`
 </td><td>
-_string_
+_optional string_
 </td><td>
 A string identifying which records to return.  If left blank all available studies will be returned.
 
@@ -124,14 +124,14 @@ The recommended search endpoint is:
 <tr markdown="block"><td>
 `tags`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
 `version`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 Version to return
 </td></tr>
@@ -153,9 +153,8 @@ The recommended endpoint to return expression data is:
 <table>
 <tr markdown="block"><td>
 `id`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 A string identifying which record to return.
 
@@ -177,70 +176,70 @@ The recommended search endpoint is:
 <tr markdown="block"><td>
 `tags`  
 </td><td>
-_string_
+_optional string_
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
 `version`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 Version to return
 </td></tr>
 <tr markdown="block"><td>
 `sampleID`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 sampleID to match
 </td></tr>
 <tr markdown="block"><td>
 `projectID`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 project to filter by
 </td></tr>
 <tr markdown="block"><td>
 `studyID`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 study to filter by
 </td></tr>
 <tr markdown="block"><td>
 `featureIDList`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 return only values for listed feature ID values
 </td></tr>
 <tr markdown="block"><td>
 `featureNameList`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 return only values for listed features
 </td></tr>
 <tr markdown="block"><td>
 `featureAccessionList`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 return only values for listed accession numbers
 </td></tr>
 <tr markdown="block"><td>
 `minExpression`
 </td><td>
-_threshold_ array  
+_optional threshold_ array  
 </td><td>
 return only samples with expression values greater than listed threshold for each corresponding feature in the array
 </td></tr>
 <tr markdown="block"><td>
 `maxExpression`
 </td><td>
-_threshold_ array  
+_optional threshold_ array  
 </td><td>
 return only samples with expression values less than listed threshold for each corresponding feature in the array
 </td></tr>
@@ -252,28 +251,28 @@ return only samples with expression values less than listed threshold for each c
 <tr markdown="block"><td>
 `threshold`  
 </td><td>
-_float_
+_optional float_
 </td><td>
 Numeric value to compare to expression value when filtering
 </td></tr>
 <tr markdown="block"><td>
 `featureID`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 ID of feature this threshold corresponds to
 </td></tr>
 <tr markdown="block"><td>
 `featureName`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 Name of feature this threshold corresponds to
 </td></tr>
 <tr markdown="block"><td>
 `featureAccession`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 Accession of feature this threshold corresponds to
 </td></tr>
@@ -292,7 +291,7 @@ The recommended endpoint for retrieving search filters is:
 <tr markdown="block"><td>
 `type`
 </td><td>
-_string_
+_optional string_
 </td><td>
 A string identifying the type of filters to return.  This is one of two values:
 
@@ -316,9 +315,8 @@ The recommended endpoint to return file retrieval URLs is:
 <table>
 <tr markdown="block"><td>
 `id`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 A string identifying which record to return.
 
@@ -340,28 +338,28 @@ The recommended search endpoint is:
 <tr markdown="block"><td>
 `tags`  
 </td><td>
-_string_
+_optional string_
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
 `projectID`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 project to filter by
 </td></tr>
 <tr markdown="block"><td>
 `studyID`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 study to filter by
 </td></tr>
 <tr markdown="block"><td>
 `fileType`
 </td><td>
-_string_  
+_optional string_  
 </td><td>
 File type to filter by
 </td></tr>
@@ -380,9 +378,8 @@ The recommended endpoints to return database related data are:
 <table>
 <tr markdown="block"><td>
 `version`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 A string identifying which version to return the changelog for.
 
@@ -405,37 +402,36 @@ The response to a project query is an array in which each element has the follow
 <table>
 <tr markdown="block"><td>
 `id`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
 `version`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
 `tags`
 </td><td>
-_string_ array
+_optional string_ array
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
 `name`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Short, readable name
 </td></tr>
 <tr markdown="block"><td>
 `description`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Detailed description of the object
 </td></tr>
@@ -449,16 +445,15 @@ The response to a project filter query is an array in which each element has the
 <table>
 <tr markdown="block"><td>
 `filter`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 A unique name for the filter for use in search query URLs
 </td></tr>
 </table>
 
 ## Study
-The study is a set of related RNA expression values.  The samples in a study have been processed uniformly.  Example studies include:
+The study is a set of related RNA expression values.  It is assumed all samples in a study have been processed uniformly.  Example studies include:
 
 * multiple tissues from all patients enrolled in clinical trial X
 * a collection of liver samples from several sources which have been uniformly reprocessed for differential analysis
@@ -468,51 +463,50 @@ The response to a study query is an array in which each element has the followin
 <table>
 <tr markdown="block"><td>
 `id`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
 `version`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
 `tags`
 </td><td>
-_string_ array
+_optional string_ array
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
 `name`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Short, readable name
 </td></tr>
 <tr markdown="block"><td>
 `description`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Detailed description of the object
 </td></tr>
 <tr markdown="block"><td>
 `parentProjectID`
 </td><td>
-_string_
+_optional string_
 </td><td>
 ID of the project containing the study
 </td></tr>
 <tr markdown="block"><td>
 `sampleList`
 </td><td>
-_string_ array
+_optional string_ array
 </td><td>
 ID(s) of samples which provided the read data for the study
 </td></tr>
@@ -526,9 +520,8 @@ The response to a study filter query is an array in which each element has the f
 <table>
 <tr markdown="block"><td>
 `filter`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 A unique name for the filter for use in search query URLs
 </td></tr>
@@ -542,9 +535,8 @@ The response to an expression query is an array in which each element has the fo
 <table>
 <tr markdown="block"><td>
 `expressionDataURL`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 URL for download or stream of expression data bundle
 </td></tr>
@@ -558,9 +550,8 @@ The response to an expression filter query is an array in which each element has
 <table>
 <tr markdown="block"><td>
 `filterType`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 Identifies the axis to which these filter apply.  One of:
 
@@ -570,7 +561,7 @@ feature, sample
 <tr markdown="block"><td>
 `filters`
 </td><td>
-_string_ array
+_optional string_ array
 </td><td>
 List of unique names for the filters to be used in search query URLs
 </td></tr>
@@ -584,30 +575,29 @@ The response to a file query is an array in which each element has the following
 <table>
 <tr markdown="block"><td>
 `id`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
 `version`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
 `tags`
 </td><td>
-_string_ array
+_optional string_ array
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
 `fileType`
 </td><td>
-_string_
+_optional string_
 </td><td>
 Type of file.  Examples include:
 
@@ -616,15 +606,14 @@ Type of file.  Examples include:
 <tr markdown="block"><td>
 `studyID`
 </td><td>
-_string_
+_optional string_
 </td><td>
 ID of containing study
 </td></tr>
 <tr markdown="block"><td>
 `URL`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 URL to download file.
 </td></tr>
@@ -638,16 +627,15 @@ The response to a changelog query is an array in which each element has the foll
 <table>
 <tr markdown="block"><td>
 `version`
-_required_
 </td><td>
-_string_
+_required string_
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
 `log`
 </td><td>
-_string_ array
+_optional string_ array
 </td><td>
 List of the specific changes made to the DB
 </td></tr>
