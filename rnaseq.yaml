@@ -39,6 +39,33 @@ tags:
 schemes:
 - "http"
 paths:
+  /projects/{projectId}:
+    get:
+      tags:
+      - "projects"
+      summary: "Find project by ID"
+      description: "Returns a single specified project"
+      operationId: "getProjectById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of project to return"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/project"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Project not found"
+      security:
+        - api_key: []
   /projects/search:
     get:
       tags:
@@ -75,31 +102,51 @@ paths:
       security:
       - rna_auth:
         - "read:expression"
-  /projects/{projectId}:
+  /projects/search/filters:
     get:
       tags:
       - "projects"
-      summary: "Find project by ID"
-      description: "Returns a single specified project"
-      operationId: "getProjectById"
+      summary: "Returns filters for project searches"
+      description: "Get filters for project searches"
+      operationId: "searchProjectFilters"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/searchFilter"
+        400:
+          description: "Error"
+      security:
+      - rna_auth:
+        - "read:expression"
+  /studies/{studyId}:
+    get:
+      tags:
+      - "studies"
+      summary: "Find study by ID"
+      description: "Returns a single specified study"
+      operationId: "getStudyById"
       produces:
       - "application/xml"
       - "application/json"
       parameters:
-      - name: "projectId"
+      - name: "studyId"
         in: "path"
-        description: "ID of project to return"
+        description: "ID of study to return"
         required: true
         type: "string"
       responses:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/project"
+            $ref: "#/definitions/study"
         400:
           description: "Invalid ID supplied"
         404:
-          description: "Project not found"
+          description: "Study not found"
       security:
       - api_key: []
   /studies/search:
@@ -138,33 +185,26 @@ paths:
       security:
       - rna_auth:
         - "read:expression"
-  /studies/{studyId}:
+  /studies/search/filters:
     get:
       tags:
       - "studies"
-      summary: "Find study by ID"
-      description: "Returns a single specified study"
-      operationId: "getStudyById"
+      summary: "Returns filters for study searches"
+      description: "Get filters for study searches"
+      operationId: "searchStudyFilters"
       produces:
       - "application/xml"
       - "application/json"
-      parameters:
-      - name: "studyId"
-        in: "path"
-        description: "ID of study to return"
-        required: true
-        type: "string"
       responses:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/study"
+            $ref: "#/definitions/searchFilter"
         400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Study not found"
+          description: "Error"
       security:
-      - api_key: []
+      - rna_auth:
+        - "read:expression"
   /expressions/{expressionId}:
     get:
       tags:
@@ -211,26 +251,6 @@ paths:
         items:
           type: "string"
         collectionFormat: "multi"
-      - name: "organism"
-        in: "query"
-        description: "organism to match"
-        required: false
-        type: "string"
-      - name: "reference"
-        in: "query"
-        description: "genomic reference to filter by"
-        required: false
-        type: "string"
-      - name: "annotation"
-        in: "query"
-        description: "annotation to filter by"
-        required: false
-        type: "string"
-      - name: "tissue"
-        in: "query"
-        description: "tissue type to match"
-        required: false
-        type: "string"
       - name: "sampleID"
         in: "query"
         description: "sampleID to match"
@@ -251,14 +271,21 @@ paths:
         description: "version to filter by"
         required: false
         type: "string"
-      - name: "geneNameList"
+      - name: "featureIDList"
         in: "query"
-        description: "return only values for listed genes"
+        description: "return only values for listed feature IDs"
         required: false
         type: "array"
         items:
           type: "string"
-      - name: "geneAccessionList"
+      - name: "featureNameList"
+        in: "query"
+        description: "return only values for listed features"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+      - name: "featureAccessionList"
         in: "query"
         description: "return only values for listed accession numbers"
         required: false
@@ -272,6 +299,32 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/expression"
+        400:
+          description: "Error"
+      security:
+      - rna_auth:
+        - "read:expression"
+  /expressions/search/filters:
+    get:
+      tags:
+      - "expressions"
+      summary: "Returns filters for project searches"
+      description: "Get filters for project searches"
+      operationId: "searchExpressionFilters"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "type"
+        in: "query"
+        description: "one of `feature` or `sample` reflecting which axis to request filters for.  If blank, both will be returned"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/expressionSearchFilter"
         400:
           description: "Error"
       security:
@@ -463,22 +516,6 @@ definitions:
     type: "object"
     description: "Matrix of expression values."
     properties:
-      id:
-        type: "string"
-      version:
-        type: "string"
-      parentStudyID:
-        type: "string"
-      tags:
-        type: "array"
-        items:
-          type: "string"
-      organism:
-        type: "string"
-      tissue:
-        type: "string"
-      sampleID:
-        type: "string"
       expressionDataURL:
         type: "string"
     externalDocs:
@@ -486,6 +523,32 @@ definitions:
       url: "https://github.com/ga4gh-rnaseq/schema"
     xml:
       name: "expression"
+  searchFilter:
+    type: "object"
+    description: "parameter name to use for filter when searching"
+    properties:
+      version:
+        type: "string"
+    externalDocs:
+      description: "Find out more"
+      url: "https://github.com/ga4gh-rnaseq/schema"
+    xml:
+      name: "filters"
+  expressionSearchFilter:
+    type: "object"
+    description: "parameter name to use for filter when searching"
+    properties:
+      filterType:
+        type: "string"
+      filters:
+        type: "array"
+        items:
+          type: "string"
+    externalDocs:
+      description: "Find out more"
+      url: "https://github.com/ga4gh-rnaseq/schema"
+    xml:
+      name: "filters"
   changeLog:
     type: "object"
     description: "list of changes to the database associated with a version update"
