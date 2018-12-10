@@ -40,6 +40,43 @@ The bundle metadata is intended to contain metadata common to all the samples an
 
 It may occur that the matrix contains samples from multiple projects or studies.  If elements like the processing pipeline are no longer common to all samples, care should be taken to move this metadata to the samples or features metadata table instead of the bundle metadata.
 
+# Sample Metadata Discussion
+
+### Minimum Sample Metadata
+
+The following metadata fields describe a recommended minimal set of sample metadata.
+
+<table>
+<tr markdown="block"><td>
+`sampleName`
+</td><td>
+_string_
+</td><td>
+A human readable name for the sample.  Would be better if it were unique to the sample within the database.
+</td></tr>
+<tr markdown="block"><td>
+`tissue`
+</td><td>
+_string_
+</td><td>
+Tissue of origin for the sample.
+</td></tr>
+<tr markdown="block"><td>
+`libraryPrep`
+</td><td>
+_string_
+</td><td>
+Library preparation strategy including measurement strategy and platform used.  This could be a URL to a more detailed methods document.
+</td></tr>
+<tr markdown="block"><td>
+`dataProvider`
+</td><td>
+_string_
+</td><td>
+The source project or site of the sample data.
+</td></tr>
+</table>
+
 # The meaning of zero
 
 Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes which may not have 100% coverage of the annotation reference.  The consequence is that some features which show zero expression may not necessarily have a truly zero expression.  This idea can be extended further in the context of submitted data as well as potentially access restricted data.  The result is that a zero value can indicate one of several states:
