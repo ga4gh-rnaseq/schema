@@ -24,6 +24,55 @@ The following metadata fields describe a minimal set of metadata necessary to wo
 
 <table>
 <tr markdown="block"><td>
+`workstreamURLs`
+</td><td>
+_string_ array
+</td><td>
+URL(s) for the workstream(s) used to calculate expression.  Advise that tool names, versions, settings be included in workstream/pipeline description referenced by this URL
+</td></tr>
+<tr markdown="block"><td>
+`processingTools`
+</td><td>
+_string_ array
+</td><td>
+List of tools used in processing.  Entries should include version, command line options, etc.
+</td></tr>
+<tr markdown="block"><td>
+`referenceURL`
+</td><td>
+_string_
+</td><td>
+URL of the reference genome used
+</td></tr>
+<tr markdown="block"><td>
+`referenceName`
+</td><td>
+_string_
+</td><td>
+Nane of the reference genome
+</td></tr>
+<tr markdown="block"><td>
+`annotationURL`
+</td><td>
+_string_
+</td><td>
+URL of the annotation used
+</td></tr>
+<tr markdown="block"><td>
+`annotationName`
+</td><td>
+_string_
+</td><td>
+Name of the annotation
+</td></tr>
+<tr markdown="block"><td>
+`organism`
+</td><td>
+_string_
+</td><td>
+The species providing the samples.
+</td></tr>
+<tr markdown="block"><td>
 `units`
 </td><td>
 _string_
