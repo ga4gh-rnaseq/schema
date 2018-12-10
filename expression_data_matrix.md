@@ -28,14 +28,14 @@ The following metadata fields describe a minimal set of metadata necessary to wo
 </td><td>
 _string_ array
 </td><td>
-URL(s) for the workstream(s) used to calculate expression.  Advise that tool names, versions, settings be included in workstream/pipeline description referenced by this URL
+URL(s) for the workstream(s) used to calculate expression
 </td></tr>
 <tr markdown="block"><td>
 `processingTools`
 </td><td>
 _string_ array
 </td><td>
-List of tools used in processing.  Entries should include version, command line options, etc.
+List of tools used in processing
 </td></tr>
 <tr markdown="block"><td>
 `referenceURL`
@@ -49,7 +49,7 @@ URL of the reference genome used
 </td><td>
 _string_
 </td><td>
-Nane of the reference genome
+Name of the reference genome
 </td></tr>
 <tr markdown="block"><td>
 `annotationURL`
@@ -70,7 +70,7 @@ Name of the annotation
 </td><td>
 _string_
 </td><td>
-The species providing the samples.
+The species providing the samples
 </td></tr>
 <tr markdown="block"><td>
 `units`
@@ -84,6 +84,13 @@ A string identifying the unit of measurement.  Ex. TPM, FPKM, count
 ### A place to describe the read processing pipeline
 
 The bundle metadata is intended to contain metadata common to all the samples and features in the associated matrix.  It is highly recommended that this be used to describe the processing pipeline used to quantify the raw reads and produce the expression data.  The genomic reference used to align the reads and the annotation used to map the alignments should also be included here.
+
+In the case of workstreams and processing tools it is important to document all of the details of the software used to process the read data.  This can include:
+
+* the names of each software package
+* specific versions used
+* any settings and command line options
+* step by step order of using software
 
 ### Merged datasets
 
