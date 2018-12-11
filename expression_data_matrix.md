@@ -55,11 +55,11 @@ _string_
 A human readable name for the sample.  Would be better if it were unique to the sample within the database.
 </td></tr>
 <tr markdown="block"><td>
-`tissue`
+`materialType`
 </td><td>
 _string_
 </td><td>
-Tissue of origin for the sample.
+The type and origin for the sample.  Should follow [MIABIS-2.0-14](https://github.com/MIABIS/miabis/wiki/Structured-data-and-lists#material-type) 
 </td></tr>
 <tr markdown="block"><td>
 `libraryPrep`
