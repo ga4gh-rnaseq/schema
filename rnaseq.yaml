@@ -37,7 +37,7 @@ tags:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
 schemes:
-- "http"
+- "https"
 paths:
   /projects/{projectId}:
     get:
