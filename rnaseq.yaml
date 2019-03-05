@@ -84,7 +84,7 @@ paths:
         type: "array"
         items:
           type: "string"
-        collectionFormat: "multi"
+        collectionFormat: "csv"
       - name: "version"
         in: "query"
         description: "version to return"
@@ -167,7 +167,7 @@ paths:
         type: "array"
         items:
           type: "string"
-        collectionFormat: "multi"
+        collectionFormat: "csv"
       - name: "version"
         in: "query"
         description: "version to return"
@@ -250,7 +250,7 @@ paths:
         type: "array"
         items:
           type: "string"
-        collectionFormat: "multi"
+        collectionFormat: "csv"
       - name: "sampleID"
         in: "query"
         description: "sampleID to match"
@@ -422,7 +422,7 @@ paths:
         type: "array"
         items:
           type: "string"
-        collectionFormat: "multi"
+        collectionFormat: "csv"
       - name: "projectID"
         in: "query"
         description: "ProjectID to filter by"
@@ -459,7 +459,7 @@ securityDefinitions:
       read:expression: "read expression"
   api_key:
     type: "apiKey"
-    name: "api_key"
+    name: "X-Api-Key"
     in: "header"
 definitions:
   project:
