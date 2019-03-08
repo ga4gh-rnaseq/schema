@@ -447,8 +447,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "project"
   study:
     type: "object"
     properties:
@@ -477,8 +475,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "study"
   expression:
     type: "object"
     description: "Matrix of expression values."
@@ -488,8 +484,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "expression"
   searchFilter:
     type: "object"
     description: "parameter name to use for filter when searching"
@@ -499,8 +493,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "filters"
   expressionSearchFilter:
     type: "object"
     description: "parameter name to use for filter when searching"
@@ -514,8 +506,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "filters"
   changeLog:
     type: "object"
     description: "list of changes to the database associated with a version update"
@@ -525,8 +515,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "changeLog"
   file:
     type: "object"
     description: "URL and type for raw data and analysis pipeline files"
@@ -548,8 +536,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "file"
 externalDocs:
   description: "Find out more about GA4GH"
   url: "http://ga4gh.org"
