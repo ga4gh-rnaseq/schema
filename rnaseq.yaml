@@ -5,6 +5,8 @@ info:
   title: "GA4GH RNA-seq API"
 host: "ga4gh.org"
 basePath: "/rna"
+produces:
+  - application/json
 tags:
 - name: "projects"
   description: "High level collection of studies"
@@ -37,7 +39,7 @@ tags:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
 schemes:
-- "http"
+- "https"
 paths:
   /projects/{projectId}:
     get:
@@ -46,9 +48,6 @@ paths:
       summary: "Find project by ID"
       description: "Returns a single specified project"
       operationId: "getProjectById"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "projectId"
         in: "path"
@@ -73,9 +72,6 @@ paths:
       summary: "Search for projects matching filters"
       description: "Search for projects matching filters"
       operationId: "searchProjects"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "tags"
         in: "query"
@@ -109,14 +105,13 @@ paths:
       summary: "Returns filters for project searches"
       description: "Get filters for project searches"
       operationId: "searchProjectFilters"
-      produces:
-      - "application/xml"
-      - "application/json"
       responses:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/searchFilter"
+            type: "array"
+            items:
+              $ref: "#/definitions/searchFilter"
         400:
           description: "Error"
       security:
@@ -129,9 +124,6 @@ paths:
       summary: "Find study by ID"
       description: "Returns a single specified study"
       operationId: "getStudyById"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "studyId"
         in: "path"
@@ -156,9 +148,6 @@ paths:
       summary: "Search for studies matching filters"
       description: "Search for studies matching filters"
       operationId: "searchStudies"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "tags"
         in: "query"
@@ -192,14 +181,13 @@ paths:
       summary: "Returns filters for study searches"
       description: "Get filters for study searches"
       operationId: "searchStudyFilters"
-      produces:
-      - "application/xml"
-      - "application/json"
       responses:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/searchFilter"
+            type: "array"
+            items:
+              $ref: "#/definitions/searchFilter"
         400:
           description: "Error"
       security:
@@ -212,9 +200,6 @@ paths:
       summary: "Find expression data by ID"
       description: "Returns a single specified expression matrix"
       operationId: "getExpressionById"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "expressionId"
         in: "path"
@@ -225,7 +210,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/expression"
+            $ref: "#/definitions/file"
         400:
           description: "Invalid ID supplied"
         404:
@@ -239,9 +224,6 @@ paths:
       summary: "Search for expressions matching filters"
       description: "Search for expressions matching filters"
       operationId: "searchExpressions"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "tags"
         in: "query"
@@ -298,7 +280,7 @@ paths:
           schema:
             type: "array"
             items:
-              $ref: "#/definitions/expression"
+              $ref: "#/definitions/file"
         400:
           description: "Error"
       security:
@@ -311,9 +293,6 @@ paths:
       summary: "Returns filters for project searches"
       description: "Get filters for project searches"
       operationId: "searchExpressionFilters"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "type"
         in: "query"
@@ -335,9 +314,6 @@ paths:
       tags:
       - "getVersions"
       summary: "Get release versions of database"
-      produces:
-      - "application/xml"
-      - "application/json"
       responses:
         200:
           description: "Successful operation"
@@ -357,9 +333,6 @@ paths:
       summary: "Get change log for a specific release version"
       description: "Returns changes associated with specified database release version"
       operationId: "getChangeLog"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "version"
         in: "path"
@@ -384,9 +357,6 @@ paths:
       summary: "Get specific file"
       description: "Returns download URL for file"
       operationId: "getFile"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "fileID"
         in: "path"
@@ -411,9 +381,6 @@ paths:
       summary: "Search for files matching filters"
       description: "Search for files matching filters.  Returns download URL or manifest of download URLs for matching file(s)"
       operationId: "searchFiles"
-      produces:
-      - "application/xml"
-      - "application/json"
       parameters:
       - name: "tags"
         in: "query"
@@ -480,8 +447,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "project"
   study:
     type: "object"
     properties:
@@ -510,30 +475,15 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "study"
-  expression:
-    type: "object"
-    description: "Matrix of expression values."
-    properties:
-      expressionDataURL:
-        type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "expression"
   searchFilter:
     type: "object"
     description: "parameter name to use for filter when searching"
     properties:
-      version:
+      filter:
         type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "filters"
   expressionSearchFilter:
     type: "object"
     description: "parameter name to use for filter when searching"
@@ -547,8 +497,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "filters"
   changeLog:
     type: "object"
     description: "list of changes to the database associated with a version update"
@@ -558,8 +506,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "changeLog"
   file:
     type: "object"
     description: "URL and type for raw data and analysis pipeline files"
@@ -581,8 +527,6 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
-    xml:
-      name: "file"
 externalDocs:
   description: "Find out more about GA4GH"
   url: "http://ga4gh.org"
