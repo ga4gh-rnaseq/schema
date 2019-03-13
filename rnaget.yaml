@@ -1,9 +1,9 @@
 swagger: "2.0"
 info:
+  title: "GA4GH rnaget API"
   description: "RNA API for GA4GH consideration."
   version: "0.1.0"
-  title: "GA4GH RNA-seq API"
-basePath: "/rna"
+basePath: "/rnaget"
 produces:
   - application/json
 tags:
