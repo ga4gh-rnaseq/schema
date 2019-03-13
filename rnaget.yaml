@@ -63,7 +63,8 @@ paths:
         404:
           description: "Project not found"
       security:
-        - api_key: []
+      - rna_auth:
+        - "read:project"
   /projects/search:
     get:
       tags:
@@ -96,7 +97,7 @@ paths:
           description: "Error"
       security:
       - rna_auth:
-        - "read:expression"
+        - "read:project"
   /projects/search/filters:
     get:
       tags:
@@ -115,7 +116,7 @@ paths:
           description: "Error"
       security:
       - rna_auth:
-        - "read:expression"
+        - "read:project"
   /studies/{studyId}:
     get:
       tags:
@@ -139,7 +140,8 @@ paths:
         404:
           description: "Study not found"
       security:
-      - api_key: []
+      - rna_auth:
+        - "read:study"
   /studies/search:
     get:
       tags:
@@ -172,7 +174,7 @@ paths:
           description: "Error"
       security:
       - rna_auth:
-        - "read:expression"
+        - "read:study"
   /studies/search/filters:
     get:
       tags:
@@ -191,7 +193,7 @@ paths:
           description: "Error"
       security:
       - rna_auth:
-        - "read:expression"
+        - "read:study"
   /expressions/{expressionId}:
     get:
       tags:
@@ -215,7 +217,8 @@ paths:
         404:
           description: "Expression not found"
       security:
-      - api_key: []
+      - rna_auth:
+        - "read:expression"
   /expressions/search:
     get:
       tags:
@@ -324,7 +327,7 @@ paths:
           description: "Invalid tag value"
       security:
       - rna_auth:
-        - "read:expression"
+        - "read:info"
   /changelog/{version}:
     get:
       tags:
@@ -348,7 +351,8 @@ paths:
         404:
           description: "Change log not found"
       security:
-      - api_key: []
+      - rna_auth:
+        - "read:info"
   /files/{fileID}:
     get:
       tags:
@@ -372,7 +376,8 @@ paths:
         404:
           description: "File not found"
       security:
-      - api_key: []
+      - rna_auth:
+        - "read:file"
   /files/search:
     get:
       tags:
@@ -414,19 +419,19 @@ paths:
         400:
           description: "Error"
       security:
-      - rna_auth:
-        - "read:expression"
+      - rnaget_auth:
+        - "read:file"
 securityDefinitions:
-  rna_auth:
+  rnaget_auth:
     type: "oauth2"
     authorizationUrl: "http://ga4gh.org/oauth/dialog"
     flow: "implicit"
     scopes:
-      read:expression: "read expression"
-  api_key:
-    type: "apiKey"
-    name: "X-Api-Key"
-    in: "header"
+      read:expression: "read expression data"
+      read:project: "read information about projects"
+      read:study: "read information about studies"
+      read:file: "read information about files"
+      read:info: "read general info"
 definitions:
   project:
     type: "object"
