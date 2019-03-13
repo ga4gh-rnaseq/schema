@@ -3,7 +3,6 @@ info:
   description: "RNA API for GA4GH consideration."
   version: "0.1.0"
   title: "GA4GH RNA-seq API"
-host: "ga4gh.org"
 basePath: "/rna"
 produces:
   - application/json
