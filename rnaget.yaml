@@ -63,7 +63,7 @@ paths:
         404:
           description: "Project not found"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:project"
   /projects/search:
     get:
@@ -96,7 +96,7 @@ paths:
         400:
           description: "Error"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:project"
   /projects/search/filters:
     get:
@@ -115,7 +115,7 @@ paths:
         400:
           description: "Error"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:project"
   /studies/{studyId}:
     get:
@@ -140,7 +140,7 @@ paths:
         404:
           description: "Study not found"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:study"
   /studies/search:
     get:
@@ -173,7 +173,7 @@ paths:
         400:
           description: "Error"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:study"
   /studies/search/filters:
     get:
@@ -192,7 +192,7 @@ paths:
         400:
           description: "Error"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:study"
   /expressions/{expressionId}:
     get:
@@ -217,7 +217,7 @@ paths:
         404:
           description: "Expression not found"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:expression"
   /expressions/search:
     get:
@@ -286,7 +286,7 @@ paths:
         400:
           description: "Error"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:expression"
   /expressions/search/filters:
     get:
@@ -309,7 +309,7 @@ paths:
         400:
           description: "Error"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:expression"
   /getVersions:
     get:
@@ -326,7 +326,7 @@ paths:
         400:
           description: "Invalid tag value"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:info"
   /changelog/{version}:
     get:
@@ -351,7 +351,7 @@ paths:
         404:
           description: "Change log not found"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:info"
   /files/{fileID}:
     get:
@@ -376,7 +376,7 @@ paths:
         404:
           description: "File not found"
       security:
-      - rna_auth:
+      - rnaget_auth:
         - "read:file"
   /files/search:
     get:
