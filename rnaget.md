@@ -50,9 +50,9 @@ The recommended endpoint to return project data is:
 <tr markdown="block"><td>
 `id`
 </td><td>
-_optional string_
+_required string_
 </td><td>
-A string identifying which records to return.  If left blank all available projects will be returned.
+A string identifying which record to return.
 
 The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
 
@@ -102,9 +102,9 @@ The recommended endpoint to return study data is:
 <tr markdown="block"><td>
 `id`
 </td><td>
-_optional string_
+_required string_
 </td><td>
-A string identifying which records to return.  If left blank all available studies will be returned.
+A string identifying which record to return.
 
 The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
 
