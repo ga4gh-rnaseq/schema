@@ -1,10 +1,12 @@
 ---
 layout: default
-title: rnaseq expression protocol
+title: rnaget API specification
 suppress_footer: true
 ---
 
-# RNA-seq expression API spec v0.1.0
+# rnaget API
+
+# Version: 1.0.0
 
 # Design principles
 
@@ -24,7 +26,7 @@ Out of the scope of this API are:
 
 # Protocol essentials
 
-All API invocations are made to a configurable HTTP(S) endpoint, receive URL-encoded query string parameters, and return JSON output. Successful requests result with HTTP status code 200 and have UTF8-encoded JSON in the response body. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
+All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters, and return JSON output. Successful requests result with HTTP status code 200 and have UTF8-encoded JSON in the response body. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
 
 # Errors
 
@@ -34,7 +36,7 @@ The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when a
 
 This section lists the recommended URL endpoints a server SHOULD implement in order to navigate the RNA-seq data hierarchy and allow retrieval of expression data.
 
-Endpoints are described as HTTP GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handles these types of queries it is recommended that servers SHOULD implement parallel HTTP POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
+Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handles these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
 
 When processing requests containing multiple filters, the data provider SHOULD use a logical `AND` for selecting the results to return.
 
@@ -640,3 +642,6 @@ _optional string_ array
 List of the specific changes made to the DB
 </td></tr>
 <table>
+
+# API specification change log
+2019-MM-DD:    1.0.0    Initial release version <pending>
