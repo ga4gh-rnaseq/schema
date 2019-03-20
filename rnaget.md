@@ -190,11 +190,11 @@ _optional string_
 Version to return
 </td></tr>
 <tr markdown="block"><td>
-`sampleID`
+`sampleIDList`
 </td><td>
 _optional string_  
 </td><td>
-sampleID to match
+return only values for listed comma separated samples
 </td></tr>
 <tr markdown="block"><td>
 `projectID`
@@ -215,21 +215,21 @@ study to filter by
 </td><td>
 _optional string_  
 </td><td>
-return only values for listed feature ID values
+return only values for listed comma separated feature ID values
 </td></tr>
 <tr markdown="block"><td>
 `featureNameList`
 </td><td>
 _optional string_  
 </td><td>
-return only values for listed features
+return only values for listed comma separated features
 </td></tr>
 <tr markdown="block"><td>
 `featureAccessionList`
 </td><td>
 _optional string_  
 </td><td>
-return only values for listed accession numbers
+return only values for listed comma separated accession numbers
 </td></tr>
 <tr markdown="block"><td>
 `minExpression`

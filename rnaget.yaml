@@ -235,9 +235,9 @@ paths:
         items:
           type: "string"
         collectionFormat: "csv"
-      - name: "sampleID"
+      - name: "sampleIDList"
         in: "query"
-        description: "sampleID to match"
+        description: "return only values for listed sample IDs"
         required: false
         type: "string"
       - name: "projectID"
