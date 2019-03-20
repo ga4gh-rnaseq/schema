@@ -532,17 +532,7 @@ A unique name for the filter for use in search query URLs
 ## Expression
 The expression is a matrix of calculated expression values.
 
-The response to an expression query is an array in which each element has the following fields:
-
-<table>
-<tr markdown="block"><td>
-`expressionDataURL`
-</td><td>
-_required string_
-</td><td>
-URL for download or stream of expression data bundle
-</td></tr>
-</table>
+The response to an expression query is an array in which each element is a File object as described below.
 
 ## Expression Filters
 To support flexible search this provides a means of identifying the search filters supported by the data provider.
