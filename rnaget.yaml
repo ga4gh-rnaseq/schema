@@ -235,11 +235,14 @@ paths:
         items:
           type: "string"
         collectionFormat: "csv"
-      - name: "sampleID"
+      - name: "sampleIDList"
         in: "query"
-        description: "sampleID to match"
+        description: "comma separated list of sampleIDs to match"
         required: false
-        type: "string"
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "csv"
       - name: "projectID"
         in: "query"
         description: "project to filter by"
