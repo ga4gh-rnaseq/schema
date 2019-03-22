@@ -29,7 +29,7 @@ saupchurch client
 </td><td>
 Passed
 </td><td>
-Pending
+Passed
 </td></tr>
 </table>
 
