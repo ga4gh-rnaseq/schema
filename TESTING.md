@@ -15,6 +15,8 @@ Several sources have written test servers and clients for the rnaget API.  These
 ### Clients
 * saupchurch client - This is an iPython notebook example designed to demonstrate basic navigation and operations on the demo PCAWG dataset.  It is available at: https://github.com/saupchurch/bioinformatics-tools/blob/master/ga4gh-rnaget-api/GA4GH-rnaget-API-examples.ipynb
 
+* emi80 client - This is a Go command line application covering the basic functionalities of the API. It is available at: https://github.com/guigolab/rnaget-client
+
 
 ### Interoperability
 <table>
@@ -26,6 +28,13 @@ crg.cat server
 </td></tr>
 <tr markdown="block"><td>
 saupchurch client
+</td><td>
+Passed
+</td><td>
+Passed
+</td></tr>
+<tr markdown="block"><td>
+emi80 client
 </td><td>
 Passed
 </td><td>
