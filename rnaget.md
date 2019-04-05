@@ -20,8 +20,8 @@ Features of this API include:
 
 Out of the scope of this API are:
 
-* A means of retrieving primary (raw) read sequence data.  Expression matrices provide a means to link each included sample to the corresponding input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API] (https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
-* A means of retrieving reference sequences.  Expression matrices provide a means to link each included sample to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [refget API] (https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.
+* A means of retrieving primary (raw) read sequence data.  Expression matrices provide a means to link each included sample to the corresponding input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
+* A means of retrieving reference sequences.  Expression matrices provide a means to link each included sample to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [refget API](https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.
 * A means of retrieving feature annotation details.  Expression matrices provide a means to link each mapped feature to the corresponding annotation.  Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
 ## OpenAPI Description
@@ -32,7 +32,7 @@ An OpenAPI description of this specification is available and [describes the 1.0
 
 All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters, and return JSON output. Successful requests result with HTTP status code 200 and have UTF8-encoded JSON in the response body. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
 
-The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing] (https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
+The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing](https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
 
 # Errors
 
@@ -87,7 +87,7 @@ The specified request is not supported by the server
 
 The rnaget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.
 
-Data providers SHOULD verify user identity and credentials.  It is recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard] (https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
+Data providers SHOULD verify user identity and credentials.  It is recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
 
 ## CORS
 Cross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.
