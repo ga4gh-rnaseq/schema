@@ -54,9 +54,9 @@ The recommended endpoint to return project data is:
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<i>required</i> <code>strin</code>g
 </td><td>
 A string identifying which record to return.
 
