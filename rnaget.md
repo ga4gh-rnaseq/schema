@@ -8,7 +8,7 @@ suppress_footer: true
 
 # Version: 1.0.0
 
-# Design principles
+## Design principles
 
 This API provides a means of retrieving RNA-seq expression data via a client/server model.
 
@@ -20,21 +20,79 @@ Features of this API include:
 
 Out of the scope of this API are:
 
-* A means of retrieving primary (raw) read sequence data.  Expression matrices provide a means to link each included sample to the corresponding input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.
-* A means of retrieving reference sequences.  Expression matrices provide a means to link each included sample to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.
+* A means of retrieving primary (raw) read sequence data.  Expression matrices provide a means to link each included sample to the corresponding input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API] (https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
+* A means of retrieving reference sequences.  Expression matrices provide a means to link each included sample to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [refget API] (https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.
 * A means of retrieving feature annotation details.  Expression matrices provide a means to link each mapped feature to the corresponding annotation.  Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
+
+## OpenAPI Description
+
+An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget.yaml). OpenAPI is a language independent way of describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
 
 # Protocol essentials
 
 All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters, and return JSON output. Successful requests result with HTTP status code 200 and have UTF8-encoded JSON in the response body. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
 
-Data providers SHOULD verify user identity and credentials.  It is recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard] (https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
-
 The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing] (https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
 
 # Errors
 
-The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected.
+The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected. In the case of transient server errors (e.g., 503 and other 5xx status codes), the client SHOULD implement appropriate retry logic. For example, if a client sends an alphanumeric string for a parameter that is specified as unsigned integer the server MUST reply with `Bad Request`.
+
+<table>
+<tr markdown="block"><td>
+Error Type
+</td><td>
+HTTP status code
+</td><td>
+Description
+</td></tr>
+<tr markdown="block"><td>
+<code>Bad Request</code>
+</td><td>
+400
+</td><td>
+Cannot process due to malformed request, the requested parameters do not adhere to the specification
+</td></tr>
+<tr markdown="block"><td>
+<code>Unauthorized</code>
+</td><td>
+401
+</td><td>
+Authorization provided is invalid
+</td></tr>
+<tr markdown="block"><td>
+<code>Not Found</code>
+</td><td>
+404
+</td><td>
+The resource requested was not found
+</td></tr>
+<tr markdown="block"><td>
+<code>Not Acceptable</code>
+</td><td>
+406
+</td><td>
+The requested formatting is not supported by the server
+</td></tr>
+<tr markdown="block"><td>
+<code>Not Implemented</code>
+</td><td>
+501
+</td><td>
+The specified request is not supported by the server
+</td></tr>
+</table>
+
+## Security
+
+The rnaget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.
+
+Data providers SHOULD verify user identity and credentials.  It is recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard] (https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
+
+## CORS
+Cross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.
+
+GA4GH is publishing a [CORS best practices document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing), which implementers should refer to for guidance when enabling CORS on public API instances.
 
 # Request
 
