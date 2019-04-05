@@ -20,7 +20,7 @@ Features of this API include:
 Out of the scope of this API are:
 
 * A means of retrieving primary (raw) read sequence data.  Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
-* A means of retrieving reference sequences.  Each study lists the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [refget API](https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.
+* A means of retrieving reference sequences.  Each study lists the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
 * A means of retrieving feature annotation details.  Expression matrices provide a means to link each mapped feature to the corresponding annotation.  Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
 ## OpenAPI Description
@@ -31,11 +31,40 @@ An OpenAPI description of this specification is available and [describes the 1.0
 
 Implementors can check if their rnaget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
 
-# Protocol essentials
+## Protocol essentials
 
-All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters, and return JSON output. Successful requests result with HTTP status code 200 and have UTF8-encoded JSON in the response body. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
+All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
 
-The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing](https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
+The response for sequence retrieval has a character set of US-ASCII and consists solely of the requested sequence or sub-sequence with no line breaks. Other formatting of the response sequence may be allowed by the server, subject to standard negotiation with the client via the Accept header.
+
+Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.
+
+HTTP responses may be compressed using [RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html) transfer-coding, not content-coding.
+
+HTTP response may include a 3XX response code and Location header redirecting the client to retrieve sequence data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured follow redirects. `302`, `303` and `307` are all valid response codes to use.
+
+Requests MAY include an Accept header specifying the protocol version they are using:
+
+```
+Accept: text/vnd.ga4gh.rnaget.v1.0.0+plain
+```
+
+Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version:
+
+```
+Content-Type: text/vnd.ga4gh.rnaget.v1.0.0+plain; charset=us-ascii
+```
+
+## Internet Media Types Handling
+
+When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so
+
+- `text/vnd.ga4gh.rnaget.v1.0.0+plain; charset=us-ascii`
+  - `text/vnd.ga4gh.rnaget.v1.0.0+plain`
+  - `text/plain`
+- `application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii`
+  - `application/vnd.ga4gh.rnaget.v1.0.0+json`
+  - `application/json`
 
 # Errors
 
@@ -104,6 +133,10 @@ Data providers SHOULD verify user identity and credentials.  The policies and pr
 Cross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.
 
 GA4GH is publishing a [CORS best practices document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing), which implementers should refer to for guidance when enabling CORS on public API instances.
+
+## Responsible data sharing
+
+The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing](https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
 
 # Request
 
@@ -766,5 +799,9 @@ List of the specific changes made to the DB
 </td></tr>
 <table>
 
-# API specification change log
-2019-MM-DD:    1.0.0    Initial release version <pending>
+## Possible Future API Enhancements
+
+- Allow OR for search filters
+
+## API specification change log
+2019-MM-DD:    1.0.0    Initial release version (pending)
