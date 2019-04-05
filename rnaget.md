@@ -56,7 +56,8 @@ The recommended endpoint to return project data is:
 <tr markdown="block"><td>
 <code>id</code>
 </td><td>
-<i>required</i> <code>strin</code>g
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which record to return.
 
@@ -76,16 +77,18 @@ The recommended search endpoint is:
 
 <table>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version to return
 </td></tr>
@@ -106,9 +109,10 @@ The recommended endpoint to return study data is:
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which record to return.
 
@@ -128,16 +132,18 @@ The recommended search endpoint is:
 
 <table>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version to return
 </td></tr>
@@ -158,9 +164,10 @@ The recommended endpoint to return expression data is:
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which record to return.
 
@@ -180,72 +187,82 @@ The recommended search endpoint is:
 
 <table>
 <tr markdown="block"><td>
-`tags`  
+<code>tags</code>  
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version to return
 </td></tr>
 <tr markdown="block"><td>
-`sampleIDList`
+<code>sampleIDList</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 comma separated list of sampleIDs to match
 </td></tr>
 <tr markdown="block"><td>
-`projectID`
+<code>projectID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 project to filter by
 </td></tr>
 <tr markdown="block"><td>
-`studyID`
+<code>studyID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 study to filter by
 </td></tr>
 <tr markdown="block"><td>
-`featureIDList`
+<code>featureIDList</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 return only values for listed comma separated feature ID values
 </td></tr>
 <tr markdown="block"><td>
-`featureNameList`
+<code>featureNameList</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 return only values for listed comma separated features
 </td></tr>
 <tr markdown="block"><td>
-`featureAccessionList`
+<code>featureAccessionList</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 return only values for listed comma separated accession numbers
 </td></tr>
 <tr markdown="block"><td>
-`minExpression`
+<code>minExpression</code>
 </td><td>
-_optional threshold_ array  
+<code>threshold</code> array  
+<i>optional</i>
 </td><td>
 return only samples with expression values greater than listed threshold for each corresponding feature in the array
 </td></tr>
 <tr markdown="block"><td>
-`maxExpression`
+<code>maxExpression</code>
 </td><td>
-_optional threshold_ array  
+<code>threshold</code> array  
+<i>optional</i>
 </td><td>
 return only samples with expression values less than listed threshold for each corresponding feature in the array
 </td></tr>
@@ -255,30 +272,34 @@ return only samples with expression values less than listed threshold for each c
 
 <table>
 <tr markdown="block"><td>
-`threshold`  
+<code>threshold</code>  
 </td><td>
-_optional float_
+<code>float</code>
+<i>optional</i>
 </td><td>
 Numeric value to compare to expression value when filtering
 </td></tr>
 <tr markdown="block"><td>
-`featureID`
+<code>featureID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 ID of feature this threshold corresponds to
 </td></tr>
 <tr markdown="block"><td>
-`featureName`
+<code>featureName</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 Name of feature this threshold corresponds to
 </td></tr>
 <tr markdown="block"><td>
-`featureAccession`
+<code>featureAccession</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 Accession of feature this threshold corresponds to
 </td></tr>
@@ -295,9 +316,10 @@ The recommended endpoint for retrieving search filters is:
 
 <table>
 <tr markdown="block"><td>
-`type`
+<code>type</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 A string identifying the type of filters to return.  This is one of two values:
 
@@ -320,9 +342,10 @@ The recommended endpoint to return file retrieval URLs is:
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which record to return.
 
@@ -342,30 +365,34 @@ The recommended search endpoint is:
 
 <table>
 <tr markdown="block"><td>
-`tags`  
+<code>tags</code>  
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
-`projectID`
+<code>projectID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 project to filter by
 </td></tr>
 <tr markdown="block"><td>
-`studyID`
+<code>studyID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 study to filter by
 </td></tr>
 <tr markdown="block"><td>
-`fileType`
+<code>fileType</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 File type to filter by
 </td></tr>
@@ -383,9 +410,10 @@ The recommended endpoints to return database related data are:
 
 <table>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which version to return the changelog for.
 
@@ -407,37 +435,42 @@ The response to a project query is an array in which each element has the follow
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
-`name`
+<code>name</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Short, readable name
 </td></tr>
 <tr markdown="block"><td>
-`description`
+<code>description</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Detailed description of the object
 </td></tr>
@@ -450,9 +483,10 @@ The response to a project filter query is an array in which each element has the
 
 <table>
 <tr markdown="block"><td>
-`filter`
+<code>filter</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique name for the filter for use in search query URLs
 </td></tr>
@@ -468,51 +502,58 @@ The response to a study query is an array in which each element has the followin
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
-`name`
+<code>name</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Short, readable name
 </td></tr>
 <tr markdown="block"><td>
-`description`
+<code>description</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Detailed description of the object
 </td></tr>
 <tr markdown="block"><td>
-`parentProjectID`
+<code>parentProjectID</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 ID of the project containing the study
 </td></tr>
 <tr markdown="block"><td>
-`sampleList`
+<code>sampleList</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 ID(s) of samples which provided the read data for the study
 </td></tr>
@@ -525,9 +566,10 @@ The response to a study filter query is an array in which each element has the f
 
 <table>
 <tr markdown="block"><td>
-`filter`
+<code>filter</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique name for the filter for use in search query URLs
 </td></tr>
@@ -545,9 +587,10 @@ The response to an expression filter query is an array in which each element has
 
 <table>
 <tr markdown="block"><td>
-`filterType`
+<code>filterType</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 Identifies the axis to which these filter apply.  One of:
 
@@ -555,9 +598,10 @@ feature, sample
 
 </td></tr>
 <tr markdown="block"><td>
-`filters`
+<code>filters</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of unique names for the filters to be used in search query URLs
 </td></tr>
@@ -570,46 +614,52 @@ The response to a file query is an array in which each element has the following
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
-`fileType`
+<code>fileType</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Type of file.  Examples include:
 
 * BAM
 </td></tr>
 <tr markdown="block"><td>
-`studyID`
+<code>studyID</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 ID of containing study
 </td></tr>
 <tr markdown="block"><td>
-`URL`
+<code>URL</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 URL to download file.
 </td></tr>
@@ -622,16 +672,18 @@ The response to a changelog query is an array in which each element has the foll
 
 <table>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
-`log`
+<code>log</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of the specific changes made to the DB
 </td></tr>
