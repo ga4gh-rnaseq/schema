@@ -14,19 +14,18 @@ This API provides a means of retrieving RNA-seq expression data via a client/ser
 
 Features of this API include:
 
-* A matrix representation for expression data to allow for efficient retrieval of large numbers of results
 * Support for a hierarchical data model which provides the option for servers to associate expression data for discovery and retrieval
 * Support for accessing subsets of expression data through slicing operations on the expression matrix and/or query filters to specify features to be included
 
 Out of the scope of this API are:
 
-* A means of retrieving primary (raw) read sequence data.  Expression matrices provide a means to link each included sample to the corresponding input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
-* A means of retrieving reference sequences.  Expression matrices provide a means to link each included sample to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [refget API](https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.
+* A means of retrieving primary (raw) read sequence data.  Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
+* A means of retrieving reference sequences.  Each study lists the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [refget API](https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.
 * A means of retrieving feature annotation details.  Expression matrices provide a means to link each mapped feature to the corresponding annotation.  Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
 ## OpenAPI Description
 
-An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget.yaml). OpenAPI is a language independent way of describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
+An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget-openapi.yaml). OpenAPI is a language independent way of describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
 
 # Protocol essentials
 
@@ -87,7 +86,15 @@ The specified request is not supported by the server
 
 The rnaget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.
 
-Data providers SHOULD verify user identity and credentials.  It is recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
+Sensitive information transmitted on public networks, such as access tokens and human genomic data, MUST be protected using Transport Level Security (TLS) version 1.2 or later, as specified in [RFC 5246](https://tools.ietf.org/html/rfc5246).
+
+If the data holder requires client authentication and/or authorization, then the client's HTTPS API request MUST present an OAuth 2.0 bearer access token as specified in [RFC 6750](https://tools.ietf.org/html/rfc6750), in the Authorization request header field with the Bearer authentication scheme:
+
+```
+Authorization: Bearer [access_token]
+```
+
+Data providers SHOULD verify user identity and credentials.  The policies and processes used to perform user authentication and authorization, and the means through which access tokens are issued, are beyond the scope of this API specification. GA4GH recommends the use of the OAuth 2.0 framework ([RFC 6749](https://tools.ietf.org/html/rfc6749)) for authentication and authorization.  It is also recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
 
 ## CORS
 Cross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.
@@ -98,7 +105,7 @@ GA4GH is publishing a [CORS best practices document](https://docs.google.com/doc
 
 This section lists the recommended URL endpoints a server SHOULD implement in order to navigate the RNA-seq data hierarchy and allow retrieval of expression data.
 
-Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handles these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
+Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
 
 When processing requests containing multiple filters, the data provider SHOULD use a logical `AND` for selecting the results to return.
 
@@ -606,6 +613,14 @@ Detailed description of the object
 <i>optional</i>
 </td><td>
 ID of the project containing the study
+</td></tr>
+<tr markdown="block"><td>
+<code>genome</code>
+</td><td>
+<code>string</code> array
+<i>optional</i>
+</td><td>
+Name of the reference genome build used for aligning samples in the study.
 </td></tr>
 <tr markdown="block"><td>
 <code>sampleList</code>
