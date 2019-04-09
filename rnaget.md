@@ -39,7 +39,7 @@ Requests adhering to this specification MAY include an Accept header specifying 
 
 HTTP responses may be compressed using [RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html) transfer-coding, not content-coding.
 
-HTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured follow redirects. `302`, `303` and `307` are all valid response codes to use.
+HTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured to follow redirects. `302`, `303` and `307` are all valid response codes to use.
 
 Requests MAY include an Accept header specifying the protocol version they are using:
 
@@ -64,7 +64,7 @@ When responding to a request a server MUST use the fully specified media type fo
   - `application/vnd.ga4gh.rnaget.v1.0.0+json`
   - `application/json`
 
-# Errors
+## Errors
 
 The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected. In the case of transient server errors (e.g., 503 and other 5xx status codes), the client SHOULD implement appropriate retry logic. For example, if a client sends an alphanumeric string for a parameter that is specified as unsigned integer the server MUST reply with `Bad Request`.
 
