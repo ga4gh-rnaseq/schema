@@ -8,39 +8,139 @@ suppress_footer: true
 
 # Version: 1.0.0
 
-# Design principles
+## Design principles
 
 This API provides a means of retrieving RNA-seq expression data via a client/server model.
 
 Features of this API include:
 
-* A matrix representation for expression data to allow for efficient retrieval of large numbers of results
 * Support for a hierarchical data model which provides the option for servers to associate expression data for discovery and retrieval
 * Support for accessing subsets of expression data through slicing operations on the expression matrix and/or query filters to specify features to be included
 
 Out of the scope of this API are:
 
-* A means of retrieving primary (raw) read sequence data.  Expression matrices provide a means to link each included sample to the corresponding input read sequences and servers should implement additional API(s) to allow for search and retrieval of raw reads.
-* A means of retrieving reference sequences.  Expression matrices provide a means to link each included sample to the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.
+* A means of retrieving primary (raw) read sequence data.  Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
+* A means of retrieving reference sequences.  Each study lists the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
 * A means of retrieving feature annotation details.  Expression matrices provide a means to link each mapped feature to the corresponding annotation.  Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
-# Protocol essentials
+## OpenAPI Description
 
-All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters, and return JSON output. Successful requests result with HTTP status code 200 and have UTF8-encoded JSON in the response body. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
+An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget-openapi.yaml). OpenAPI is a language independent way of describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
 
-Data providers SHOULD verify user identity and credentials.  It is recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard] (https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
+## Compliance
 
-The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing] (https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
+Implementors can check if their rnaget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
+
+## Protocol essentials
+
+All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
+
+Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.
+
+HTTP responses may be compressed using [RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html) transfer-coding, not content-coding.
+
+HTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured follow redirects. `302`, `303` and `307` are all valid response codes to use.
+
+Requests MAY include an Accept header specifying the protocol version they are using:
+
+```
+Accept: text/vnd.ga4gh.rnaget.v1.0.0+plain
+```
+
+Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version:
+
+```
+Content-Type: text/vnd.ga4gh.rnaget.v1.0.0+plain; charset=us-ascii
+```
+
+## Internet Media Types Handling
+
+When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so
+
+- `text/vnd.ga4gh.rnaget.v1.0.0+plain; charset=us-ascii`
+  - `text/vnd.ga4gh.rnaget.v1.0.0+plain`
+  - `text/plain`
+- `application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii`
+  - `application/vnd.ga4gh.rnaget.v1.0.0+json`
+  - `application/json`
 
 # Errors
 
-The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected.
+The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected. In the case of transient server errors (e.g., 503 and other 5xx status codes), the client SHOULD implement appropriate retry logic. For example, if a client sends an alphanumeric string for a parameter that is specified as unsigned integer the server MUST reply with `Bad Request`.
+
+<table>
+<tr markdown="block"><td>
+Error Type
+</td><td>
+HTTP status code
+</td><td>
+Description
+</td></tr>
+<tr markdown="block"><td>
+<code>Bad Request</code>
+</td><td>
+400
+</td><td>
+Cannot process due to malformed request, the requested parameters do not adhere to the specification
+</td></tr>
+<tr markdown="block"><td>
+<code>Unauthorized</code>
+</td><td>
+401
+</td><td>
+Authorization provided is invalid
+</td></tr>
+<tr markdown="block"><td>
+<code>Not Found</code>
+</td><td>
+404
+</td><td>
+The resource requested was not found
+</td></tr>
+<tr markdown="block"><td>
+<code>Not Acceptable</code>
+</td><td>
+406
+</td><td>
+The requested formatting is not supported by the server
+</td></tr>
+<tr markdown="block"><td>
+<code>Not Implemented</code>
+</td><td>
+501
+</td><td>
+The specified request is not supported by the server
+</td></tr>
+</table>
+
+## Security
+
+The rnaget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.
+
+Sensitive information transmitted on public networks, such as access tokens and human genomic data, MUST be protected using Transport Level Security (TLS) version 1.2 or later, as specified in [RFC 5246](https://tools.ietf.org/html/rfc5246).
+
+If the data holder requires client authentication and/or authorization, then the client's HTTPS API request MUST present an OAuth 2.0 bearer access token as specified in [RFC 6750](https://tools.ietf.org/html/rfc6750), in the Authorization request header field with the Bearer authentication scheme:
+
+```
+Authorization: Bearer [access_token]
+```
+
+Data providers SHOULD verify user identity and credentials.  The policies and processes used to perform user authentication and authorization, and the means through which access tokens are issued, are beyond the scope of this API specification. GA4GH recommends the use of the OAuth 2.0 framework ([RFC 6749](https://tools.ietf.org/html/rfc6749)) for authentication and authorization.  It is also recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
+
+## CORS
+Cross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.
+
+GA4GH is publishing a [CORS best practices document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing), which implementers should refer to for guidance when enabling CORS on public API instances.
+
+## Responsible data sharing
+
+The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing](https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
 
 # Request
 
 This section lists the recommended URL endpoints a server SHOULD implement in order to navigate the RNA-seq data hierarchy and allow retrieval of expression data.
 
-Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handles these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
+Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
 
 When processing requests containing multiple filters, the data provider SHOULD use a logical `AND` for selecting the results to return.
 
@@ -54,9 +154,10 @@ The recommended endpoint to return project data is:
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which record to return.
 
@@ -76,16 +177,18 @@ The recommended search endpoint is:
 
 <table>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version to return
 </td></tr>
@@ -106,9 +209,10 @@ The recommended endpoint to return study data is:
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which record to return.
 
@@ -128,16 +232,18 @@ The recommended search endpoint is:
 
 <table>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version to return
 </td></tr>
@@ -158,9 +264,10 @@ The recommended endpoint to return expression data is:
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which record to return.
 
@@ -180,72 +287,82 @@ The recommended search endpoint is:
 
 <table>
 <tr markdown="block"><td>
-`tags`  
+<code>tags</code>  
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version to return
 </td></tr>
 <tr markdown="block"><td>
-`sampleIDList`
+<code>sampleIDList</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 comma separated list of sampleIDs to match
 </td></tr>
 <tr markdown="block"><td>
-`projectID`
+<code>projectID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 project to filter by
 </td></tr>
 <tr markdown="block"><td>
-`studyID`
+<code>studyID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 study to filter by
 </td></tr>
 <tr markdown="block"><td>
-`featureIDList`
+<code>featureIDList</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 return only values for listed comma separated feature ID values
 </td></tr>
 <tr markdown="block"><td>
-`featureNameList`
+<code>featureNameList</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 return only values for listed comma separated features
 </td></tr>
 <tr markdown="block"><td>
-`featureAccessionList`
+<code>featureAccessionList</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 return only values for listed comma separated accession numbers
 </td></tr>
 <tr markdown="block"><td>
-`minExpression`
+<code>minExpression</code>
 </td><td>
-_optional threshold_ array  
+<code>threshold</code> array  
+<i>optional</i>
 </td><td>
 return only samples with expression values greater than listed threshold for each corresponding feature in the array
 </td></tr>
 <tr markdown="block"><td>
-`maxExpression`
+<code>maxExpression</code>
 </td><td>
-_optional threshold_ array  
+<code>threshold</code> array  
+<i>optional</i>
 </td><td>
 return only samples with expression values less than listed threshold for each corresponding feature in the array
 </td></tr>
@@ -255,30 +372,34 @@ return only samples with expression values less than listed threshold for each c
 
 <table>
 <tr markdown="block"><td>
-`threshold`  
+<code>threshold</code>  
 </td><td>
-_optional float_
+<code>float</code>
+<i>optional</i>
 </td><td>
 Numeric value to compare to expression value when filtering
 </td></tr>
 <tr markdown="block"><td>
-`featureID`
+<code>featureID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 ID of feature this threshold corresponds to
 </td></tr>
 <tr markdown="block"><td>
-`featureName`
+<code>featureName</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 Name of feature this threshold corresponds to
 </td></tr>
 <tr markdown="block"><td>
-`featureAccession`
+<code>featureAccession</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 Accession of feature this threshold corresponds to
 </td></tr>
@@ -295,9 +416,10 @@ The recommended endpoint for retrieving search filters is:
 
 <table>
 <tr markdown="block"><td>
-`type`
+<code>type</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 A string identifying the type of filters to return.  This is one of two values:
 
@@ -320,9 +442,10 @@ The recommended endpoint to return file retrieval URLs is:
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which record to return.
 
@@ -342,30 +465,34 @@ The recommended search endpoint is:
 
 <table>
 <tr markdown="block"><td>
-`tags`  
+<code>tags</code>  
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Comma separated tag list to filter by
 </td></tr>
 <tr markdown="block"><td>
-`projectID`
+<code>projectID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 project to filter by
 </td></tr>
 <tr markdown="block"><td>
-`studyID`
+<code>studyID</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 study to filter by
 </td></tr>
 <tr markdown="block"><td>
-`fileType`
+<code>fileType</code>
 </td><td>
-_optional string_  
+<code>string</code>
+<i>optional</i>
 </td><td>
 File type to filter by
 </td></tr>
@@ -383,9 +510,10 @@ The recommended endpoints to return database related data are:
 
 <table>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A string identifying which version to return the changelog for.
 
@@ -407,37 +535,42 @@ The response to a project query is an array in which each element has the follow
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
-`name`
+<code>name</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Short, readable name
 </td></tr>
 <tr markdown="block"><td>
-`description`
+<code>description</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Detailed description of the object
 </td></tr>
@@ -450,9 +583,10 @@ The response to a project filter query is an array in which each element has the
 
 <table>
 <tr markdown="block"><td>
-`filter`
+<code>filter</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique name for the filter for use in search query URLs
 </td></tr>
@@ -468,51 +602,66 @@ The response to a study query is an array in which each element has the followin
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
-`name`
+<code>name</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Short, readable name
 </td></tr>
 <tr markdown="block"><td>
-`description`
+<code>description</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Detailed description of the object
 </td></tr>
 <tr markdown="block"><td>
-`parentProjectID`
+<code>parentProjectID</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 ID of the project containing the study
 </td></tr>
 <tr markdown="block"><td>
-`sampleList`
+<code>genome</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
+</td><td>
+Name of the reference genome build used for aligning samples in the study.
+</td></tr>
+<tr markdown="block"><td>
+<code>sampleList</code>
+</td><td>
+<code>string</code> array
+<i>optional</i>
 </td><td>
 ID(s) of samples which provided the read data for the study
 </td></tr>
@@ -525,9 +674,10 @@ The response to a study filter query is an array in which each element has the f
 
 <table>
 <tr markdown="block"><td>
-`filter`
+<code>filter</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique name for the filter for use in search query URLs
 </td></tr>
@@ -545,9 +695,10 @@ The response to an expression filter query is an array in which each element has
 
 <table>
 <tr markdown="block"><td>
-`filterType`
+<code>filterType</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 Identifies the axis to which these filter apply.  One of:
 
@@ -555,9 +706,10 @@ feature, sample
 
 </td></tr>
 <tr markdown="block"><td>
-`filters`
+<code>filters</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of unique names for the filters to be used in search query URLs
 </td></tr>
@@ -570,46 +722,52 @@ The response to a file query is an array in which each element has the following
 
 <table>
 <tr markdown="block"><td>
-`id`
+<code>id</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 A unique identifier assigned to this object
 </td></tr>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
-`tags`
+<code>tags</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of tags associated with the object
 </td></tr>
 <tr markdown="block"><td>
-`fileType`
+<code>fileType</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 Type of file.  Examples include:
 
 * BAM
 </td></tr>
 <tr markdown="block"><td>
-`studyID`
+<code>studyID</code>
 </td><td>
-_optional string_
+<code>string</code>
+<i>optional</i>
 </td><td>
 ID of containing study
 </td></tr>
 <tr markdown="block"><td>
-`URL`
+<code>URL</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 URL to download file.
 </td></tr>
@@ -622,20 +780,26 @@ The response to a changelog query is an array in which each element has the foll
 
 <table>
 <tr markdown="block"><td>
-`version`
+<code>version</code>
 </td><td>
-_required string_
+<code>string</code>
+<i>required</i>
 </td><td>
 Version number of the object
 </td></tr>
 <tr markdown="block"><td>
-`log`
+<code>log</code>
 </td><td>
-_optional string_ array
+<code>string</code> array
+<i>optional</i>
 </td><td>
 List of the specific changes made to the DB
 </td></tr>
 <table>
 
-# API specification change log
-2019-MM-DD:    1.0.0    Initial release version <pending>
+## Possible Future API Enhancements
+
+- Allow OR for search filters
+
+## API specification change log
+2019-MM-DD:    1.0.0    Initial release version (pending)
