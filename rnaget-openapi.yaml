@@ -22,16 +22,6 @@ tags:
   externalDocs:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "getVersions"
-  description: "Returns database release versions"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "changelog"
-  description: "Returns change log for a release version"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
 - name: "files"
   description: "Returns files"
   externalDocs:
@@ -314,48 +304,6 @@ paths:
       security:
       - rnaget_auth:
         - "read:expression"
-  /getVersions:
-    get:
-      tags:
-      - "getVersions"
-      summary: "Get release versions of database"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "object"
-            additionalProperties:
-              type: "string"
-        400:
-          description: "Invalid tag value"
-      security:
-      - rnaget_auth:
-        - "read:info"
-  /changelog/{version}:
-    get:
-      tags:
-      - "changelog"
-      summary: "Get change log for a specific release version"
-      description: "Returns changes associated with specified database release version"
-      operationId: "getChangeLog"
-      parameters:
-      - name: "version"
-        in: "path"
-        description: "release version"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/changeLog"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Change log not found"
-      security:
-      - rnaget_auth:
-        - "read:info"
   /files/{fileID}:
     get:
       tags:
@@ -501,15 +449,6 @@ definitions:
         type: "array"
         items:
           type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-  changeLog:
-    type: "object"
-    description: "list of changes to the database associated with a version update"
-    properties:
-      version:
-        type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"

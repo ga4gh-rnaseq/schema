@@ -136,21 +136,34 @@ GA4GH is publishing a [CORS best practices document](https://docs.google.com/doc
 
 The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing](https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
 
-# Request
+## API Methods
 
 This section lists the recommended URL endpoints a server SHOULD implement in order to navigate the RNA-seq data hierarchy and allow retrieval of expression data.
 
-Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
+Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as a UTF8-encoded JSON key-value dictionary.
 
 When processing requests containing multiple filters, the data provider SHOULD use a logical `AND` for selecting the results to return.
 
-## Project Get Methods
+### Project: Get project by id
 
-The recommended endpoint to return project data is:
+`GET /projects/<id>`
 
-    GET /projects/<id>
+The primary method for accessing specific project data.  The reponse is the specified project in JSON format unless an alternative formatting supported by the server is requested.
 
-### URL parameters
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description
+|
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-projectId or /byContributor/some-projectId
+
 
 <table>
 <tr markdown="block"><td>
@@ -172,6 +185,14 @@ The format of this identifier is left to the discretion of the API provider, inc
 The recommended search endpoint is:
 
     GET /projects/search
+
+To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
+
+    POST /projects/search
+
+with a UTF-8 JSON encoded key-value dictionary in the form:
+
+`{"filter1": "value1", "filter2": "value2"}`
 
 ### Search Query Filters
 
@@ -228,6 +249,14 @@ The recommended search endpoint is:
 
     GET /studies/search
 
+To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
+ 
+    POST /studies/search
+
+with a UTF-8 JSON encoded key-value dictionary in the form:
+
+`{"filter1": "value1", "filter2": "value2"}`
+
 ### Search Query Filters
 
 <table>
@@ -277,15 +306,45 @@ The format of this identifier is left to the discretion of the API provider, inc
 </td></tr>
 </table>
 
+## Supported Expression Data Formats
+
+The recommended search endpoint is:
+
+    GET /expressions/formats
+
+The response is a UTF-8 encoded JSON list of the supported output data formats.  It is recommended that data providers support at least 1 of the following common output formats:
+
+  * tsv
+  * loom
+  * hdf5
+  * mtx
+
+
 ## Expression Search Methods
 
 The recommended search endpoint is:
 
     GET /expressions/search
 
+To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
+
+    POST /expressions/search
+
+with a UTF-8 JSON encoded key-value dictionary in the form:
+
+`{"filter1": "value1", "filter2": "value2"}`
+
 ### Search Query Filters
 
 <table>
+<tr markdown="block"><td>
+<code>format</code>
+</td><td>
+<code>string</code>
+<i>required</i>
+</td><td>
+Data format to return.  MUST be one of the supported data types returned by a request to the <code>/expressions/formats</code> endpoint
+</td></tr>
 <tr markdown="block"><td>
 <code>tags</code>  
 </td><td>
@@ -495,31 +554,6 @@ study to filter by
 <i>optional</i>
 </td><td>
 File type to filter by
-</td></tr>
-</table>
-
-## Additional Methods
-
-## Database Get Methods
-The recommended endpoints to return database related data are:
-
-    GET /getVersions
-    GET /changeLog/<version>
-
-### Changelog URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which version to return the changelog for.
-
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
-
-* some-version-string or /byDate/some-version-string
 </td></tr>
 </table>
 
@@ -773,33 +807,10 @@ URL to download file.
 </td></tr>
 </table>
 
-## Changelog
-The changelog is a list of changes to the database associated with a version update.
-
-The response to a changelog query is an array in which each element has the following fields:
-
-<table>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>log</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of the specific changes made to the DB
-</td></tr>
-<table>
-
 ## Possible Future API Enhancements
 
 - Allow OR for search filters
 
 ## API specification change log
-2019-MM-DD:    1.0.0    Initial release version (pending)
+
+1.0.0    Initial release version
