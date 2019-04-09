@@ -159,7 +159,7 @@ Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
 
 #### URL parameters
 
-| Parameter | Data Type | Required | Description
+| Parameter | Data Type | Required | Description |
 |
 |-----------|-----------|----------|-----------|
 | `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-projectId or /byContributor/some-projectId |
