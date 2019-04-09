@@ -146,6 +146,11 @@ When processing requests containing multiple filters, the data provider SHOULD u
 
 ### Project: Get project by id
 
+The project is the top level of the model hierarchy and contains a set of related studies.  Example projects include:
+
+* all data submitted by contributor X
+* the local mirror of the European Nucleotide Archive data
+
 `GET /projects/<id>`
 
 The primary method for accessing specific project data.  The reponse is the specified project in JSON format unless an alternative formatting supported by the server is requested.
@@ -163,23 +168,33 @@ Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
 |-----------|-----------|----------|-----------|
 | `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-projectId or /byContributor/some-projectId |
 
+#### Request parameters
 
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which record to return.
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned sequence, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting of the sequence.The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
 
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
+#### Response
 
-* some-projectId or /byContributor/some-projectId
-</td></tr>
-</table>
+The server shall return the selected project as a JSON formatted object.  The server may return the sequence in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
-## Project Search Methods
+On success and a project is returned the server MUST issue a 200 status code.
+
+The response to a project query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | required | A unique identifier assigned to this object |
+| `version`  | string    | optional | Version number of the object |
+| `tags`     | string array | optional | List of tags for the object |
+| `name`     | string    | optional | Short, readable name |
+| `description` | string | optional | Detailed description of the object |
+
+#### An example response
+
+XXX insert example XXX
+
+### Project:  Search for matching projects
 
 The recommended search endpoint is:
 
@@ -557,57 +572,6 @@ File type to filter by
 </table>
 
 # Responses
-
-## Project
-The project is the top level of the model hierarchy and contains a set of related studies.  Example projects include:
-
-* all data submitted by contributor X
-* the local mirror of the European Nucleotide Archive data
-
-The response to a project query is an array in which each element has the following fields:
-
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique identifier assigned to this object
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of tags associated with the object
-</td></tr>
-<tr markdown="block"><td>
-<code>name</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Short, readable name
-</td></tr>
-<tr markdown="block"><td>
-<code>description</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Detailed description of the object
-</td></tr>
-</table>
 
 ## Project Filters
 To support flexible search this provides a means of identifying the search filters supported by the data provider.
