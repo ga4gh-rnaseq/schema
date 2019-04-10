@@ -176,7 +176,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.
+in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching projects in JSON format unless an alternative formatting supported by the server is requested.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
@@ -218,28 +218,38 @@ The response to a project search query is a list of JSON objects each with the f
 
 XXX insert example XXX
 
-## Project Search Filters
-The recommended endpoint for retrieving search filters is:
+### Project Search Filters
 
-    GET /projects/search/filters
-
-XXX start of old stuff XXX
-## Project Filters
 To support flexible search this provides a means of identifying the search filters supported by the data provider.
 
-The response to a project filter query is an array in which each element has the following fields:
+`GET /projects/search/filters`
 
-<table>
-<tr markdown="block"><td>
-<code>filter</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique name for the filter for use in search query URLs
-</td></tr>
-</table>
-XXX end of old stuff XXX
+The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the available filters as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more filters are returned the server MUST issue a 200 status code.
+
+The response to a project search filter query is a list of JSON objects each with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `filter`   | string    | Yes      | A unique name for the filter for use in search query URLs |
 
 ### Study: Get study by id
 
@@ -250,7 +260,7 @@ The study is a set of related RNA expression values.  It is assumed all samples 
 
 `GET /studies/<id>`
 
-The primary method for accessing specific study data.  The reponse is the specified project in JSON format unless an alternative formatting supported by the server is requested.
+The primary method for accessing specific study data.  The reponse is the specified study in JSON format unless an alternative formatting supported by the server is requested.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
@@ -298,11 +308,11 @@ XXX insert example XXX
 
 The recommended search endpoint is:
 
-    GET /studies/search
+`GET /studies/search`
 
 To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
  
-    POST /studies/search
+`POST /studies/search`
 
 accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
@@ -313,7 +323,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.
+in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching studies in JSON format unless an alternative formatting supported by the server is requested.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
@@ -361,7 +371,9 @@ XXX insert example XXX
 ## Study Search Filters
 The recommended endpoint for retrieving search filters is:
 
-    GET /studies/search/filters
+`GET /studies/search/filters`
+
+The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
 XXX start of old stuff XXX
 ## Study Filters
@@ -482,7 +494,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.
+in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching expressions in JSON format unless an alternative formatting supported by the server is requested.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
@@ -533,7 +545,9 @@ XXX insert example XXX
 ## Expression Search Filters
 The recommended endpoint for retrieving search filters is:
 
-    GET /expressions/search/filters
+`GET /expressions/search/filters`
+
+The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
 XXX start of old stuff XXX
 ## Expression Filters
@@ -650,7 +664,7 @@ with a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.
+in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching files in JSON format unless an alternative formatting supported by the server is requested.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
