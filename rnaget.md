@@ -161,11 +161,11 @@ XXX insert example XXX
 
 The recommended search endpoint is:
 
-    GET /projects/search
+`GET /projects/search`
 
 To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
 
-    POST /projects/search
+`POST /projects/search`
 
 accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
@@ -218,7 +218,7 @@ The response to a project search query is a list of JSON objects each with the f
 
 XXX insert example XXX
 
-### Project Search Filters
+### Project: Get available search filters
 
 To support flexible search this provides a means of identifying the search filters supported by the data provider.
 
@@ -250,6 +250,10 @@ The response to a project search filter query is a list of JSON objects each wit
 | Data Field | Data Type | Required | Description 
 |------------|-----------|----------|-----------|
 | `filter`   | string    | Yes      | A unique name for the filter for use in search query URLs |
+
+#### An example response
+
+XXX insert example XXX
 
 ### Study: Get study by id
 
@@ -368,30 +372,42 @@ The response to a study search query is a list of JSON objects each with the fol
 
 XXX insert example XXX
 
-## Study Search Filters
-The recommended endpoint for retrieving search filters is:
+### Study: Get available search filters
+
+To support flexible search this provides a means of identifying the search filters supported by the data provider.
 
 `GET /studies/search/filters`
 
 The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
-XXX start of old stuff XXX
-## Study Filters
-To support flexible search this provides a means of identifying the search filters supported by the data provider.
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
-The response to a study filter query is an array in which each element has the following fields:
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
 
-<table>
-<tr markdown="block"><td>
-<code>filter</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique name for the filter for use in search query URLs
-</td></tr>
-</table>
-XXX end of old stuff XXX
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the available filters as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more filters are returned the server MUST issue a 200 status code.
+
+The response to a study search filter query is a list of JSON objects each with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `filter`   | string    | Yes      | A unique name for the filter for use in search query URLs |
+
+#### An example response
+
+XXX insert example XXX
 
 ### Expression: Get RNA Expression by id
 
@@ -480,7 +496,7 @@ GET /expressions/formats
 
 The recommended search endpoint is:
 
-    GET /expressions/search
+`GET /expressions/search`
 
 To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
 
@@ -536,67 +552,49 @@ For each threshold tuple the request SHOULD provide only one of `featureID`, `fe
 
 XXX insert example XXX
 
-#### Request parameters
+#### Expression: Get available search filters
 
-| Parameter | Data Type | Required | Description
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned study list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
-
-## Expression Search Filters
-The recommended endpoint for retrieving search filters is:
+To support flexible search this provides a means of identifying the search filters supported by the data provider.
 
 `GET /expressions/search/filters`
 
 The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
-XXX start of old stuff XXX
-## Expression Filters
-To support flexible search this provides a means of identifying the search filters supported by the data provider.
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
-The response to an expression filter query is an array in which each element has the following fields:
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
 
-<table>
-<tr markdown="block"><td>
-<code>filterType</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-Identifies the axis to which these filter apply.  One of:
+#### URL parameters
 
-feature, sample
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `type`    | string    | Optional | A string identifying the type of filters to return.  This is one of two values: feature (returns filters on the feature axis of the matrix) or sample (returns filters on the sample axis of the matrix) If not present both lists will be returned. |
 
-</td></tr>
-<tr markdown="block"><td>
-<code>filters</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of unique names for the filters to be used in search query URLs
-</td></tr>
-</table>
-XXX end of old stuff XXX
+#### Request parameters
 
-### URL parameters
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
-<table>
-<tr markdown="block"><td>
-<code>type</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-A string identifying the type of filters to return.  This is one of two values:
+#### Response
 
-feature - returns filters on the feature axis of the matrix
+The server shall return the available filters as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
-sample - returns filters on the sample axis of the matrix
+On success and one or more filters are returned the server MUST issue a 200 status code.
 
-If not present both lists will be returned.
+The response to an expression search filter query is a list of JSON objects each with the following fields:
 
-</td></tr>
-</table>
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `filterType` | string       | Yes      | Identifies the axis to which these filter apply.  One of: feature, sample |
+| `filters`    | string array | Optional | List of unique names for the filters to be used in search query URLs |
+
+#### An example response
+
+XXX insert example XXX
 
 ### File: Get file by id
 
