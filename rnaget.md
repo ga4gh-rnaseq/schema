@@ -44,13 +44,13 @@ HTTP response may include a 3XX response code and Location header redirecting th
 Requests MAY include an Accept header specifying the protocol version they are using:
 
 ```
-Accept: text/vnd.ga4gh.rnaget.v1.0.0+plain
+Accept: text/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version:
 
 ```
-Content-Type: text/vnd.ga4gh.rnaget.v1.0.0+plain; charset=us-ascii
+Content-Type: text/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
 ```
 
 ## Internet Media Types Handling
@@ -172,11 +172,11 @@ Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned sequence, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting of the sequence.The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+| `Accept`  | string    | Optional | The formatting of the returned project, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
-The server shall return the selected project as a JSON formatted object.  The server may return the sequence in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+The server shall return the selected project as a JSON formatted object.  The server may return the project in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
 On success and a project is returned the server MUST issue a 200 status code.
 
@@ -184,11 +184,11 @@ The response to a project query is a JSON object with the following fields:
 
 | Data Field | Data Type | Required | Description 
 |------------|-----------|----------|-----------|
-| `id`       | string    | required | A unique identifier assigned to this object |
-| `version`  | string    | optional | Version number of the object |
-| `tags`     | string array | optional | List of tags for the object |
-| `name`     | string    | optional | Short, readable name |
-| `description` | string | optional | Detailed description of the object |
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `name`     | string    | Optional | Short, readable name |
+| `description` | string | Optional | Detailed description of the object |
 
 #### An example response
 
@@ -204,60 +204,106 @@ To support queries with many parameters the data provider SHOULD implement the f
 
     POST /projects/search
 
-with a UTF-8 JSON encoded key-value dictionary in the form:
+accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
 `{"filter1": "value1", "filter2": "value2"}`
 
-### Search Query Filters
+in which each `filter#` key matches the corresponding URL parameter.
 
-<table>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Comma separated tag list to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version to return
-</td></tr>
-</table>
+#### URL parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `tags`    | string    | Optional | Comma separated tag list to filter by |
+| `version` | string    | Optional | Version to return |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned project list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the matching projects as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more projects are returned the server MUST issue a 200 status code.
+
+The response to a project search query is a list of JSON objects each with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | required | A unique identifier assigned to this object |
+| `version`  | string    | optional | Version number of the object |
+| `tags`     | string array | optional | List of tags for the object |
+| `name`     | string    | optional | Short, readable name |
+| `description` | string | optional | Detailed description of the object |
+
+#### An example response
+
+XXX insert example XXX
 
 ## Project Search Filters
 The recommended endpoint for retrieving search filters is:
 
     GET /projects/search/filters
 
-## Study Get Methods
+XXX Project search filters XXX
 
-The recommended endpoint to return study data is:
+### Study: Get study by id
 
-    GET /studies/<id>
+The study is a set of related RNA expression values.  It is assumed all samples in a study have been processed uniformly.  Example studies include:
 
-### URL parameters
+* multiple tissues from all patients enrolled in clinical trial X
+* a collection of liver samples from several sources which have been uniformly reprocessed for differential analysis
 
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which record to return.
+`GET /studies/<id>`
 
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
+The primary method for accessing specific study data.  The reponse is the specified project in JSON format unless an alternative formatting supported by the server is requested.
 
-* some-studyId or /byProject/some-studyId
-</td></tr>
-</table>
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
-## Study Search Methods
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-studyId or /byContributor/some-studyId |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned study, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the selected study as a JSON formatted object.  The server may return the object in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and a study is returned the server MUST issue a 200 status code.
+
+The response to a study query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `name`     | string    | Optional | Short, readable name |
+| `description` | string | Optional | Detailed description of the object |
+| `parentProjectID` | string | Optional | ID of the project containing the study |
+| `genome`   | string    | Optional | Name of the reference genome build used for aligning samples in the study |
+| `sampleList` | string array | Optional | ID(s) of samples which provided the read data for the study |
+
+#### An example response
+
+XXX insert example XXX
+
+### Study: Search for matching studies
 
 The recommended search endpoint is:
 
@@ -271,68 +317,131 @@ with a UTF-8 JSON encoded key-value dictionary in the form:
 
 `{"filter1": "value1", "filter2": "value2"}`
 
-### Search Query Filters
+in which each `filter#` key matches the corresponding URL parameter.
 
-<table>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Comma separated tag list to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version to return
-</td></tr>
-</table>
+#### URL parameters
+
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `tags`    | string    | Optional | Comma separated tag list to filter by |
+| `version` | string    | Optional | Version to return |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned istudy list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the matching studies as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more studies are returned the server MUST issue a 200 status code.
+
+The response to a study search query is a list of JSON objects each with the following fields:
+
+| Data Field | Data Type | Required | Description
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `name`     | string    | Optional | Short, readable name |
+| `description` | string | Optional | Detailed description of the object |
+| `parentProjectID` | string | Optional | ID of the project containing the study |
+| `genome`   | string    | Optional | Name of the reference genome build used for aligning samples in the study |
+| `sampleList` | string array | Optional | ID(s) of samples which provided the read data for the study |
+
+#### An example response
+
+XXX insert example XXX
 
 ## Study Search Filters
 The recommended endpoint for retrieving search filters is:
 
     GET /studies/search/filters
 
-## RNA Expression Get Methods
+### Expression: Get RNA Expression by id
 
-The recommended endpoint to return expression data is:
+The expression is a matrix of calculated expression values.
 
-    GET /expressions/<id>
+`GET /expressions/<id>`
 
-### URL parameters
+The primary method for accessing specific expression data.  The reponse is the specified expression object in JSON format unless an alternative formatting supported by the server is requested.
 
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which record to return.
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
 
-* some-expressionId or /bySample/some-expressionId
-</td></tr>
-</table>
+#### URL parameters
 
-## Supported Expression Data Formats
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-expressionId or /byContributor/some-expressionId |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned expression object, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+
+#### Response
+
+The server shall return the selected expression as a JSON formatted object.  The server may return the expression in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and an expression is returned the server MUST issue a 200 status code.
+
+The response to an expression query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `fileType  | string    | Optional | Type of file.  Examples include: loom, tsv |
+| `studyID` | string | Optional | ID of containing study |
+| `URL    ` | string | Yes      | URL to download file |
+
+### Expression: Get supported data formats
 
 The recommended search endpoint is:
 
-    GET /expressions/formats
+`GET /expressions/formats`
 
-The response is a UTF-8 encoded JSON list of the supported output data formats.  It is recommended that data providers support at least 1 of the following common output formats:
+The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  It is recommended that data providers support at least 1 of the following common output formats:
 
   * tsv
   * loom
   * hdf5
   * mtx
 
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned formats, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+
+#### Response
+
+The server shall return the supported formats as JSON formatted string array.  The server may return the list in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and a list is returned the server MUST issue a 200 status code.
+
+#### An example response
+
+```
+GET /expressions/formats
+["tsv", "loom"]
+```
 
 ## Expression Search Methods
 
@@ -345,8 +454,12 @@ To support queries with many parameters the data provider SHOULD implement the f
     POST /expressions/search
 
 with a UTF-8 JSON encoded key-value dictionary in the form:
-
-`{"filter1": "value1", "filter2": "value2"}`
+```
+{
+  "filter1": "value1",
+  "filter2": "value2"
+}
+```
 
 ### Search Query Filters
 
@@ -586,81 +699,6 @@ The response to a project filter query is an array in which each element has the
 <i>required</i>
 </td><td>
 A unique name for the filter for use in search query URLs
-</td></tr>
-</table>
-
-## Study
-The study is a set of related RNA expression values.  It is assumed all samples in a study have been processed uniformly.  Example studies include:
-
-* multiple tissues from all patients enrolled in clinical trial X
-* a collection of liver samples from several sources which have been uniformly reprocessed for differential analysis
-
-The response to a study query is an array in which each element has the following fields:
-
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique identifier assigned to this object
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of tags associated with the object
-</td></tr>
-<tr markdown="block"><td>
-<code>name</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Short, readable name
-</td></tr>
-<tr markdown="block"><td>
-<code>description</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Detailed description of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>parentProjectID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-ID of the project containing the study
-</td></tr>
-<tr markdown="block"><td>
-<code>genome</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-Name of the reference genome build used for aligning samples in the study.
-</td></tr>
-<tr markdown="block"><td>
-<code>sampleList</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-ID(s) of samples which provided the read data for the study
 </td></tr>
 </table>
 
