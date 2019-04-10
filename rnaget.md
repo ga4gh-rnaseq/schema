@@ -68,50 +68,13 @@ When responding to a request a server MUST use the fully specified media type fo
 
 The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected. In the case of transient server errors (e.g., 503 and other 5xx status codes), the client SHOULD implement appropriate retry logic. For example, if a client sends an alphanumeric string for a parameter that is specified as unsigned integer the server MUST reply with `Bad Request`.
 
-<table>
-<tr markdown="block"><td>
-Error Type
-</td><td>
-HTTP status code
-</td><td>
-Description
-</td></tr>
-<tr markdown="block"><td>
-<code>Bad Request</code>
-</td><td>
-400
-</td><td>
-Cannot process due to malformed request, the requested parameters do not adhere to the specification
-</td></tr>
-<tr markdown="block"><td>
-<code>Unauthorized</code>
-</td><td>
-401
-</td><td>
-Authorization provided is invalid
-</td></tr>
-<tr markdown="block"><td>
-<code>Not Found</code>
-</td><td>
-404
-</td><td>
-The resource requested was not found
-</td></tr>
-<tr markdown="block"><td>
-<code>Not Acceptable</code>
-</td><td>
-406
-</td><td>
-The requested formatting is not supported by the server
-</td></tr>
-<tr markdown="block"><td>
-<code>Not Implemented</code>
-</td><td>
-501
-</td><td>
-The specified request is not supported by the server
-</td></tr>
-</table>
+| Error type        | HTTP status code | Description
+|-------------------|------------------|-------------|
+| `Bad Request`     | 400 | Cannot process due to malformed request, the requested parameters do not adhere to the specification |
+| `Unauthorized`    | 401 | Authorization provided is invalid |
+| `Not Found`       | 404 | The resource requested was not found |
+| `Not Acceptable`  | 406 | The requested formatting is not supported by the server |
+| `Not Implemented` | 501 | The specified request is not supported by the server |
 
 ## Security
 
@@ -206,9 +169,21 @@ To support queries with many parameters the data provider SHOULD implement the f
 
 accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
-`{"filter1": "value1", "filter2": "value2"}`
+```
+{
+  "filter1": "value1",
+  "filter2": "value2"
+}
+```
 
 in which each `filter#` key matches the corresponding URL parameter.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
 
 #### URL parameters
 
@@ -248,7 +223,23 @@ The recommended endpoint for retrieving search filters is:
 
     GET /projects/search/filters
 
-XXX Project search filters XXX
+XXX start of old stuff XXX
+## Project Filters
+To support flexible search this provides a means of identifying the search filters supported by the data provider.
+
+The response to a project filter query is an array in which each element has the following fields:
+
+<table>
+<tr markdown="block"><td>
+<code>filter</code>
+</td><td>
+<code>string</code>
+<i>required</i>
+</td><td>
+A unique name for the filter for use in search query URLs
+</td></tr>
+</table>
+XXX end of old stuff XXX
 
 ### Study: Get study by id
 
@@ -313,11 +304,23 @@ To support queries with many parameters the data provider SHOULD implement the f
  
     POST /studies/search
 
-with a UTF-8 JSON encoded key-value dictionary in the form:
+accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
-`{"filter1": "value1", "filter2": "value2"}`
+```
+{
+  "filter1": "value1",
+  "filter2": "value2"
+}
+```
 
 in which each `filter#` key matches the corresponding URL parameter.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
 
 #### URL parameters
 
@@ -330,7 +333,7 @@ in which each `filter#` key matches the corresponding URL parameter.
 
 | Parameter | Data Type | Required | Description
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned istudy list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned study list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -360,9 +363,27 @@ The recommended endpoint for retrieving search filters is:
 
     GET /studies/search/filters
 
+XXX start of old stuff XXX
+## Study Filters
+To support flexible search this provides a means of identifying the search filters supported by the data provider.
+
+The response to a study filter query is an array in which each element has the following fields:
+
+<table>
+<tr markdown="block"><td>
+<code>filter</code>
+</td><td>
+<code>string</code>
+<i>required</i>
+</td><td>
+A unique name for the filter for use in search query URLs
+</td></tr>
+</table>
+XXX end of old stuff XXX
+
 ### Expression: Get RNA Expression by id
 
-The expression is a matrix of calculated expression values.
+The expression is a matrix of calculated expression values.  Expression requests return a URL for the download or streaming of this numeric matrix.
 
 `GET /expressions/<id>`
 
@@ -443,7 +464,7 @@ GET /expressions/formats
 ["tsv", "loom"]
 ```
 
-## Expression Search Methods
+### Expression: Search for matching RNA expressions
 
 The recommended search endpoint is:
 
@@ -453,7 +474,7 @@ To support queries with many parameters the data provider SHOULD implement the f
 
     POST /expressions/search
 
-with a UTF-8 JSON encoded key-value dictionary in the form:
+accepting a UTF-8 JSON encoded key-value dictionary in the form:
 ```
 {
   "filter1": "value1",
@@ -461,268 +482,60 @@ with a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-### Search Query Filters
+in which each `filter#` key matches the corresponding URL parameter.
 
-<table>
-<tr markdown="block"><td>
-<code>format</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-Data format to return.  MUST be one of the supported data types returned by a request to the <code>/expressions/formats</code> endpoint
-</td></tr>
-<tr markdown="block"><td>
-<code>tags</code>  
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Comma separated tag list to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version to return
-</td></tr>
-<tr markdown="block"><td>
-<code>sampleIDList</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-comma separated list of sampleIDs to match
-</td></tr>
-<tr markdown="block"><td>
-<code>projectID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-project to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>studyID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-study to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>featureIDList</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-return only values for listed comma separated feature ID values
-</td></tr>
-<tr markdown="block"><td>
-<code>featureNameList</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-return only values for listed comma separated features
-</td></tr>
-<tr markdown="block"><td>
-<code>featureAccessionList</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-return only values for listed comma separated accession numbers
-</td></tr>
-<tr markdown="block"><td>
-<code>minExpression</code>
-</td><td>
-<code>threshold</code> array  
-<i>optional</i>
-</td><td>
-return only samples with expression values greater than listed threshold for each corresponding feature in the array
-</td></tr>
-<tr markdown="block"><td>
-<code>maxExpression</code>
-</td><td>
-<code>threshold</code> array  
-<i>optional</i>
-</td><td>
-return only samples with expression values less than listed threshold for each corresponding feature in the array
-</td></tr>
-</table>
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
-### Expression Threshold
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
 
-<table>
-<tr markdown="block"><td>
-<code>threshold</code>  
-</td><td>
-<code>float</code>
-<i>optional</i>
-</td><td>
-Numeric value to compare to expression value when filtering
-</td></tr>
-<tr markdown="block"><td>
-<code>featureID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-ID of feature this threshold corresponds to
-</td></tr>
-<tr markdown="block"><td>
-<code>featureName</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Name of feature this threshold corresponds to
-</td></tr>
-<tr markdown="block"><td>
-<code>featureAccession</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Accession of feature this threshold corresponds to
-</td></tr>
-</table>
+#### URL parameters
 
-For each threshold tuple the request SHOULD provide only one of `featureID`, `featureName` or `featureAccession`.
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `format`  | string    | Yes      | Data format to return.  MUST be one of the supported data types returned by a request to the `/expressions/formats` endpoint |
+| `tags`    | string    | Optional | Comma separated tag list to filter by |
+| `version` | string    | Optional | Version to return |
+| `sampleIDList` | string | Optional | comma separated list of sampleIDs to match |
+| `projectID` | string | Optional | project to filter by |
+| `studyID` | string | Optional |  study to filter by |
+| `featureIDList` | string | Optional | return only values for listed comma separated feature ID values |
+| `featureNameList` | string | Optional | return only values for listed comma separated features |
+| `featureAccessionList` | string | Optional | return only values for listed comma separated accession numbers |
+| `minExpression` | `threshold` array | Optional | return only samples with expression values greater than listed threshold for each corresponding feature in the array |
+| `maxExpression` | `threshold` array | Optional | return only samples with expression values less than listed threshold for each corresponding feature in the array |
+
+#### Expression Threshold
+
+To allow for filtering on a range of expression values for multiple features the `/expressions/search` endpoint optionally accepts an array of `threshold` object.  This is a JSON formatted object with the following fields.
+
+| Data Field         | Data Type | Required | Description
+|--------------------|-----------|----------|-----------|
+| `threshold`        | float     | Yes      | Numeric value to compare to expression value when filtering |
+| `featureID`        | string    | Optional | ID of feature this threshold corresponds to |
+| `featureName`      | string    | Optional | Name of feature this threshold corresponds to |
+| `featureAccession` | string    | Optional | Accession of feature this threshold corresponds to |
+
+For each threshold tuple the request SHOULD provide only one of `featureID`, `featureName` or `featureAccession`.  If none of these are provided the query will return all samples containing 1 or more features satisfying the `threshold` value and condition (min or max).
+
+#### Sample `threshold`
+
+XXX insert example XXX
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned study list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 ## Expression Search Filters
 The recommended endpoint for retrieving search filters is:
 
     GET /expressions/search/filters
 
-### URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>type</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-A string identifying the type of filters to return.  This is one of two values:
-
-feature - returns filters on the feature axis of the matrix
-
-sample - returns filters on the sample axis of the matrix
-
-If not present both lists will be returned.
-
-</td></tr>
-</table>
-
-## File Get Methods
-
-The recommended endpoint to return file retrieval URLs is:
-
-    GET /files/<id>
-
-### URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which record to return.
-
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
-
-* some-fileId or /bam_files/some-fileId
-</td></tr>
-</table>
-
-## File Search Methods
-
-The recommended search endpoint is:
-
-    GET /files/search
-
-### Search Query Filters
-
-<table>
-<tr markdown="block"><td>
-<code>tags</code>  
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Comma separated tag list to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>projectID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-project to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>studyID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-study to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>fileType</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-File type to filter by
-</td></tr>
-</table>
-
-# Responses
-
-## Project Filters
-To support flexible search this provides a means of identifying the search filters supported by the data provider.
-
-The response to a project filter query is an array in which each element has the following fields:
-
-<table>
-<tr markdown="block"><td>
-<code>filter</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique name for the filter for use in search query URLs
-</td></tr>
-</table>
-
-## Study Filters
-To support flexible search this provides a means of identifying the search filters supported by the data provider.
-
-The response to a study filter query is an array in which each element has the following fields:
-
-<table>
-<tr markdown="block"><td>
-<code>filter</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique name for the filter for use in search query URLs
-</td></tr>
-</table>
-
-## Expression
-The expression is a matrix of calculated expression values.
-
-The response to an expression query is an array in which each element is a File object as described below.
-
+XXX start of old stuff XXX
 ## Expression Filters
 To support flexible search this provides a means of identifying the search filters supported by the data provider.
 
@@ -749,64 +562,137 @@ feature, sample
 List of unique names for the filters to be used in search query URLs
 </td></tr>
 </table>
+XXX end of old stuff XXX
 
-## File
-The file response is a URL for downloading the requested file.  Supported files include input and interim processing pipeline files.  Example files include:
-
-The response to a file query is an array in which each element has the following fields:
+### URL parameters
 
 <table>
 <tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique identifier assigned to this object
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
+<code>type</code>
 </td><td>
 <code>string</code>
 <i>optional</i>
 </td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of tags associated with the object
-</td></tr>
-<tr markdown="block"><td>
-<code>fileType</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Type of file.  Examples include:
+A string identifying the type of filters to return.  This is one of two values:
 
-* BAM
-</td></tr>
-<tr markdown="block"><td>
-<code>studyID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-ID of containing study
-</td></tr>
-<tr markdown="block"><td>
-<code>URL</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-URL to download file.
+feature - returns filters on the feature axis of the matrix
+
+sample - returns filters on the sample axis of the matrix
+
+If not present both lists will be returned.
+
 </td></tr>
 </table>
+
+### File: Get file by id
+
+The file response is a URL for downloading the requested file.  Supported files include input and interim processing pipeline files.
+
+`GET /files/<id>`
+
+The primary method for accessing specific files.  The reponse is the specified file object in JSON format unless an alternative formatting supported by the server is requested.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-fileId or /byContributor/some-fileId |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned expression object, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+
+#### Response
+
+The server shall return the selected file as a JSON formatted object.  The server may return the object in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and a file is returned the server MUST issue a 200 status code.
+
+The response to an file query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `fileType  | string    | Optional | Type of file.  Examples include: txt, tsv, log |
+| `studyID` | string | Optional | ID of containing study |
+| `URL    ` | string | Yes      | URL to download file |
+
+#### An example response
+
+XXX insert example XXX
+
+### File:  Search for matching files
+
+The recommended search endpoint is:
+
+`GET /files/search`
+
+To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
+
+`POST /files/search`
+
+with a UTF-8 JSON encoded key-value dictionary in the form:
+```
+{
+  "filter1": "value1",
+  "filter2": "value2"
+}
+```
+
+in which each `filter#` key matches the corresponding URL parameter.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter   | Data Type | Required | Description 
+|-------------|-----------|----------|-----------|
+| `tags`      | string    | Optional | Comma separated tag list to filter by |
+| `projectID` | string    | Optional | project to filter by |
+| `studyID`   | string    | Optional | study to filter by |
+| `fileType`  | string    | Optional | File type to filter by |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned project, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+The server shall return the matching files as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more files are returned the server MUST issue a 200 status code.
+
+The response to a file search query is a list of JSON objects each with the following fields:
+
+| Data Field | Data Type | Required | Description
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `fileType  | string    | Optional | Type of file.  Examples include: txt, tsv, log |
+| `studyID` | string | Optional | ID of containing study |
+| `URL    ` | string | Yes      | URL to download file |
+
+#### An example response
+
+XXX insert example XXX
 
 ## Possible Future API Enhancements
 
