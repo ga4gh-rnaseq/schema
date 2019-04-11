@@ -44,7 +44,7 @@ HTTP response may include a 3XX response code and Location header redirecting th
 Requests MAY include an Accept header specifying the protocol version they are using:
 
 ```
-Accept: text/vnd.ga4gh.rnaget.v1.0.0+json
+Accept: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version:
@@ -135,7 +135,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned project, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned project, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -196,7 +196,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned project list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned project list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -237,7 +237,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -283,7 +283,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned study, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned study, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -347,7 +347,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned study list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned study list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -391,7 +391,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -434,7 +434,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned expression object, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+| `Accept`  | string    | Optional | The formatting of the returned expression object, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
 
 #### Response
 
@@ -449,7 +449,7 @@ The response to an expression query is a JSON object with the following fields:
 | `id`       | string    | Yes      | A unique identifier assigned to this object |
 | `version`  | string    | Optional | Version number of the object |
 | `tags`     | string array | Optional | List of tags for the object |
-| `fileType  | string    | Optional | Type of file.  Examples include: loom, tsv |
+| `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
 | `URL    ` | string | Yes      | URL to download file |
 
@@ -476,7 +476,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned formats, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+| `Accept`  | string    | Optional | The formatting of the returned formats, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
 
 #### Response
 
@@ -576,7 +576,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -620,7 +620,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned expression object, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+| `Accept`  | string    | Optional | The formatting of the returned expression object, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
 
 #### Response
 
@@ -683,7 +683,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned project, defaults to `text/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+| `Accept`  | string    | Optional | The formatting of the returned project, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 The server shall return the matching files as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.

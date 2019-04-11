@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  title: "GA4GH rnaget API"
-  description: "RNA API for GA4GH consideration."
-  version: "0.1.0"
+  title: "rnaget API"
+  description: "RNA API for expression value retrieval"
+  version: "1.0.0"
 basePath: "/rnaget"
 produces:
   - application/json
@@ -52,6 +52,10 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "Project not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:project"
@@ -84,7 +88,11 @@ paths:
             items:
               $ref: "#/definitions/project"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:project"
@@ -103,7 +111,11 @@ paths:
             items:
               $ref: "#/definitions/searchFilter"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:project"
@@ -129,6 +141,10 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "Study not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:study"
@@ -161,7 +177,11 @@ paths:
             items:
               $ref: "#/definitions/study"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:study"
@@ -180,7 +200,11 @@ paths:
             items:
               $ref: "#/definitions/searchFilter"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:study"
@@ -206,6 +230,33 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "Expression not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
+      security:
+      - rnaget_auth:
+        - "read:expression"
+  /expressions/formats:
+    get:
+      tags:
+      - "expressions"
+      summary: "Get output formats"
+      description: "Returns a list of supported expression matrix formats"
+      operationId: "getExpressionFormats"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        404:
+          description: "Format list not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -277,7 +328,11 @@ paths:
             items:
               $ref: "#/definitions/file"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -300,7 +355,11 @@ paths:
           schema:
             $ref: "#/definitions/expressionSearchFilter"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -326,6 +385,10 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "File not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:file"
@@ -368,7 +431,11 @@ paths:
             items:
               $ref: "#/definitions/file"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:file"
@@ -419,10 +486,8 @@ definitions:
         type: "string"
       parentProjectID:
         type: "string"
-      patientList:
-        type: "array"
-        items:
-          type: "string"
+      genome:
+        type: "string"
       sampleList:
         type: "array"
         items:
