@@ -155,7 +155,18 @@ The response to a project query is a JSON object with the following fields:
 
 #### An example response
 
-XXX insert example XXX
+```
+{
+  "description": "Pan Cancer Analysis of Whole Genomes test data from Expression Atlas E-MTAB-5423",
+  "id": "43378a5d48364f9d8cf3c3d5104df560",
+  "name": "PCAWG",
+  "tags": [
+    "PCAWG",
+    "cancer"
+  ],
+  "version": "1.0"
+}
+```
 
 ### Project:  Search for matching projects
 
@@ -216,7 +227,20 @@ The response to a project search query is a list of JSON objects each with the f
 
 #### An example response
 
-XXX insert example XXX
+```
+[
+  {
+    "description": "Pan Cancer Analysis of Whole Genomes test data from Expression Atlas E-MTAB-5423",
+    "id": "43378a5d48364f9d8cf3c3d5104df560",
+    "name": "PCAWG",
+    "tags": [
+      "PCAWG",
+      "cancer"
+    ],
+    "version": "1.0"
+  }
+]
+```
 
 ### Project: Get available search filters
 
@@ -253,7 +277,13 @@ The response to a project search filter query is a list of JSON objects each wit
 
 #### An example response
 
-XXX insert example XXX
+```
+[
+  "version",
+  "tags",
+  "name"
+]
+```
 
 ### Study: Get study by id
 
@@ -306,7 +336,19 @@ The response to a study query is a JSON object with the following fields:
 
 #### An example response
 
-XXX insert example XXX
+```
+{
+  "description": "PCAWG study",
+  "id": "6cccbbd76b9c4837bd7342dd616d0fec",
+  "name": "PCAWG",
+  "parentProjectID": "43378a5d48364f9d8cf3c3d5104df560",
+  "tags": [
+    "PCAWG",
+    "cancer"
+  ],
+  "version": "1.0"
+}
+```
 
 ### Study: Search for matching studies
 
@@ -370,7 +412,21 @@ The response to a study search query is a list of JSON objects each with the fol
 
 #### An example response
 
-XXX insert example XXX
+```
+[
+  {
+    "description": "PCAWG study",
+    "id": "6cccbbd76b9c4837bd7342dd616d0fec",
+    "name": "PCAWG",
+    "parentProjectID": "43378a5d48364f9d8cf3c3d5104df560",
+    "tags": [
+      "PCAWG",
+      "cancer"
+    ],
+    "version": "1.0"
+  }
+]
+```
 
 ### Study: Get available search filters
 
@@ -407,7 +463,14 @@ The response to a study search filter query is a list of JSON objects each with 
 
 #### An example response
 
-XXX insert example XXX
+```
+[
+  "version",
+  "tags",
+  "name",
+  "projectID"
+]
+```
 
 ### Expression: Get RNA Expression by id
 
@@ -452,6 +515,17 @@ The response to an expression query is a JSON object with the following fields:
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
 | `URL    ` | string | Yes      | URL to download file |
+
+#### An example response
+
+```
+{
+  "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
+  "file_type": "loom",
+  "id": "2a7ab5533ef941eaa59edbfe887b58c4",
+  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+}
+```
 
 ### Expression: Get supported data formats
 
@@ -534,6 +608,36 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 | `minExpression` | `threshold` array | Optional | return only samples with expression values greater than listed threshold for each corresponding feature in the array |
 | `maxExpression` | `threshold` array | Optional | return only samples with expression values less than listed threshold for each corresponding feature in the array |
 
+#### Response
+
+The server shall return the selected expression as a JSON formatted object.  The server may return the expression in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and an expression is returned the server MUST issue a 200 status code.
+
+The response to an expression query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
+| `studyID` | string | Optional | ID of containing study |
+| `URL    ` | string | Yes      | URL to download file |
+
+#### An example response
+
+```
+[
+  {
+    "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
+    "file_type": "loom",
+    "id": "2a7ab5533ef941eaa59edbfe887b58c4",
+    "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+  }
+]
+```
+
 #### Expression Threshold
 
 To allow for filtering on a range of expression values for multiple features the `/expressions/search` endpoint optionally accepts an array of `threshold` object.  This is a JSON formatted object with the following fields.
@@ -593,7 +697,19 @@ The response to an expression search filter query is a list of JSON objects each
 
 #### An example response
 
-XXX insert example XXX
+```
+[
+  "version",
+  "sampleID",
+  "projectID",
+  "studyID",
+  "featureIDList",
+  "featureNameList",
+  "featureAccessionList",
+  "minExpression",
+  "maxExpression"
+]
+```
 
 ### File: Get file by id
 
