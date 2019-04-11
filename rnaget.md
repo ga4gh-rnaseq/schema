@@ -50,7 +50,7 @@ Accept: text/vnd.ga4gh.rnaget.v1.0.0+json
 Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version:
 
 ```
-Content-Type: text/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
+Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
 ```
 
 ## Internet Media Types Handling
@@ -122,7 +122,7 @@ The primary method for accessing specific project data.  The reponse is the spec
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
@@ -182,7 +182,7 @@ in which each `filter#` key matches the corresponding URL parameter.  The repons
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
@@ -230,7 +230,7 @@ The reponse is a list of search filters in JSON format unless an alternative for
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### Request parameters
@@ -270,7 +270,7 @@ The primary method for accessing specific study data.  The reponse is the specif
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
@@ -333,7 +333,7 @@ in which each `filter#` key matches the corresponding URL parameter.  The repons
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
@@ -384,7 +384,7 @@ The reponse is a list of search filters in JSON format unless an alternative for
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### Request parameters
@@ -421,7 +421,7 @@ The primary method for accessing specific expression data.  The reponse is the s
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
@@ -463,14 +463,13 @@ The response is a list of the supported data formats as a JSON formatted object 
 
   * tsv
   * loom
-  * hdf5
   * mtx
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### Request parameters
@@ -516,7 +515,7 @@ in which each `filter#` key matches the corresponding URL parameter.  The repons
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
@@ -564,7 +563,7 @@ The reponse is a list of search filters in JSON format unless an alternative for
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
@@ -608,7 +607,7 @@ The primary method for accessing specific files.  The reponse is the specified f
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
@@ -668,7 +667,7 @@ in which each `filter#` key matches the corresponding URL parameter.  The repons
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: text/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 #### URL parameters
