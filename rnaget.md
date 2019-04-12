@@ -621,7 +621,7 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 #### Response
 
-The server shall return the selected expression as a JSON formatted object.  The server may return the expression in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+The server shall return the filtered expression as a JSON formatted object.  The server may return the expression in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
 On success and an expression is returned the server MUST issue a 200 status code.
 
@@ -664,7 +664,10 @@ For each threshold tuple the request SHOULD provide only one of `featureID`, `fe
 
 #### Sample `threshold`
 
-XXX insert example XXX
+{
+  "threshold": 10,
+  "featureName": "GABARAPL2"
+}
 
 #### Expression: Get available search filters
 
@@ -795,7 +798,16 @@ The response to an file query is a JSON object with the following fields:
 
 #### An example response
 
-XXX insert example XXX
+{
+  "URL": "http://server.com/rnaget/somestudy/pipelinefiles/SJ.out.tab",
+  "file_type": "tsv",
+  "id": "2a7ab55e3ef241eaa59edbfe827b58c4",
+  "tags": [
+      "splice-junctions"
+    ],
+  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+}
+
 
 ### File:  Search for matching files
 
@@ -857,7 +869,17 @@ The response to a file search query is a list of JSON objects each with the foll
 
 #### An example response
 
-XXX insert example XXX
+[
+  {
+    "URL": "http://server.com/rnaget/somestudy/pipelinefiles/SJ.out.tab",
+    "file_type": "tsv",
+    "id": "2a7ab55e3ef241eaa59edbfe827b58c4",
+    "tags": [
+      "splice-junctions"
+    ],
+    "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+  }
+]
 
 ## Possible Future API Enhancements
 
