@@ -19,13 +19,13 @@ Features of this API include:
 
 Out of the scope of this API are:
 
-* A means of retrieving primary (raw) read sequence data.  Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
-* A means of retrieving reference sequences.  Each study lists the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
-* A means of retrieving feature annotation details.  Expression matrices provide a means to link each mapped feature to the corresponding annotation.  Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
+* A means of retrieving primary (raw) read sequence data. Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads. The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
+* A means of retrieving reference sequences. Each study lists the genomic reference used for alignment. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
+* A means of retrieving feature annotation details. Expression matrices provide a means to link each mapped feature to the corresponding annotation. Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
 ## OpenAPI Description
 
-An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget-openapi.yaml). OpenAPI is a language independent way of describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
+An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget-openapi.yaml). OpenAPI is an independent API description format for describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
 
 ## Compliance
 
@@ -57,9 +57,6 @@ Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
 
 When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so
 
-- `text/vnd.ga4gh.rnaget.v1.0.0+plain; charset=us-ascii`
-  - `text/vnd.ga4gh.rnaget.v1.0.0+plain`
-  - `text/plain`
 - `application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii`
   - `application/vnd.ga4gh.rnaget.v1.0.0+json`
   - `application/json`
@@ -279,9 +276,15 @@ The response to a project search filter query is a list of JSON objects each wit
 
 ```
 [
-  "version",
-  "tags",
-  "name"
+  {
+    filter: "version"
+  },
+  {
+    filter: "tags"
+  },
+  {
+    filter: "name"
+  }
 ]
 ```
 
@@ -465,10 +468,18 @@ The response to a study search filter query is a list of JSON objects each with 
 
 ```
 [
-  "version",
-  "tags",
-  "name",
-  "projectID"
+  {
+    filter: "version"
+  },
+  {
+    filter: "tags"
+  },
+  {
+    filter: "name"
+  },
+  {
+    filter: "projectID"
+  }
 ]
 ```
 
@@ -699,15 +710,42 @@ The response to an expression search filter query is a list of JSON objects each
 
 ```
 [
-  "version",
-  "sampleID",
-  "projectID",
-  "studyID",
-  "featureIDList",
-  "featureNameList",
-  "featureAccessionList",
-  "minExpression",
-  "maxExpression"
+  {
+    filterType: "general",
+    filters: ["version"]
+  },
+  {
+    filterType: "sample",
+    filters: ["sampleID"]
+  },
+  {
+    filterType: "general",
+    filters: ["projectID"]
+  },
+  {
+    filterType: "general",
+    filters: ["studyID"]
+  },
+  {
+    filterType: "feature",
+    filters: ["featureIDList"]
+  },
+  {
+    filterType: "feature",
+    filters: ["featureNameList"]
+  },
+  {
+    filterType: "feature",
+    filters: ["featureAccessionList"]
+  },
+  {
+    filterType: "general",
+    filters: ["minExpression"]
+  },
+  {
+    filterType: "general",
+    filters: ["maxExpression"]
+  }
 ]
 ```
 
@@ -751,9 +789,9 @@ The response to an file query is a JSON object with the following fields:
 | `id`       | string    | Yes      | A unique identifier assigned to this object |
 | `version`  | string    | Optional | Version number of the object |
 | `tags`     | string array | Optional | List of tags for the object |
-| `fileType  | string    | Optional | Type of file.  Examples include: txt, tsv, log |
-| `studyID` | string | Optional | ID of containing study |
-| `URL    ` | string | Yes      | URL to download file |
+| `fileType` | string    | Optional | Type of file.  Examples include: txt, tsv, log |
+| `studyID`  | string    | Optional | ID of containing study |
+| `URL`      | string    | Yes      | URL to download file |
 
 #### An example response
 
@@ -813,9 +851,9 @@ The response to a file search query is a list of JSON objects each with the foll
 | `id`       | string    | Yes      | A unique identifier assigned to this object |
 | `version`  | string    | Optional | Version number of the object |
 | `tags`     | string array | Optional | List of tags for the object |
-| `fileType  | string    | Optional | Type of file.  Examples include: txt, tsv, log |
-| `studyID` | string | Optional | ID of containing study |
-| `URL    ` | string | Yes      | URL to download file |
+| `fileType` | string    | Optional | Type of file.  Examples include: txt, tsv, log |
+| `studyID`  | string    | Optional | ID of containing study |
+| `URL`      | string    | Yes      | URL to download file |
 
 #### An example response
 
