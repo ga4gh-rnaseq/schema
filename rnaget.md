@@ -546,9 +546,34 @@ The recommended search endpoint is:
 
 The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  It is recommended that data providers support at least 1 of the following common output formats:
 
-  * tsv
-  * loom
-  * mtx
+  * Tab delimited text (.tsv)
+  * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
+  * [Matrix Market](https://math.nist.gov/MatrixMarket/formats.html) (.mtx)
+
+A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  There should be one header row following the comments.  Feature (genes/transcripts) names and/or ID fields should be the first columns of the header row and have the `string` type.  All following columns are for the samples and will have ?-bit `float` values in each row.
+
+##### Example .tsv file
+
+# Example tsv file
+geneID	geneName	sample1	sample2
+ENSG00000000003	TSPAN6	12.4	15.6
+
+Loom format discussion
+
+MM format discussion
+
+##### The meaning of zero
+
+Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes which may not have 100% coverage of the annotation reference.  The consequence is that some features which show zero expression may not necessarily have a truly zero expression.  This idea can be extended further in the context of submitted data as well as potentially access restricted data.  The result is that a zero value can indicate one of several states:
+
+1. _Not measured_ – not measured at all and value is not available
+2. _Not supplied_ – measured but not provided to the data repository
+3. _Restricted access_ – measured but require further authentication to view
+4. _Not applicable_ – measurement does not apply to the sample
+
+If practical a data provider should adopt a means to indicate these states rather than use a zero.
+
+What should we recommend here? NaN, or something else?
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
