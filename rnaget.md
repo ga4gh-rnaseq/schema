@@ -554,9 +554,11 @@ A Tab delimited file can have any number of comment lines beginning with `#` for
 
 ##### Example .tsv file
 
+```
 # Example tsv file
 geneID	geneName	sample1	sample2
 ENSG00000000003	TSPAN6	12.4	15.6
+```
 
 Loom format discussion
 
