@@ -340,8 +340,8 @@ paths:
     get:
       tags:
       - "expressions"
-      summary: "Returns filters for project searches"
-      description: "Get filters for project searches"
+      summary: "Returns filters for expression searches"
+      description: "Get filters for expression searches"
       operationId: "searchExpressionFilters"
       parameters:
       - name: "type"
