@@ -562,7 +562,7 @@ ENSG00000000003	TSPAN6	12.4	15.6
 
 Loom format discussion
 
-MM format discussion
+A Matrix Market format file can be in either coordinate format or array format as long as this is properly reflected in the header.  For expression data, the row and column keys will be in separate files one each for row and column with one key per line in the same order as the matrix.  These will be delivered along with the .mtx file as a compressed gzip archive.
 
 ##### The meaning of zero
 
