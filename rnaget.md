@@ -825,6 +825,7 @@ The response to an file query is a JSON object with the following fields:
 
 #### An example response
 
+```
 {
   "URL": "http://server.com/rnaget/somestudy/pipelinefiles/SJ.out.tab",
   "file_type": "tsv",
@@ -834,7 +835,7 @@ The response to an file query is a JSON object with the following fields:
     ],
   "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
 }
-
+```
 
 ### File:  Search for matching files
 
@@ -896,6 +897,7 @@ The response to a file search query is a list of JSON objects each with the foll
 
 #### An example response
 
+```
 [
   {
     "URL": "http://server.com/rnaget/somestudy/pipelinefiles/SJ.out.tab",
@@ -907,6 +909,7 @@ The response to a file search query is a list of JSON objects each with the foll
     "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
   }
 ]
+```
 
 ## Possible Future API Enhancements
 
