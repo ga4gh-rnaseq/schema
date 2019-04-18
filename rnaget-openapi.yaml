@@ -22,11 +22,6 @@ tags:
   externalDocs:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "files"
-  description: "Returns files"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
 schemes:
 - "https"
 paths:
@@ -363,82 +358,6 @@ paths:
       security:
       - rnaget_auth:
         - "read:expression"
-  /files/{fileID}:
-    get:
-      tags:
-      - "files"
-      summary: "Get specific file"
-      description: "Returns download URL for file"
-      operationId: "getFile"
-      parameters:
-      - name: "fileID"
-        in: "path"
-        description: "file ID"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/file"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "File not found"
-        406:
-          description: "Requested formatting not supported"
-        501:
-          description: "The specified request is not supported by the server"
-      security:
-      - rnaget_auth:
-        - "read:file"
-  /files/search:
-    get:
-      tags:
-      - "files"
-      summary: "Search for files matching filters"
-      description: "Search for files matching filters.  Returns download URL or manifest of download URLs for matching file(s)"
-      operationId: "searchFiles"
-      parameters:
-      - name: "tags"
-        in: "query"
-        description: "Comma separated tag list to filter by"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "csv"
-      - name: "projectID"
-        in: "query"
-        description: "ProjectID to filter by"
-        required: false
-        type: "string"
-      - name: "studyID"
-        in: "query"
-        description: "StudyID to filter by"
-        required: false
-        type: "string"
-      - name: "fileType"
-        in: "query"
-        description: "File type to filter by"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/file"
-        400:
-          description: "The requested data format is not supported"
-        406:
-          description: "Requested formatting not supported"
-        501:
-          description: "The specified request is not supported by the server"
-      security:
-      - rnaget_auth:
-        - "read:file"
 securityDefinitions:
   rnaget_auth:
     type: "oauth2"
@@ -448,7 +367,6 @@ securityDefinitions:
       read:expression: "read expression data"
       read:project: "read information about projects"
       read:study: "read information about studies"
-      read:file: "read information about files"
       read:info: "read general info"
 definitions:
   project:
@@ -519,7 +437,7 @@ definitions:
       url: "https://github.com/ga4gh-rnaseq/schema"
   file:
     type: "object"
-    description: "URL and type for raw data and analysis pipeline files"
+    description: "URL and type for data files"
     properties:
       id:
         type: "string"
