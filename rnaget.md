@@ -268,22 +268,30 @@ On success and one or more filters are returned the server MUST issue a 200 stat
 
 The response to a project search filter query is a list of JSON objects each with the following fields:
 
-| Data Field | Data Type | Required | Description 
-|------------|-----------|----------|-----------|
-| `filter`   | string    | Yes      | A unique name for the filter for use in search query URLs |
+| Data Field    | Data Type | Required | Description 
+|---------------|-----------|----------|-----------|
+| `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
+| `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
+| `description` | string    | Yes      | Detailed description of the filter |
 
 #### An example response
 
 ```
 [
   {
-    filter: "version"
+    filter: "version",
+    fieldType: "string",
+    description: "release version to match"
   },
   {
-    filter: "tags"
+    filter: "tags",
+    fieldType: "string",
+    description: "comma separated list of tags"
   },
   {
-    filter: "name"
+    filter: "name",
+    fieldType: "string",
+    description: "project name"
   }
 ]
 ```
@@ -460,25 +468,35 @@ On success and one or more filters are returned the server MUST issue a 200 stat
 
 The response to a study search filter query is a list of JSON objects each with the following fields:
 
-| Data Field | Data Type | Required | Description 
-|------------|-----------|----------|-----------|
-| `filter`   | string    | Yes      | A unique name for the filter for use in search query URLs |
+| Data Field    | Data Type | Required | Description
+|---------------|-----------|----------|-----------|
+| `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
+| `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
+| `description` | string    | Yes      | Detailed description of the filter |
 
 #### An example response
 
 ```
 [
   {
-    filter: "version"
+    filter: "version",
+    fieldType: "string",
+    description: "release version to match"
   },
   {
-    filter: "tags"
+    filter: "tags",
+    fieldType: "string",
+    description: "comma separated list of tags"
   },
   {
-    filter: "name"
+    filter: "name",
+    fieldType: "string",
+    description: "study name"
   },
   {
-    filter: "projectID"
+    filter: "projectID",
+    fieldType: "string",
+    description: "ID of parent project"
   }
 ]
 ```
@@ -544,13 +562,12 @@ The recommended search endpoint is:
 
 `GET /expressions/formats`
 
-The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  It is recommended that data providers support at least 1 of the following common output formats:
+The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  A data provider may use any internal storage format that they wish with no restrictions from this API.  To support development of interoperable clients, it is recommended that data providers MUST support at least 1 of the following common output formats:
 
   * Tab delimited text (.tsv)
   * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
-  * [Matrix Market](https://math.nist.gov/MatrixMarket/formats.html) (.mtx)
 
-A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  There should be one header row following the comments.  Feature (genes/transcripts) names and/or ID fields should be the first columns of the header row and have the `string` type.  All following columns are for the samples and will have ?-bit `float` values in each row.
+A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  There should be one header row following the comments.  Feature (genes/transcripts) names and/or ID fields should be the first columns of the header row and have the `string` type.  All following columns are for the samples and will have 32-bit `float` values in each row.
 
 ##### Example .tsv file
 
@@ -560,9 +577,7 @@ geneID	geneName	sample1	sample2
 ENSG00000000003	TSPAN6	12.4	15.6
 ```
 
-A Loom format file will have a ?-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by loom specification.
-
-A Matrix Market format file can be in either coordinate format or array format as long as this is properly reflected in the header.  For expression data, the row and column keys will be in separate files one each for row and column with one key per line in the same order as the matrix.  These will be delivered along with the .mtx file as a compressed gzip archive.
+A Loom format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by loom specification.
 
 ##### The meaning of zero
 
@@ -573,9 +588,7 @@ Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes w
 3. _Restricted access_ – measured but require further authentication to view
 4. _Not applicable_ – measurement does not apply to the sample
 
-If practical a data provider should adopt a means to indicate these states rather than use a zero.
-
-What should we recommend here? NaN, or something else?
+If practical a data provider SHOULD adopt a means to indicate these states rather than use a zero.  It is recommended that the `NaN` value be used to indicate these states.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
@@ -682,7 +695,7 @@ To allow for filtering on a range of expression values for multiple features the
 
 | Data Field         | Data Type | Required | Description
 |--------------------|-----------|----------|-----------|
-| `threshold`        | float     | Yes      | Numeric value to compare to expression value when filtering |
+| `threshold`        | 32-bit float | Yes      | Numeric value to compare to expression value when filtering |
 | `featureID`        | string    | Optional | ID of feature this threshold corresponds to |
 | `featureName`      | string    | Optional | Name of feature this threshold corresponds to |
 | `featureAccession` | string    | Optional | Accession of feature this threshold corresponds to |
@@ -731,50 +744,60 @@ On success and one or more filters are returned the server MUST issue a 200 stat
 
 The response to an expression search filter query is a list of JSON objects each with the following fields:
 
-| Data Field | Data Type | Required | Description 
-|------------|-----------|----------|-----------|
-| `filterType` | string       | Yes      | Identifies the axis to which these filter apply.  One of: feature, sample |
-| `filters`    | string array | Optional | List of unique names for the filters to be used in search query URLs |
+| Data Field    | Data Type | Required | Description
+|---------------|-----------|----------|-----------|
+| `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
+| `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
+| `description` | string    | Yes      | Detailed description of the filter |
 
 #### An example response
 
 ```
 [
   {
-    filterType: "general",
-    filters: ["version"]
+    filter: "version",
+    fieldType: "string",
+    description: "release version to match"
   },
   {
-    filterType: "sample",
-    filters: ["sampleID"]
+    filter: "sampleID",
+    fieldType: "string",
+    description: "ID of the sample"
   },
   {
-    filterType: "general",
-    filters: ["projectID"]
+    filter: "projectID",
+    fieldType: "string",
+    description: "ID of the parent project"
   },
   {
-    filterType: "general",
-    filters: ["studyID"]
+    filter: "studyID",
+    fieldType: "string",
+    description: "ID of the parent study"
   },
   {
-    filterType: "feature",
-    filters: ["featureIDList"]
+    filter: "featureIDList",
+    fieldType: "string",
+    description: "comma separated list of feature IDs to match"
   },
   {
-    filterType: "feature",
-    filters: ["featureNameList"]
+    filter: "featureNameList",
+    fieldType: "string",
+    description: "comma separated list of feature names to match"
   },
   {
-    filterType: "feature",
-    filters: ["featureAccessionList"]
+    filter: "featureAccessionList",
+    fieldType: "string",
+    description: "comma separated list of feature accession IDs to match"
   },
   {
-    filterType: "general",
-    filters: ["minExpression"]
+    filter: "minExpression",
+    fieldType: "32-bit float",
+    description: "return values with expression => this value"
   },
   {
-    filterType: "general",
-    filters: ["maxExpression"]
+    filter: "maxExpression",
+    fieldType: "32-bit float",
+    description: "return values with expression <= this value"
   }
 ]
 ```

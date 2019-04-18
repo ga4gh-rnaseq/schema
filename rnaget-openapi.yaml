@@ -348,7 +348,7 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/expressionSearchFilter"
+            $ref: "#/definitions/searchFilter"
         400:
           description: "The requested data format is not supported"
         406:
@@ -419,19 +419,10 @@ definitions:
     properties:
       filter:
         type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-  expressionSearchFilter:
-    type: "object"
-    description: "parameter name to use for filter when searching"
-    properties:
-      filterType:
+      fieldType:
         type: "string"
-      filters:
-        type: "array"
-        items:
-          type: "string"
+      description:
+        type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
