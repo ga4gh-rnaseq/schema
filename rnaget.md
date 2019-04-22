@@ -788,12 +788,12 @@ The response to an expression search filter query is a list of JSON objects each
   {
     filter: "minExpression",
     fieldType: "32-bit float",
-    description: "return values with expression => this value"
+    description: "return values with expression greater than this value"
   },
   {
     filter: "maxExpression",
     fieldType: "32-bit float",
-    description: "return values with expression <= this value"
+    description: "return values with expression less than this value"
   }
 ]
 ```
