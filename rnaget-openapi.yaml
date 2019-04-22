@@ -263,6 +263,11 @@ paths:
       description: "Search for expressions matching filters"
       operationId: "searchExpressions"
       parameters:
+      - name: "format"
+        in: "query"
+        description: "Data format to return"
+        required: true
+        type: "string"
       - name: "tags"
         in: "query"
         description: "Comma separated tag list to filter by"
