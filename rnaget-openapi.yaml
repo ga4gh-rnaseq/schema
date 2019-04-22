@@ -449,6 +449,8 @@ definitions:
         type: "string"
       URL:
         type: "string"
+      units:
+        type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"

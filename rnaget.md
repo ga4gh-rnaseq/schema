@@ -544,6 +544,7 @@ The response to an expression query is a JSON object with the following fields:
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
 | `URL    ` | string | Yes      | URL to download file |
+| `units  ` | string | Yes      | Units for the values. Examples include: TPM, FPKM, counts |
 
 #### An example response
 
@@ -552,7 +553,8 @@ The response to an expression query is a JSON object with the following fields:
   "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
   "file_type": "loom",
   "id": "2a7ab5533ef941eaa59edbfe887b58c4",
-  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
+  "units": "TPM"
 }
 ```
 
