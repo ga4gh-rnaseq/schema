@@ -724,12 +724,6 @@ Unless negotiated with the client and allowed by the server, the default encodin
 Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
-#### URL parameters
-
-| Parameter | Data Type | Required | Description
-|-----------|-----------|----------|-----------|
-| `type`    | string    | Optional | A string identifying the type of filters to return.  This is one of two values: feature (returns filters on the feature axis of the matrix) or sample (returns filters on the sample axis of the matrix) If not present both lists will be returned. |
-
 #### Request parameters
 
 | Parameter | Data Type | Required | Description 
