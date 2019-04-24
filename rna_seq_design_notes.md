@@ -1,10 +1,9 @@
 # Target Users
 
-We aim to build this infrastructure to be useful for four distinct groups of users.
-1.	Those working with patients (i.e. physicians, PAs, patient advocates, and sophisticated patients). This will require data analysis and visualization and interpretation modules that require of the end-user little or no programming or analytical expertise.
-2.	Research data scientists who integrate new and/or existing datasets to derive new hypotheses and experimental paradigms
-3.	Methodologists who are developing new analytical methods in this API for RNA-seq analysis – including alignment, assembly, quantification, and differential expression modules.
-4.	Data portal developers who are creating computational solutions to collecting and analyzing large scale (multi-million+ samples) datasets
+We aim to build this infrastructure to be useful for three distinct groups of users.
+1.	Research data scientists who integrate new and/or existing datasets to derive new hypotheses and experimental paradigms
+2.	Methodologists who are developing new analytical methods in this API for RNA-seq analysis – including alignment, assembly, quantification, and differential expression modules.
+3.	Data portal developers who are creating computational solutions to collecting and analyzing large scale (multi-million+ samples) datasets
 
 # Use Case Overview
 

@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  title: "GA4GH rnaget API"
-  description: "RNA API for GA4GH consideration."
-  version: "0.1.0"
+  title: "rnaget API"
+  description: "RNA API for expression value retrieval"
+  version: "1.0.0"
 basePath: "/rnaget"
 produces:
   - application/json
@@ -19,21 +19,6 @@ tags:
     url: "https://github.com/ga4gh-rnaseq/schema"
 - name: "expressions"
   description: "Feature level expression data"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "getVersions"
-  description: "Returns database release versions"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "changelog"
-  description: "Returns change log for a release version"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "files"
-  description: "Returns files"
   externalDocs:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
@@ -62,6 +47,10 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "Project not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:project"
@@ -94,7 +83,11 @@ paths:
             items:
               $ref: "#/definitions/project"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:project"
@@ -113,7 +106,11 @@ paths:
             items:
               $ref: "#/definitions/searchFilter"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:project"
@@ -139,6 +136,10 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "Study not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:study"
@@ -171,7 +172,11 @@ paths:
             items:
               $ref: "#/definitions/study"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:study"
@@ -190,7 +195,11 @@ paths:
             items:
               $ref: "#/definitions/searchFilter"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:study"
@@ -216,6 +225,33 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "Expression not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
+      security:
+      - rnaget_auth:
+        - "read:expression"
+  /expressions/formats:
+    get:
+      tags:
+      - "expressions"
+      summary: "Get output formats"
+      description: "Returns a list of supported expression matrix formats"
+      operationId: "getExpressionFormats"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        404:
+          description: "Format list not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -227,6 +263,11 @@ paths:
       description: "Search for expressions matching filters"
       operationId: "searchExpressions"
       parameters:
+      - name: "format"
+        in: "query"
+        description: "Data format to return"
+        required: true
+        type: "string"
       - name: "tags"
         in: "query"
         description: "Comma separated tag list to filter by"
@@ -287,7 +328,11 @@ paths:
             items:
               $ref: "#/definitions/file"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -308,122 +353,16 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/expressionSearchFilter"
+            $ref: "#/definitions/searchFilter"
         400:
-          description: "Error"
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
       security:
       - rnaget_auth:
         - "read:expression"
-  /getVersions:
-    get:
-      tags:
-      - "getVersions"
-      summary: "Get release versions of database"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "object"
-            additionalProperties:
-              type: "string"
-        400:
-          description: "Invalid tag value"
-      security:
-      - rnaget_auth:
-        - "read:info"
-  /changelog/{version}:
-    get:
-      tags:
-      - "changelog"
-      summary: "Get change log for a specific release version"
-      description: "Returns changes associated with specified database release version"
-      operationId: "getChangeLog"
-      parameters:
-      - name: "version"
-        in: "path"
-        description: "release version"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/changeLog"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "Change log not found"
-      security:
-      - rnaget_auth:
-        - "read:info"
-  /files/{fileID}:
-    get:
-      tags:
-      - "files"
-      summary: "Get specific file"
-      description: "Returns download URL for file"
-      operationId: "getFile"
-      parameters:
-      - name: "fileID"
-        in: "path"
-        description: "file ID"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            $ref: "#/definitions/file"
-        400:
-          description: "Invalid ID supplied"
-        404:
-          description: "File not found"
-      security:
-      - rnaget_auth:
-        - "read:file"
-  /files/search:
-    get:
-      tags:
-      - "files"
-      summary: "Search for files matching filters"
-      description: "Search for files matching filters.  Returns download URL or manifest of download URLs for matching file(s)"
-      operationId: "searchFiles"
-      parameters:
-      - name: "tags"
-        in: "query"
-        description: "Comma separated tag list to filter by"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "csv"
-      - name: "projectID"
-        in: "query"
-        description: "ProjectID to filter by"
-        required: false
-        type: "string"
-      - name: "studyID"
-        in: "query"
-        description: "StudyID to filter by"
-        required: false
-        type: "string"
-      - name: "fileType"
-        in: "query"
-        description: "File type to filter by"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/file"
-        400:
-          description: "Error"
-      security:
-      - rnaget_auth:
-        - "read:file"
 securityDefinitions:
   rnaget_auth:
     type: "oauth2"
@@ -433,7 +372,6 @@ securityDefinitions:
       read:expression: "read expression data"
       read:project: "read information about projects"
       read:study: "read information about studies"
-      read:file: "read information about files"
       read:info: "read general info"
 definitions:
   project:
@@ -471,10 +409,8 @@ definitions:
         type: "string"
       parentProjectID:
         type: "string"
-      patientList:
-        type: "array"
-        items:
-          type: "string"
+      genome:
+        type: "string"
       sampleList:
         type: "array"
         items:
@@ -488,34 +424,16 @@ definitions:
     properties:
       filter:
         type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-  expressionSearchFilter:
-    type: "object"
-    description: "parameter name to use for filter when searching"
-    properties:
-      filterType:
+      fieldType:
         type: "string"
-      filters:
-        type: "array"
-        items:
-          type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-  changeLog:
-    type: "object"
-    description: "list of changes to the database associated with a version update"
-    properties:
-      version:
+      description:
         type: "string"
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
   file:
     type: "object"
-    description: "URL and type for raw data and analysis pipeline files"
+    description: "URL and type for data files"
     properties:
       id:
         type: "string"
@@ -530,6 +448,8 @@ definitions:
       studyID:
         type: "string"
       URL:
+        type: "string"
+      units:
         type: "string"
     externalDocs:
       description: "Find out more"

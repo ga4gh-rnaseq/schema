@@ -19,13 +19,13 @@ Features of this API include:
 
 Out of the scope of this API are:
 
-* A means of retrieving primary (raw) read sequence data.  Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads.  The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
-* A means of retrieving reference sequences.  Each study lists the genomic reference used for alignment.  Servers should implement additional API(s) to allow for search and retrieval of reference base sequences.  The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
-* A means of retrieving feature annotation details.  Expression matrices provide a means to link each mapped feature to the corresponding annotation.  Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
+* A means of retrieving primary (raw) read sequence data. Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads. The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
+* A means of retrieving reference sequences. Each study lists the genomic reference used for alignment. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
+* A means of retrieving feature annotation details. Expression matrices provide a means to link each mapped feature to the corresponding annotation. Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
 ## OpenAPI Description
 
-An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget-openapi.yaml). OpenAPI is a language independent way of describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
+An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget-openapi.yaml). OpenAPI is an independent API description format for describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
 
 ## Compliance
 
@@ -39,79 +39,39 @@ Requests adhering to this specification MAY include an Accept header specifying 
 
 HTTP responses may be compressed using [RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html) transfer-coding, not content-coding.
 
-HTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured follow redirects. `302`, `303` and `307` are all valid response codes to use.
+HTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured to follow redirects. `302`, `303` and `307` are all valid response codes to use.
 
 Requests MAY include an Accept header specifying the protocol version they are using:
 
 ```
-Accept: text/vnd.ga4gh.rnaget.v1.0.0+plain
+Accept: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
 Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version:
 
 ```
-Content-Type: text/vnd.ga4gh.rnaget.v1.0.0+plain; charset=us-ascii
+Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
 ```
 
 ## Internet Media Types Handling
 
 When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so
 
-- `text/vnd.ga4gh.rnaget.v1.0.0+plain; charset=us-ascii`
-  - `text/vnd.ga4gh.rnaget.v1.0.0+plain`
-  - `text/plain`
 - `application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii`
   - `application/vnd.ga4gh.rnaget.v1.0.0+json`
   - `application/json`
 
-# Errors
+## Errors
 
 The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected. In the case of transient server errors (e.g., 503 and other 5xx status codes), the client SHOULD implement appropriate retry logic. For example, if a client sends an alphanumeric string for a parameter that is specified as unsigned integer the server MUST reply with `Bad Request`.
 
-<table>
-<tr markdown="block"><td>
-Error Type
-</td><td>
-HTTP status code
-</td><td>
-Description
-</td></tr>
-<tr markdown="block"><td>
-<code>Bad Request</code>
-</td><td>
-400
-</td><td>
-Cannot process due to malformed request, the requested parameters do not adhere to the specification
-</td></tr>
-<tr markdown="block"><td>
-<code>Unauthorized</code>
-</td><td>
-401
-</td><td>
-Authorization provided is invalid
-</td></tr>
-<tr markdown="block"><td>
-<code>Not Found</code>
-</td><td>
-404
-</td><td>
-The resource requested was not found
-</td></tr>
-<tr markdown="block"><td>
-<code>Not Acceptable</code>
-</td><td>
-406
-</td><td>
-The requested formatting is not supported by the server
-</td></tr>
-<tr markdown="block"><td>
-<code>Not Implemented</code>
-</td><td>
-501
-</td><td>
-The specified request is not supported by the server
-</td></tr>
-</table>
+| Error type        | HTTP status code | Description
+|-------------------|------------------|-------------|
+| `Bad Request`     | 400 | Cannot process due to malformed request, the requested parameters do not adhere to the specification |
+| `Unauthorized`    | 401 | Authorization provided is invalid |
+| `Not Found`       | 404 | The resource requested was not found |
+| `Not Acceptable`  | 406 | The requested formatting is not supported by the server |
+| `Not Implemented` | 501 | The specified request is not supported by the server |
 
 ## Security
 
@@ -136,670 +96,712 @@ GA4GH is publishing a [CORS best practices document](https://docs.google.com/doc
 
 The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing](https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
 
-# Request
+## API Methods
 
 This section lists the recommended URL endpoints a server SHOULD implement in order to navigate the RNA-seq data hierarchy and allow retrieval of expression data.
 
-Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as UTF8-encoded JSON.
+Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as a UTF8-encoded JSON key-value dictionary.
 
 When processing requests containing multiple filters, the data provider SHOULD use a logical `AND` for selecting the results to return.
 
-## Project Get Methods
+### Project: Get project by id
 
-The recommended endpoint to return project data is:
-
-    GET /projects/<id>
-
-### URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which record to return.
-
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
-
-* some-projectId or /byContributor/some-projectId
-</td></tr>
-</table>
-
-## Project Search Methods
-
-The recommended search endpoint is:
-
-    GET /projects/search
-
-### Search Query Filters
-
-<table>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Comma separated tag list to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version to return
-</td></tr>
-</table>
-
-## Project Search Filters
-The recommended endpoint for retrieving search filters is:
-
-    GET /projects/search/filters
-
-## Study Get Methods
-
-The recommended endpoint to return study data is:
-
-    GET /studies/<id>
-
-### URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which record to return.
-
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
-
-* some-studyId or /byProject/some-studyId
-</td></tr>
-</table>
-
-## Study Search Methods
-
-The recommended search endpoint is:
-
-    GET /studies/search
-
-### Search Query Filters
-
-<table>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Comma separated tag list to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version to return
-</td></tr>
-</table>
-
-## Study Search Filters
-The recommended endpoint for retrieving search filters is:
-
-    GET /studies/search/filters
-
-## RNA Expression Get Methods
-
-The recommended endpoint to return expression data is:
-
-    GET /expressions/<id>
-
-### URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which record to return.
-
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
-
-* some-expressionId or /bySample/some-expressionId
-</td></tr>
-</table>
-
-## Expression Search Methods
-
-The recommended search endpoint is:
-
-    GET /expressions/search
-
-### Search Query Filters
-
-<table>
-<tr markdown="block"><td>
-<code>tags</code>  
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Comma separated tag list to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version to return
-</td></tr>
-<tr markdown="block"><td>
-<code>sampleIDList</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-comma separated list of sampleIDs to match
-</td></tr>
-<tr markdown="block"><td>
-<code>projectID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-project to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>studyID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-study to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>featureIDList</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-return only values for listed comma separated feature ID values
-</td></tr>
-<tr markdown="block"><td>
-<code>featureNameList</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-return only values for listed comma separated features
-</td></tr>
-<tr markdown="block"><td>
-<code>featureAccessionList</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-return only values for listed comma separated accession numbers
-</td></tr>
-<tr markdown="block"><td>
-<code>minExpression</code>
-</td><td>
-<code>threshold</code> array  
-<i>optional</i>
-</td><td>
-return only samples with expression values greater than listed threshold for each corresponding feature in the array
-</td></tr>
-<tr markdown="block"><td>
-<code>maxExpression</code>
-</td><td>
-<code>threshold</code> array  
-<i>optional</i>
-</td><td>
-return only samples with expression values less than listed threshold for each corresponding feature in the array
-</td></tr>
-</table>
-
-### Expression Threshold
-
-<table>
-<tr markdown="block"><td>
-<code>threshold</code>  
-</td><td>
-<code>float</code>
-<i>optional</i>
-</td><td>
-Numeric value to compare to expression value when filtering
-</td></tr>
-<tr markdown="block"><td>
-<code>featureID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-ID of feature this threshold corresponds to
-</td></tr>
-<tr markdown="block"><td>
-<code>featureName</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Name of feature this threshold corresponds to
-</td></tr>
-<tr markdown="block"><td>
-<code>featureAccession</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Accession of feature this threshold corresponds to
-</td></tr>
-</table>
-
-For each threshold tuple the request SHOULD provide only one of `featureID`, `featureName` or `featureAccession`.
-
-## Expression Search Filters
-The recommended endpoint for retrieving search filters is:
-
-    GET /expressions/search/filters
-
-### URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>type</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-A string identifying the type of filters to return.  This is one of two values:
-
-feature - returns filters on the feature axis of the matrix
-
-sample - returns filters on the sample axis of the matrix
-
-If not present both lists will be returned.
-
-</td></tr>
-</table>
-
-## File Get Methods
-
-The recommended endpoint to return file retrieval URLs is:
-
-    GET /files/<id>
-
-### URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which record to return.
-
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
-
-* some-fileId or /bam_files/some-fileId
-</td></tr>
-</table>
-
-## File Search Methods
-
-The recommended search endpoint is:
-
-    GET /files/search
-
-### Search Query Filters
-
-<table>
-<tr markdown="block"><td>
-<code>tags</code>  
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Comma separated tag list to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>projectID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-project to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>studyID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-study to filter by
-</td></tr>
-<tr markdown="block"><td>
-<code>fileType</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-File type to filter by
-</td></tr>
-</table>
-
-## Additional Methods
-
-## Database Get Methods
-The recommended endpoints to return database related data are:
-
-    GET /getVersions
-    GET /changeLog/<version>
-
-### Changelog URL parameters
-
-<table>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A string identifying which version to return the changelog for.
-
-The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers:
-
-* some-version-string or /byDate/some-version-string
-</td></tr>
-</table>
-
-# Responses
-
-## Project
 The project is the top level of the model hierarchy and contains a set of related studies.  Example projects include:
 
 * all data submitted by contributor X
 * the local mirror of the European Nucleotide Archive data
 
-The response to a project query is an array in which each element has the following fields:
+`GET /projects/<id>`
 
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique identifier assigned to this object
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of tags associated with the object
-</td></tr>
-<tr markdown="block"><td>
-<code>name</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Short, readable name
-</td></tr>
-<tr markdown="block"><td>
-<code>description</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Detailed description of the object
-</td></tr>
-</table>
+The primary method for accessing specific project data.  The reponse is the specified project in JSON format unless an alternative formatting supported by the server is requested.
 
-## Project Filters
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-projectId or /byContributor/some-projectId |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned project, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the selected project as a JSON formatted object.  The server may return the project in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and a project is returned the server MUST issue a 200 status code.
+
+The response to a project query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `name`     | string    | Optional | Short, readable name |
+| `description` | string | Optional | Detailed description of the object |
+
+#### An example response
+
+```
+{
+  "description": "Pan Cancer Analysis of Whole Genomes test data from Expression Atlas E-MTAB-5423",
+  "id": "43378a5d48364f9d8cf3c3d5104df560",
+  "name": "PCAWG",
+  "tags": [
+    "PCAWG",
+    "cancer"
+  ],
+  "version": "1.0"
+}
+```
+
+### Project:  Search for matching projects
+
+The recommended search endpoint is:
+
+`GET /projects/search`
+
+To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
+
+`POST /projects/search`
+
+accepting a UTF-8 JSON encoded key-value dictionary in the form:
+
+```
+{
+  "filter1": "value1",
+  "filter2": "value2"
+}
+```
+
+in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching projects in JSON format unless an alternative formatting supported by the server is requested.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `tags`    | string    | Optional | Comma separated tag list to filter by |
+| `version` | string    | Optional | Version to return |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned project list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the matching projects as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more projects are returned the server MUST issue a 200 status code.
+
+The response to a project search query is a list of JSON objects each with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | required | A unique identifier assigned to this object |
+| `version`  | string    | optional | Version number of the object |
+| `tags`     | string array | optional | List of tags for the object |
+| `name`     | string    | optional | Short, readable name |
+| `description` | string | optional | Detailed description of the object |
+
+#### An example response
+
+```
+[
+  {
+    "description": "Pan Cancer Analysis of Whole Genomes test data from Expression Atlas E-MTAB-5423",
+    "id": "43378a5d48364f9d8cf3c3d5104df560",
+    "name": "PCAWG",
+    "tags": [
+      "PCAWG",
+      "cancer"
+    ],
+    "version": "1.0"
+  }
+]
+```
+
+### Project: Get available search filters
+
 To support flexible search this provides a means of identifying the search filters supported by the data provider.
 
-The response to a project filter query is an array in which each element has the following fields:
+`GET /projects/search/filters`
 
-<table>
-<tr markdown="block"><td>
-<code>filter</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique name for the filter for use in search query URLs
-</td></tr>
-</table>
+The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
-## Study
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the available filters as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more filters are returned the server MUST issue a 200 status code.
+
+The response to a project search filter query is a list of JSON objects each with the following fields:
+
+| Data Field    | Data Type | Required | Description 
+|---------------|-----------|----------|-----------|
+| `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
+| `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
+| `description` | string    | Yes      | Detailed description of the filter |
+
+#### An example response
+
+```
+[
+  {
+    filter: "version",
+    fieldType: "string",
+    description: "release version to match"
+  },
+  {
+    filter: "tags",
+    fieldType: "string",
+    description: "comma separated list of tags"
+  },
+  {
+    filter: "name",
+    fieldType: "string",
+    description: "project name"
+  }
+]
+```
+
+### Study: Get study by id
+
 The study is a set of related RNA expression values.  It is assumed all samples in a study have been processed uniformly.  Example studies include:
 
 * multiple tissues from all patients enrolled in clinical trial X
 * a collection of liver samples from several sources which have been uniformly reprocessed for differential analysis
 
-The response to a study query is an array in which each element has the following fields:
+`GET /studies/<id>`
 
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique identifier assigned to this object
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of tags associated with the object
-</td></tr>
-<tr markdown="block"><td>
-<code>name</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Short, readable name
-</td></tr>
-<tr markdown="block"><td>
-<code>description</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Detailed description of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>parentProjectID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-ID of the project containing the study
-</td></tr>
-<tr markdown="block"><td>
-<code>genome</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-Name of the reference genome build used for aligning samples in the study.
-</td></tr>
-<tr markdown="block"><td>
-<code>sampleList</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-ID(s) of samples which provided the read data for the study
-</td></tr>
-</table>
+The primary method for accessing specific study data.  The reponse is the specified study in JSON format unless an alternative formatting supported by the server is requested.
 
-## Study Filters
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-studyId or /byContributor/some-studyId |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned study, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the selected study as a JSON formatted object.  The server may return the object in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and a study is returned the server MUST issue a 200 status code.
+
+The response to a study query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `name`     | string    | Optional | Short, readable name |
+| `description` | string | Optional | Detailed description of the object |
+| `parentProjectID` | string | Optional | ID of the project containing the study |
+| `genome`   | string    | Optional | Name of the reference genome build used for aligning samples in the study |
+| `sampleList` | string array | Optional | ID(s) of samples which provided the read data for the study |
+
+#### An example response
+
+```
+{
+  "description": "PCAWG study",
+  "id": "6cccbbd76b9c4837bd7342dd616d0fec",
+  "name": "PCAWG",
+  "parentProjectID": "43378a5d48364f9d8cf3c3d5104df560",
+  "tags": [
+    "PCAWG",
+    "cancer"
+  ],
+  "version": "1.0"
+}
+```
+
+### Study: Search for matching studies
+
+The recommended search endpoint is:
+
+`GET /studies/search`
+
+To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
+ 
+`POST /studies/search`
+
+accepting a UTF-8 JSON encoded key-value dictionary in the form:
+
+```
+{
+  "filter1": "value1",
+  "filter2": "value2"
+}
+```
+
+in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching studies in JSON format unless an alternative formatting supported by the server is requested.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `tags`    | string    | Optional | Comma separated tag list to filter by |
+| `version` | string    | Optional | Version to return |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned study list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the matching studies as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more studies are returned the server MUST issue a 200 status code.
+
+The response to a study search query is a list of JSON objects each with the following fields:
+
+| Data Field | Data Type | Required | Description
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `name`     | string    | Optional | Short, readable name |
+| `description` | string | Optional | Detailed description of the object |
+| `parentProjectID` | string | Optional | ID of the project containing the study |
+| `genome`   | string    | Optional | Name of the reference genome build used for aligning samples in the study |
+| `sampleList` | string array | Optional | ID(s) of samples which provided the read data for the study |
+
+#### An example response
+
+```
+[
+  {
+    "description": "PCAWG study",
+    "id": "6cccbbd76b9c4837bd7342dd616d0fec",
+    "name": "PCAWG",
+    "parentProjectID": "43378a5d48364f9d8cf3c3d5104df560",
+    "tags": [
+      "PCAWG",
+      "cancer"
+    ],
+    "version": "1.0"
+  }
+]
+```
+
+### Study: Get available search filters
+
 To support flexible search this provides a means of identifying the search filters supported by the data provider.
 
-The response to a study filter query is an array in which each element has the following fields:
+`GET /studies/search/filters`
 
-<table>
-<tr markdown="block"><td>
-<code>filter</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique name for the filter for use in search query URLs
-</td></tr>
-</table>
+The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
-## Expression
-The expression is a matrix of calculated expression values.
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
-The response to an expression query is an array in which each element is a File object as described below.
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
 
-## Expression Filters
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the available filters as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more filters are returned the server MUST issue a 200 status code.
+
+The response to a study search filter query is a list of JSON objects each with the following fields:
+
+| Data Field    | Data Type | Required | Description
+|---------------|-----------|----------|-----------|
+| `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
+| `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
+| `description` | string    | Yes      | Detailed description of the filter |
+
+#### An example response
+
+```
+[
+  {
+    filter: "version",
+    fieldType: "string",
+    description: "release version to match"
+  },
+  {
+    filter: "tags",
+    fieldType: "string",
+    description: "comma separated list of tags"
+  },
+  {
+    filter: "name",
+    fieldType: "string",
+    description: "study name"
+  },
+  {
+    filter: "projectID",
+    fieldType: "string",
+    description: "ID of parent project"
+  }
+]
+```
+
+### Expression: Get RNA Expression by id
+
+The expression is a matrix of calculated expression values.  Expression requests return a URL for the download or streaming of this numeric matrix.
+
+`GET /expressions/<id>`
+
+The primary method for accessing specific expression data.  The reponse is the specified expression object in JSON format unless an alternative formatting supported by the server is requested.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-expressionId or /byContributor/some-expressionId |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned expression object, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+
+#### Response
+
+The server shall return the selected expression as a JSON formatted object.  The server may return the expression in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and an expression is returned the server MUST issue a 200 status code.
+
+The response to an expression query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description 
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
+| `studyID` | string | Optional | ID of containing study |
+| `URL    ` | string | Yes      | URL to download file |
+| `units  ` | string | Yes      | Units for the values. Examples include: TPM, FPKM, counts |
+
+#### An example response
+
+```
+{
+  "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
+  "file_type": "loom",
+  "id": "2a7ab5533ef941eaa59edbfe887b58c4",
+  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
+  "units": "TPM"
+}
+```
+
+### Expression: Get supported data formats
+
+The recommended search endpoint is:
+
+`GET /expressions/formats`
+
+The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  A data provider may use any internal storage format that they wish with no restrictions from this API.  To support development of interoperable clients, it is recommended that data providers MUST support at least 1 of the following common output formats:
+
+  * Tab delimited text (.tsv)
+  * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
+
+A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  There should be one header row following the comments.  Feature (genes/transcripts) names and/or ID fields should be the first columns of the header row and have the `string` type.  All following columns are for the samples and will have 32-bit `float` values in each row.
+
+##### Example .tsv file
+
+```
+# Example tsv file
+geneID	geneName	sample1	sample2
+ENSG00000000003	TSPAN6	12.4	15.6
+```
+
+A Loom format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by loom specification.
+
+##### The meaning of zero
+
+Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes which may not have 100% coverage of the annotation reference.  The consequence is that some features which show zero expression may not necessarily have a truly zero expression.  This idea can be extended further in the context of submitted data as well as potentially access restricted data.  The result is that a zero value can indicate one of several states:
+
+1. _Not measured_ – not measured at all and value is not available
+2. _Not supplied_ – measured but not provided to the data repository
+3. _Restricted access_ – measured but require further authentication to view
+4. _Not applicable_ – measurement does not apply to the sample
+
+If practical a data provider SHOULD adopt a means to indicate these states rather than use a zero.  It is recommended that the `NaN` value be used to indicate these states.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned formats, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+
+#### Response
+
+The server shall return the supported formats as JSON formatted string array.  The server may return the list in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and a list is returned the server MUST issue a 200 status code.
+
+#### An example response
+
+```
+GET /expressions/formats
+["tsv", "loom"]
+```
+
+### Expression: Search for matching RNA expressions
+
+The recommended search endpoint is:
+
+`GET /expressions/search`
+
+To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
+
+    POST /expressions/search
+
+accepting a UTF-8 JSON encoded key-value dictionary in the form:
+```
+{
+  "filter1": "value1",
+  "filter2": "value2"
+}
+```
+
+in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching expressions in JSON format unless an alternative formatting supported by the server is requested.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `format`  | string    | Yes      | Data format to return.  MUST be one of the supported data types returned by a request to the `/expressions/formats` endpoint |
+| `tags`    | string    | Optional | Comma separated tag list to filter by |
+| `version` | string    | Optional | Version to return |
+| `sampleIDList` | string | Optional | comma separated list of sampleIDs to match |
+| `projectID` | string | Optional | project to filter by |
+| `studyID` | string | Optional |  study to filter by |
+| `featureIDList` | string | Optional | return only values for listed comma separated feature ID values |
+| `featureNameList` | string | Optional | return only values for listed comma separated features |
+| `featureAccessionList` | string | Optional | return only values for listed comma separated accession numbers |
+| `minExpression` | `threshold` array | Optional | return only samples with expression values greater than listed threshold for each corresponding feature in the array |
+| `maxExpression` | `threshold` array | Optional | return only samples with expression values less than listed threshold for each corresponding feature in the array |
+
+#### Response
+
+The server shall return the filtered expression as a JSON formatted object.  The server may return the expression in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and an expression is returned the server MUST issue a 200 status code.
+
+The response to an expression query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
+| `studyID` | string | Optional | ID of containing study |
+| `URL    ` | string | Yes      | URL to download file |
+
+#### An example response
+
+```
+[
+  {
+    "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
+    "file_type": "loom",
+    "id": "2a7ab5533ef941eaa59edbfe887b58c4",
+    "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+  }
+]
+```
+
+#### Expression Threshold
+
+To allow for filtering on a range of expression values for multiple features the `/expressions/search` endpoint optionally accepts an array of `threshold` object.  This is a JSON formatted object with the following fields.
+
+| Data Field         | Data Type | Required | Description
+|--------------------|-----------|----------|-----------|
+| `threshold`        | 32-bit float | Yes      | Numeric value to compare to expression value when filtering |
+| `featureID`        | string    | Optional | ID of feature this threshold corresponds to |
+| `featureName`      | string    | Optional | Name of feature this threshold corresponds to |
+| `featureAccession` | string    | Optional | Accession of feature this threshold corresponds to |
+
+For each threshold tuple the request SHOULD provide only one of `featureID`, `featureName` or `featureAccession`.  If none of these are provided the query will return all samples containing 1 or more features satisfying the `threshold` value and condition (min or max).
+
+#### Sample `threshold`
+
+{
+  "threshold": 10,
+  "featureName": "GABARAPL2"
+}
+
+#### Expression: Get available search filters
+
 To support flexible search this provides a means of identifying the search filters supported by the data provider.
 
-The response to an expression filter query is an array in which each element has the following fields:
+`GET /expressions/search/filters`
 
-<table>
-<tr markdown="block"><td>
-<code>filterType</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-Identifies the axis to which these filter apply.  One of:
+The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
-feature, sample
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
-</td></tr>
-<tr markdown="block"><td>
-<code>filters</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of unique names for the filters to be used in search query URLs
-</td></tr>
-</table>
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
 
-## File
-The file response is a URL for downloading the requested file.  Supported files include input and interim processing pipeline files.  Example files include:
+#### Request parameters
 
-The response to a file query is an array in which each element has the following fields:
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
-<table>
-<tr markdown="block"><td>
-<code>id</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-A unique identifier assigned to this object
-</td></tr>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>tags</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of tags associated with the object
-</td></tr>
-<tr markdown="block"><td>
-<code>fileType</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-Type of file.  Examples include:
+#### Response
 
-* BAM
-</td></tr>
-<tr markdown="block"><td>
-<code>studyID</code>
-</td><td>
-<code>string</code>
-<i>optional</i>
-</td><td>
-ID of containing study
-</td></tr>
-<tr markdown="block"><td>
-<code>URL</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-URL to download file.
-</td></tr>
-</table>
+The server shall return the available filters as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
-## Changelog
-The changelog is a list of changes to the database associated with a version update.
+On success and one or more filters are returned the server MUST issue a 200 status code.
 
-The response to a changelog query is an array in which each element has the following fields:
+The response to an expression search filter query is a list of JSON objects each with the following fields:
 
-<table>
-<tr markdown="block"><td>
-<code>version</code>
-</td><td>
-<code>string</code>
-<i>required</i>
-</td><td>
-Version number of the object
-</td></tr>
-<tr markdown="block"><td>
-<code>log</code>
-</td><td>
-<code>string</code> array
-<i>optional</i>
-</td><td>
-List of the specific changes made to the DB
-</td></tr>
-<table>
+| Data Field    | Data Type | Required | Description
+|---------------|-----------|----------|-----------|
+| `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
+| `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
+| `description` | string    | Yes      | Detailed description of the filter |
+
+#### An example response
+
+```
+[
+  {
+    filter: "version",
+    fieldType: "string",
+    description: "release version to match"
+  },
+  {
+    filter: "sampleID",
+    fieldType: "string",
+    description: "ID of the sample"
+  },
+  {
+    filter: "projectID",
+    fieldType: "string",
+    description: "ID of the parent project"
+  },
+  {
+    filter: "studyID",
+    fieldType: "string",
+    description: "ID of the parent study"
+  },
+  {
+    filter: "featureIDList",
+    fieldType: "string",
+    description: "comma separated list of feature IDs to match"
+  },
+  {
+    filter: "featureNameList",
+    fieldType: "string",
+    description: "comma separated list of feature names to match"
+  },
+  {
+    filter: "featureAccessionList",
+    fieldType: "string",
+    description: "comma separated list of feature accession IDs to match"
+  },
+  {
+    filter: "minExpression",
+    fieldType: "32-bit float",
+    description: "return values with expression greater than this value"
+  },
+  {
+    filter: "maxExpression",
+    fieldType: "32-bit float",
+    description: "return values with expression less than this value"
+  }
+]
+```
 
 ## Possible Future API Enhancements
 
 - Allow OR for search filters
 
 ## API specification change log
-2019-MM-DD:    1.0.0    Initial release version (pending)
+
+1.0.0    Initial release version
