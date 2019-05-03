@@ -806,7 +806,7 @@ The response to an expression search filter query is a list of JSON objects each
 
 ### Continuous: Get signal values by id
 
-The continuous is a matrix of numeric signal values.  Contiupus requests return a URL for the download or streaming of this numeric matrix.
+The continuous object is a matrix of numeric signal values.  Continuous requests return a URL for the download or streaming of this numeric matrix.
 
 `GET /continuous/<id>`
 
@@ -833,9 +833,9 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 #### Response
 
-The server shall return the selected continuous as a JSON formatted object.  The server may return the continuous in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+The server shall return the selected continuous object as a JSON formatted object.  The server may return the continuous object in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
-On success and a continuus is returned the server MUST issue a 200 status code.
+On success and a continuous object is returned the server MUST issue a 200 status code.
 
 The response to a continuous query is a JSON object with the following fields:
 
@@ -882,7 +882,7 @@ sampleID	sampleName	chr1:1000000	chr1:1000001
 12003-L1	12003-human-liver-4	12.4	15.6
 ```
 
-A Loom format file will have a 32-bit `float` matrix for the signal values with coordinates on the column axis and samples on the row axis.  Associated metadata can be stored as row and column attributes as described by loom specification.
+A Loom format file will have a 32-bit `float` matrix for the signal values with coordinates on the column axis and samples on the row axis.  Associated metadata can be stored as row and column attributes as described by the loom specification.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
@@ -959,9 +959,9 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 #### Response
 
-The server shall return the selected continuous as a JSON formatted object.  The server may return the continuous in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+The server shall return the selected continuous object as a JSON formatted object.  The server may return the continuous object in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
-On success and a continuus is returned the server MUST issue a 200 status code.
+On success and a continuous object is returned the server MUST issue a 200 status code.
 
 If start and end query parameter are specified and equal each other, the server should respond with a 404 status code and return a `Not Found` error.
 
