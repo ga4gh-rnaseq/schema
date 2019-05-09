@@ -806,17 +806,18 @@ The response to an expression search filter query is a list of JSON objects each
 
 ### Continuous: Get signal values by id
 
-The continuous object is a matrix of numeric signal values.  Continuous requests return a URL for the download or streaming of this numeric matrix.
+The continuous object is a matrix of numeric signal values.  Continuous requests return this numeric matrix as a file attachment.
 
 `GET /continuous/<id>`
 
-The primary method for accessing specific continuous value data.  The reponse is the specified continuous object in JSON format unless an alternative formatting supported by the server is requested.
+The primary method for accessing specific continuous value data.  The reponse is the specified continuous matrix as a downloadable attachment.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
 ```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0
+Content-Disposition: attachment
 ```
 
 #### URL parameters
@@ -829,34 +830,22 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned continuous object, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+| `Accept`  | string    | Optional | The formatting of the returned continuous object, defaults to `application/vnd.ga4gh.rnaget.v1.0.0` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
 
 #### Response
 
-The server shall return the selected continuous object as a JSON formatted object.  The server may return the continuous object in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+The server shall return the selected continuous matrix as a downloadable attachment.
 
 On success and a continuous object is returned the server MUST issue a 200 status code.
-
-The response to a continuous query is a JSON object with the following fields:
-
-| Data Field | Data Type | Required | Description 
-|------------|-----------|----------|-----------|
-| `id`       | string    | Yes      | A unique identifier assigned to this object |
-| `version`  | string    | Optional | Version number of the object |
-| `tags`     | string array | Optional | List of tags for the object |
-| `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
-| `studyID` | string | Optional | ID of containing study |
-| `URL    ` | string | Yes      | URL to download file |
 
 #### An example response
 
 ```
-{
-  "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.bw.loom",
-  "file_type": "loom",
-  "id": "2a7ab5533e33a82fbf21a30de87b58c4",
-  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
-}
+200 OK
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0
+Content-Disposition: attachment
+
+<matrix file as response body>
 ```
 
 ### Continuous: Get supported data formats
@@ -870,15 +859,14 @@ The response is a list of the supported data formats as a JSON formatted object 
   * Tab delimited text (.tsv)
   * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
 
-A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  There should be one header row following the comments.  Sample names and/or ID fields should be the first columns of the header row and have the `string` type.  All coordinates in a continuous range will be in the following columns with each base position in its own column.  The coordinate columns will contain 32-bit `float` values in each row corresponding to the measured signal value at that coordiante for the sample correponding to that row.
+A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  The first line of the tsv file will be a tab-delimited list beginning with `#labels` and containing the labels for text fields in the main matrix.  The second line of the tsv file will be a tab-delimited list containing 2 items: `#range` and the range in the form chr?:start-stop where the start coordinate is zero-based, inclusive and the stop coordinate is zero-based, exclusive.  Any additonal comments may follow these 2 lines.  The data matrix follows the comment black.  Sample names and/or ID fields should be the first columns of the header row, be in the same order as listed in the `#labels` comment  and have the `string` type.  All coordinates in the continuous range described in the `#range` comment will be in the following columns with each base position in its own column.  The coordinate columns will contain 32-bit `float` values in each row corresponding to the measured signal value at that coordiante for the sample correponding to that row.
 
 ##### Example .tsv file
 
 ```
-# Example tsv file
+#labels	sampleID	sampleName
+#range	chr1:1000000-1000002
 # assembly	GRCh38-V29-male
-# range	chr1:1000000-1000001
-sampleID	sampleName	chr1:1000000	chr1:1000001
 12003-L1	12003-human-liver-4	12.4	15.6
 ```
 
