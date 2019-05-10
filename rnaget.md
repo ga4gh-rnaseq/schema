@@ -815,8 +815,15 @@ The primary method for accessing specific continuous value data.  The reponse is
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
+For loom files:
 ```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0
+Content-type: application/octet-stream
+Content-Disposition: attachment
+```
+
+For tsv files:
+```
+Content-type: text/tab-separated-values
 Content-Disposition: attachment
 ```
 
