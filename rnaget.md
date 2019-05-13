@@ -837,7 +837,7 @@ Content-Disposition: attachment
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned continuous object, defaults to `application/vnd.ga4gh.rnaget.v1.0.0` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+| `Accept`  | string    | Optional | The formatting of the returned continuous object, defaults to `application/vnd.loom` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
 
 #### Response
 
@@ -849,7 +849,7 @@ On success and a continuous object is returned the server MUST issue a 200 statu
 
 ```
 200 OK
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0
+Content-type: application/vnd.loom
 Content-Disposition: attachment
 
 <matrix file as response body>
