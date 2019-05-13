@@ -817,7 +817,7 @@ Unless negotiated with the client and allowed by the server, the default encodin
 
 For loom files:
 ```
-Content-type: application/octet-stream
+Content-type: application/vnd.loom
 Content-Disposition: attachment
 ```
 
