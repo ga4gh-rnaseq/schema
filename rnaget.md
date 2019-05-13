@@ -10,12 +10,18 @@ suppress_footer: true
 
 ## Design principles
 
-This API provides a means of retrieving RNA-seq expression data via a client/server model.
+This API provides a means of retrieving data from several types of RNA experiments including:
+
+* Feature-level expression data from RNA-seq type measurements
+* Coordinate-based signal/intensity data similar to a bigwig representation
+
+via a client/server model.
 
 Features of this API include:
 
 * Support for a hierarchical data model which provides the option for servers to associate expression data for discovery and retrieval
 * Support for accessing subsets of expression data through slicing operations on the expression matrix and/or query filters to specify features to be included
+* Support for accessing signal/intensity data by specifying a range of genomic coordinates to be included
 
 Out of the scope of this API are:
 
@@ -796,6 +802,189 @@ The response to an expression search filter query is a list of JSON objects each
     description: "return values with expression less than this value"
   }
 ]
+```
+
+### Continuous: Get signal values by id
+
+The continuous object is a matrix of numeric signal values.  Continuous requests return this numeric matrix as a file attachment.
+
+`GET /continuous/<id>`
+
+The primary method for accessing specific continuous value data.  The reponse is the specified continuous matrix as a downloadable attachment.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+For loom files:
+```
+Content-type: application/vnd.loom
+Content-Disposition: attachment
+```
+
+For tsv files:
+```
+Content-type: text/tab-separated-values
+Content-Disposition: attachment
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-continuousId or /byContributor/some-continuousId |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned continuous object, defaults to `application/vnd.ga4gh.rnaget.v1.0.0` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+
+#### Response
+
+The server shall return the selected continuous matrix as a downloadable attachment.
+
+On success and a continuous object is returned the server MUST issue a 200 status code.
+
+#### An example response
+
+```
+200 OK
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0
+Content-Disposition: attachment
+
+<matrix file as response body>
+```
+
+### Continuous: Get supported data formats
+
+The recommended endpoint is:
+
+`GET /continuous/formats`
+
+The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  A data provider may use any internal storage format that they wish with no restrictions from this API.  To support development of interoperable clients, it is recommended that data providers MUST support at least 1 of the following common output formats:
+
+  * Tab delimited text (.tsv)
+  * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
+
+A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  The first line of the tsv file will be a tab-delimited list beginning with `#labels` and containing the labels for text fields in the main matrix.  The second line of the tsv file will be a tab-delimited list containing 2 items: `#range` and the range in the form chr?:start-stop where the start coordinate is zero-based, inclusive and the stop coordinate is zero-based, exclusive.  Any additonal comments may follow these 2 lines.  The data matrix follows the comment black.  Sample names and/or ID fields should be the first columns of the header row, be in the same order as listed in the `#labels` comment  and have the `string` type.  All coordinates in the continuous range described in the `#range` comment will be in the following columns with each base position in its own column.  The coordinate columns will contain 32-bit `float` values in each row corresponding to the measured signal value at that coordiante for the sample correponding to that row.
+
+##### Example .tsv file
+
+```
+#labels	sampleID	sampleName
+#range	chr1:1000000-1000002
+# assembly	GRCh38-V29-male
+12003-L1	12003-human-liver-4	12.4	15.6
+```
+
+A Loom format file will have a 32-bit `float` matrix for the signal values with coordinates on the column axis and samples on the row axis.  Associated metadata can be stored as row and column attributes as described by the loom specification.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned formats, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+
+#### Response
+
+The server shall return the supported formats as JSON formatted string array.  The server may return the list in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and a list is returned the server MUST issue a 200 status code.
+
+#### An example response
+
+```
+GET /expressions/formats
+["tsv", "loom"]
+```
+
+### Continuous: Search for matching values
+
+The recommended search endpoint is:
+
+`GET /continuous/search`
+
+To support queries with many parameters the data provider SHOULD implement the following POST endpoint:
+
+    POST /continuous/search
+
+accepting a UTF-8 JSON encoded key-value dictionary in the form:
+```
+{
+  "filter1": "value1",
+  "filter2": "value2"
+}
+```
+
+in which each `filter#` key matches the corresponding URL parameter.  The reponse is a continuous object in JSON format unless an alternative formatting supported by the server is requested.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### URL parameters
+
+| Parameter | Data Type | Required | Description
+|-----------|-----------|----------|-----------|
+| `format`  | string    | Yes      | Data format to return.  MUST be one of the supported data types returned by a request to the `/continuous/formats` endpoint |
+| `tags`    | string    | Optional | Comma separated tag list to filter by |
+| `version` | string    | Optional | Version to return |
+| `sampleIDList` | string | Optional | comma separated list of sampleIDs to match |
+| `projectID` | string | Optional | project to filter by |
+| `studyID` | string | Optional |  study to filter by |
+| `chr` | string | Optional |  The refererence to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
+| `start`   | 32-bit unsigned integer | Optional | The start position of the range on the sequence, 0-based, inclusive. The server MUST respond with a `Bad Request` error if start is specified and is larger than the total sequence length. The server must respond with a `Bad Request` error if start is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
+| `end`     | 32-bit unsigned integer | Optional | The end position of the range on the sequence, 0-based, exclusive. The server must respond with a `Bad Request` error if end is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned study, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the selected continuous object as a JSON formatted object.  The server may return the continuous object in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and a continuous object is returned the server MUST issue a 200 status code.
+
+If start and end query parameter are specified and equal each other, the server should respond with a 404 status code and return a `Not Found` error.
+
+```
+GET /continuous/search?chr=chr1&start=0&end=0
+
+```
+
+The response to a continuous query is a JSON object with the following fields:
+
+| Data Field | Data Type | Required | Description
+|------------|-----------|----------|-----------|
+| `id`       | string    | Yes      | A unique identifier assigned to this object |
+| `version`  | string    | Optional | Version number of the object |
+| `tags`     | string array | Optional | List of tags for the object |
+| `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
+| `studyID` | string | Optional | ID of containing study |
+| `URL    ` | string | Yes      | URL to download file |
+
+#### An example response
+
+```
+{ 
+  "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.bw.loom",
+  "file_type": "loom",
+  "id": "2a7ab5533e33a82fbf21a30de87b58c4",
+  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+}
 ```
 
 ## Possible Future API Enhancements
