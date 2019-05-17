@@ -665,7 +665,6 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 | `studyID` | string | Optional |  study to filter by |
 | `featureIDList` | string | Optional | return only values for listed comma separated feature ID values |
 | `featureNameList` | string | Optional | return only values for listed comma separated features |
-| `featureAccessionList` | string | Optional | return only values for listed comma separated accession numbers |
 | `minExpression` | `threshold` array | Optional | return only samples with expression values greater than listed threshold for each corresponding feature in the array |
 | `maxExpression` | `threshold` array | Optional | return only samples with expression values less than listed threshold for each corresponding feature in the array |
 
@@ -708,9 +707,8 @@ To allow for filtering on a range of expression values for multiple features the
 | `threshold`        | 32-bit float | Yes      | Numeric value to compare to expression value when filtering |
 | `featureID`        | string    | Optional | ID of feature this threshold corresponds to |
 | `featureName`      | string    | Optional | Name of feature this threshold corresponds to |
-| `featureAccession` | string    | Optional | Accession of feature this threshold corresponds to |
 
-For each threshold tuple the request SHOULD provide only one of `featureID`, `featureName` or `featureAccession`.  If none of these are provided the query will return all samples containing 1 or more features satisfying the `threshold` value and condition (min or max).
+For each threshold tuple the request SHOULD provide only one of `featureID` or `featureName`.  If none of these are provided the query will return all samples containing 1 or more features satisfying the `threshold` value and condition (min or max).
 
 #### Sample `threshold`
 
@@ -787,11 +785,6 @@ The response to an expression search filter query is a list of JSON objects each
     filter: "featureNameList",
     fieldType: "string",
     description: "comma separated list of feature names to match"
-  },
-  {
-    filter: "featureAccessionList",
-    fieldType: "string",
-    description: "comma separated list of feature accession IDs to match"
   },
   {
     filter: "minExpression",
