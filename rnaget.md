@@ -515,6 +515,8 @@ The expression is a matrix of calculated expression values.  Expression requests
 
 The primary method for accessing specific expression data.  The reponse is the specified expression object in JSON format unless an alternative formatting supported by the server is requested.
 
+If the server will not be providing expression value matrix data it MUST still define the `/expressions` endpoint and MUST respond with an `Not Implemented` error to requests sent to this endpoint.
+
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
 
@@ -811,6 +813,8 @@ The continuous object is a matrix of numeric signal values.  Continuous requests
 `GET /continuous/<id>`
 
 The primary method for accessing specific continuous value data.  The reponse is the specified continuous matrix as a downloadable attachment.
+
+If the server will not be providing numeric signal matrix data it MUST still define the `/continuous` endpoint and MUST respond with an `Not Implemented` error to requests sent to this endpoint.
 
 ##### Default encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
