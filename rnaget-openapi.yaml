@@ -22,6 +22,11 @@ tags:
   externalDocs:
     description: "Find out more"
     url: "https://github.com/ga4gh-rnaseq/schema"
+- name: "continuous"
+  description: "Coordinate range based signal data"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/ga4gh-rnaseq/schema"
 schemes:
 - "https"
 paths:
@@ -363,6 +368,136 @@ paths:
       security:
       - rnaget_auth:
         - "read:expression"
+  /continuous/{continuousId}:
+    get:
+      tags:
+      - "continuous"
+      summary: "Retrieve continuous signal data by ID"
+      description: "Returns a single specified signal matrix"
+      operationId: "getContinuousById"
+      parameters:
+      - name: "continuousId"
+        in: "path"
+        description: "ID of continuous matrix to return"
+        required: true
+        type: "string"
+      produces:
+        - application/vnd.loom
+        - text/tab-separated-values
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "file"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Continuous matrix not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
+      security:
+      - rnaget_auth:
+        - "read:continuous"
+  /continuous/formats:
+    get:
+      tags:
+      - "continuous"
+      summary: "Get output formats"
+      description: "Returns a list of supported continuous matrix formats"
+      operationId: "getContinuousFormats"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        404:
+          description: "Format list not found"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
+      security:
+      - rnaget_auth:
+        - "read:continuous"
+  /continuous/search:
+    get:
+      tags:
+      - "continuous"
+      summary: "Search for continuous data matching filters"
+      description: "Search for continuous data matching filters"
+      operationId: "searchContinuous"
+      parameters:
+      - name: "format"
+        in: "query"
+        description: "Data format to return"
+        required: true
+        type: "string"
+      - name: "tags"
+        in: "query"
+        description: "Comma separated tag list to filter by"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "csv"
+      - name: "sampleIDList"
+        in: "query"
+        description: "comma separated list of sampleIDs to match"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "csv"
+      - name: "projectID"
+        in: "query"
+        description: "project to filter by"
+        required: false
+        type: "string"
+      - name: "studyID"
+        in: "query"
+        description: "study to filter by"
+        required: false
+        type: "string"
+      - name: "version"
+        in: "query"
+        description: "version to filter by"
+        required: false
+        type: "string"
+      - name: "chr"
+        in: "query"
+        description: "The refererence to which start and end apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX)."
+        required: false
+        type: "string"
+      - name: "start"
+        in: "query"
+        description: "The start position of the range on the sequence, 0-based, inclusive."
+        required: false
+        type: "integer"
+      - name: "end"
+        in: "query"
+        description: "The end position of the range on the sequence, 0-based, exclusive."
+        required: false
+        type: "integer"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/file"
+        400:
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
+      security:
+      - rnaget_auth:
+        - "read:continuous"
 securityDefinitions:
   rnaget_auth:
     type: "oauth2"
@@ -370,6 +505,7 @@ securityDefinitions:
     flow: "implicit"
     scopes:
       read:expression: "read expression data"
+      read:continuous: "read continuous data"
       read:project: "read information about projects"
       read:study: "read information about studies"
       read:info: "read general info"
