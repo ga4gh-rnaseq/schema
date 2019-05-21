@@ -318,13 +318,6 @@ paths:
         type: "array"
         items:
           type: "string"
-      - name: "featureAccessionList"
-        in: "query"
-        description: "return only values for listed accession numbers"
-        required: false
-        type: "array"
-        items:
-          type: "string"
       responses:
         200:
           description: "Successful operation"
