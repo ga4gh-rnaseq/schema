@@ -26,8 +26,8 @@ Features of this API include:
 Out of the scope of this API are:
 
 * A means of retrieving primary (raw) read sequence data. Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads. The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
-* A means of retrieving reference sequences. Each study lists the genomic reference used for alignment. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
-* A means of retrieving feature annotation details. Expression matrices provide a means to link each mapped feature to the corresponding annotation. Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
+* A means of retrieving reference sequences. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
+* A means of retrieving feature annotation details. Expression matrices provide the identity of each mapped feature. Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
 ## OpenAPI Description
 
