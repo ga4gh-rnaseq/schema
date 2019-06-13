@@ -279,6 +279,7 @@ The response to a project search filter query is a list of JSON objects each wit
 | `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
 | `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
 | `description` | string    | Yes      | Detailed description of the filter |
+| `values` | string array   | Optional | List of supported values for the filter |
 
 #### An example response
 
@@ -287,17 +288,20 @@ The response to a project search filter query is a list of JSON objects each wit
   {
     filter: "version",
     fieldType: "string",
-    description: "release version to match"
+    description: "release version to match",
+    values: ["1.0"]
   },
   {
     filter: "tags",
     fieldType: "string",
-    description: "comma separated list of tags"
+    description: "comma separated list of tags",
+    values: ["tag1", "tag2"]
   },
   {
     filter: "name",
     fieldType: "string",
-    description: "project name"
+    description: "project name",
+    values: []
   }
 ]
 ```
@@ -479,6 +483,7 @@ The response to a study search filter query is a list of JSON objects each with 
 | `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
 | `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
 | `description` | string    | Yes      | Detailed description of the filter |
+| `values` | string array   | Optional | List of supported values for the filter |
 
 #### An example response
 
@@ -487,22 +492,26 @@ The response to a study search filter query is a list of JSON objects each with 
   {
     filter: "version",
     fieldType: "string",
-    description: "release version to match"
+    description: "release version to match",
+    values: ["1.0"]
   },
   {
     filter: "tags",
     fieldType: "string",
-    description: "comma separated list of tags"
+    description: "comma separated list of tags",
+    values: ["tag1", "tag2"]
   },
   {
     filter: "name",
     fieldType: "string",
-    description: "study name"
+    description: "study name",
+    values: []
   },
   {
     filter: "projectID",
     fieldType: "string",
-    description: "ID of parent project"
+    description: "ID of parent project",
+    values: []
   }
 ]
 ```
@@ -751,6 +760,7 @@ The response to an expression search filter query is a list of JSON objects each
 | `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
 | `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
 | `description` | string    | Yes      | Detailed description of the filter |
+| `values` | string array   | Optional | List of supported values for the filter |
 
 #### An example response
 
@@ -759,42 +769,50 @@ The response to an expression search filter query is a list of JSON objects each
   {
     filter: "version",
     fieldType: "string",
-    description: "release version to match"
+    description: "release version to match",
+    values: ["1.0"]
   },
   {
     filter: "sampleID",
     fieldType: "string",
-    description: "ID of the sample"
+    description: "ID of the sample",
+    values: ["tag1", "tag2"]
   },
   {
     filter: "projectID",
     fieldType: "string",
-    description: "ID of the parent project"
+    description: "ID of the parent project",
+    values: []
   },
   {
     filter: "studyID",
     fieldType: "string",
-    description: "ID of the parent study"
+    description: "ID of the parent study",
+    values: []
   },
   {
     filter: "featureIDList",
     fieldType: "string",
-    description: "comma separated list of feature IDs to match"
+    description: "comma separated list of feature IDs to match",
+    values: []
   },
   {
     filter: "featureNameList",
     fieldType: "string",
-    description: "comma separated list of feature names to match"
+    description: "comma separated list of feature names to match",
+    values: []
   },
   {
     filter: "minExpression",
     fieldType: "32-bit float",
-    description: "return values with expression greater than this value"
+    description: "return values with expression greater than this value",
+    values: []
   },
   {
     filter: "maxExpression",
     fieldType: "32-bit float",
-    description: "return values with expression less than this value"
+    description: "return values with expression less than this value",
+    values: []
   }
 ]
 ```
