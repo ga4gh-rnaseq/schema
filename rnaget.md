@@ -598,6 +598,34 @@ ENSG00000000003	TSPAN6	12.4	15.6
 
 A Loom format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by loom specification.
 
+##### Expression metadata
+
+This describes a set of minimal metadata appropriate for several types of RNA experiments.  The purpose is to define a common naming scheme for metadata to enable client software to have some expectation of data fields for improved interoperability.  These definitions are not intended to be a comprehensive set of metadata and defining such a universal set is beyond the scope of this effort.
+
+Where possible details are incorporated by reference.  This is to reduce the final size of matrix files, support existing metadata standards and support server-defined metadata fields.
+
+All field names are presented here in camel case.  Parsers should treat field names as case-insensitive and any white space contained in the field names should be ignored:
+
+sampleID == sampleid == Sample ID != sample_id
+
+All fields are optional.
+
+| Metadata Field   | Description
+|------------------|-------------|
+| sampleID         | an identifier for the biological specimen the experiment was conducted on.  This id MUST uniquely identify the sample within the scope of the server |
+| assayType        | the type of experiment performed (ex. RNA-seq, ATAC-seq, ChIP-seq, DNase-Hypersensitivity, methylation profiling, histone profiling, microRNA profiling, transcription profiling, WGS) |
+| samplePrepProtocol | reference to a resource or webpage describing the protocol used to obtain and prepare the sample |
+| libraryPrepProtocol | reference to a resource or webpage describing the protocol used to prepare the library for sequencing |
+| annotation       | a reference to the specific annotation used for quantifying the reads |
+| analysisPipeline | reference to a resource or webpage describing the analysis protocol.  This description should include a full listing of all software used including the exact version and command line options used.  If containerized software is used a reference to the specific containers should be included. The GA4GH [Tool Registry Service](https://github.com/ga4gh/tool-registry-service-schemas) is a resource for discovering and registering genomic tools and workflows. |
+| cellType         | a term from the [CL ontology](http://www.ontobee.org/ontology/CL) |
+| phenotype        | phenotype term applicable to the sample |
+| phenotypeSource  | reference to the ontology used for `phenotype` (example: Human Phenotype Ontology, https://hpo.jax.org/app/) |
+| sex              | sex of the organism providing the sample [PATO 47 term](http://purl.obolibrary.org/obo/PATO_0000047) |
+| organism         | organism of origin for the sample |
+| tissue           | tissue of origin or organism part of origin |
+| cellLine         | name of [cell line](http://www.ontobee.org/ontology/CLO) |
+
 ##### The meaning of zero
 
 Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes which may not have 100% coverage of the annotation reference.  The consequence is that some features which show zero expression may not necessarily have a truly zero expression.  This idea can be extended further in the context of submitted data as well as potentially access restricted data.  The result is that a zero value can indicate one of several states:
