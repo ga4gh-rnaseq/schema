@@ -944,7 +944,7 @@ On success and a list is returned the server MUST issue a 200 status code.
 #### An example response
 
 ```
-GET /expressions/formats
+GET /continuous/formats
 ["tsv", "loom"]
 ```
 
@@ -1033,6 +1033,8 @@ The response to a continuous query is a JSON object with the following fields:
 ## Possible Future API Enhancements
 
 - Allow OR for search filters
+- Report size of download file
+- Matrix slicing with bool array or list of indices
 
 ## API specification change log
 
