@@ -568,7 +568,7 @@ The response to an expression query is a JSON object with the following fields:
 ```
 {
   "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
-  "file_type": "loom",
+  "fileType": "loom",
   "id": "2a7ab5533ef941eaa59edbfe887b58c4",
   "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
   "units": "TPM"
@@ -728,7 +728,7 @@ The response to an expression query is a JSON object with the following fields:
 [
   {
     "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
-    "file_type": "loom",
+    "fileType": "loom",
     "id": "2a7ab5533ef941eaa59edbfe887b58c4",
     "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
   }
@@ -1024,10 +1024,65 @@ The response to a continuous query is a JSON object with the following fields:
 ```
 { 
   "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.bw.loom",
-  "file_type": "loom",
+  "fileType": "loom",
   "id": "2a7ab5533e33a82fbf21a30de87b58c4",
   "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
 }
+```
+
+### Continuous: Get available search filters
+
+To support flexible search this provides a means of identifying the search filters supported by the data provider.
+
+`GET /continuous/search/filters`
+
+The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
+
+##### Default encoding
+Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
+```
+
+#### Request parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
+
+#### Response
+
+The server shall return the available filters as a list of JSON formatted objects.  The server may return the objects in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+
+On success and one or more filters are returned the server MUST issue a 200 status code.
+
+The response to a continuous search filter query is a list of JSON objects each with the following fields:
+
+| Data Field    | Data Type | Required | Description 
+|---------------|-----------|----------|-----------|
+| `filter`      | string    | Yes      | A unique name for the filter for use in search query URLs |
+| `fieldType`    | string    | Yes      | The dataType (`string`, `float`, etc.) of the filter |
+| `description` | string    | Yes      | Detailed description of the filter |
+| `values` | string array   | Optional | List of supported values for the filter |
+
+#### An example response
+
+```
+[
+  {
+    filter: "cell_type",
+    fieldType: "string",
+    description: "cell type",
+    values: ["Brain", "Bone", "Kidney"]
+  },
+  {
+    filter: "assay_type",
+    fieldType: "string",
+    description: "type of assay",
+    values: ["Histone"]
+  }
+]
 ```
 
 ## Possible Future API Enhancements
