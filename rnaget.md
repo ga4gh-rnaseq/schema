@@ -59,6 +59,8 @@ Responses from the server MUST include a Content-Type header containing the enco
 Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
 ```
 
+All response objects from the server are expected to be in JSON format, regardless of the response status code.
+
 ## Internet Media Types Handling
 
 When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so
