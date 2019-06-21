@@ -579,6 +579,29 @@ paths:
       security:
       - rnaget_auth:
         - "read:continuous"
+  /continuous/search/filters:
+    get:
+      tags:
+      - "continuous"
+      summary: "Returns filters for continuous searches"
+      description: "Get filters for continuous searches"
+      operationId: "searchContinuousFilters"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/searchFilter"
+        400:
+          description: "The requested data format is not supported"
+        406:
+          description: "Requested formatting not supported"
+        501:
+          description: "The specified request is not supported by the server"
+      security:
+      - rnaget_auth:
+        - "read:continuous"
 securityDefinitions:
   rnaget_auth:
     type: "oauth2"
