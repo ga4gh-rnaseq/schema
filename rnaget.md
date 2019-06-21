@@ -981,12 +981,10 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description
 |-----------|-----------|----------|-----------|
-| `format`  | string    | Yes      | Data format to return.  MUST be one of the supported data types returned by a request to the `/continuous/formats` endpoint |
+| `studyID` | string    | Yes      |  study to filter by |
 | `tags`    | string    | Optional | Comma separated tag list to filter by |
 | `version` | string    | Optional | Version to return |
 | `sampleIDList` | string | Optional | comma separated list of sampleIDs to match |
-| `projectID` | string | Optional | project to filter by |
-| `studyID` | string | Optional |  study to filter by |
 | `chr` | string | Optional |  The refererence to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
 | `start`   | 32-bit unsigned integer | Optional | The start position of the range on the sequence, 0-based, inclusive. The server MUST respond with a `Bad Request` error if start is specified and is larger than the total sequence length. The server must respond with a `Bad Request` error if start is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
 | `end`     | 32-bit unsigned integer | Optional | The end position of the range on the sequence, 0-based, exclusive. The server must respond with a `Bad Request` error if end is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
