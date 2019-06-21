@@ -679,8 +679,6 @@ definitions:
     type: "object"
     description: "General API error model"
     properties:
-      code:
-        type: "string"
       message:
         type: "string"
 externalDocs:
