@@ -50,12 +50,20 @@ paths:
             $ref: "#/definitions/project"
         400:
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/error"
         404:
           description: "Project not found"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:project"
@@ -89,10 +97,16 @@ paths:
               $ref: "#/definitions/project"
         400:
           description: "The requested data format is not supported"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:project"
@@ -112,10 +126,16 @@ paths:
               $ref: "#/definitions/searchFilter"
         400:
           description: "The requested data format is not supported"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:project"
@@ -139,12 +159,20 @@ paths:
             $ref: "#/definitions/study"
         400:
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/error"
         404:
           description: "Study not found"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:study"
@@ -178,10 +206,16 @@ paths:
               $ref: "#/definitions/study"
         400:
           description: "The requested data format is not supported"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:study"
@@ -201,10 +235,16 @@ paths:
               $ref: "#/definitions/searchFilter"
         400:
           description: "The requested data format is not supported"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:study"
@@ -228,12 +268,20 @@ paths:
             $ref: "#/definitions/file"
         400:
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/error"
         404:
           description: "Expression not found"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -253,10 +301,16 @@ paths:
               type: "string"
         404:
           description: "Format list not found"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -327,10 +381,16 @@ paths:
               $ref: "#/definitions/file"
         400:
           description: "The requested data format is not supported"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -351,13 +411,21 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/searchFilter"
+            type: "array"
+            items:
+              $ref: "#/definitions/searchFilter"
         400:
           description: "The requested data format is not supported"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:expression"
@@ -384,12 +452,20 @@ paths:
             type: "file"
         400:
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/error"
         404:
           description: "Continuous matrix not found"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:continuous"
@@ -409,10 +485,16 @@ paths:
               type: "string"
         404:
           description: "Format list not found"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:continuous"
@@ -484,10 +566,16 @@ paths:
               $ref: "#/definitions/file"
         400:
           description: "The requested data format is not supported"
+          schema:
+            $ref: "#/definitions/error"
         406:
           description: "Requested formatting not supported"
+          schema:
+            $ref: "#/definitions/error"
         501:
           description: "The specified request is not supported by the server"
+          schema:
+            $ref: "#/definitions/error"
       security:
       - rnaget_auth:
         - "read:continuous"
@@ -610,6 +698,12 @@ definitions:
     externalDocs:
       description: "Find out more"
       url: "https://github.com/ga4gh-rnaseq/schema"
+  error:
+    type: "object"
+    description: "General API error model"
+    properties:
+      message:
+        type: "string"
 externalDocs:
   description: "Find out more about GA4GH"
   url: "http://ga4gh.org"
