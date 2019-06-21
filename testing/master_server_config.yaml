@@ -1,0 +1,52 @@
+servers:
+  - server_name: Caltech
+    base_url: https://felcat.caltech.edu/rnaget/
+    implemented:
+      projects: true
+      studies: true
+      expressions: true
+      continuous: false
+    
+    projects:
+      - id: 43378a5d48364f9d8cf3c3d5104df560
+        filters:
+          version: 1.0
+          name: PCAWG
+    
+    studies:
+      - id: 6cccbbd76b9c4837bd7342dd616d0fec
+        filters:
+          version: 1.0
+          name: PCAWG
+    
+    expressions:
+      - id: 2a7ab5533ef941eaa59edbfe887b58c4
+        filters:
+          studyID: 6cccbbd76b9c4837bd7342dd616d0fec
+
+  - server_name: Centre for Genomic Regulation
+    base_url: https://genome.crg.cat/rnaget/
+    token: abcdefuvwxyz
+    implemented:
+        projects: true
+        studies: true
+        expressions: true
+        continuous: false
+    
+    projects:
+      - id: E-MTAB-5200
+        filters:
+          name: Pancancer Analysis of Whole Genomes
+      - id: E-GEOD-81547
+        filters:
+          name: Single cell transcriptome analysis of human pancreas
+    
+    studies:
+      - id: E-MTAB-5200-ST0
+        filters:
+          name: Pancancer Analysis of Whole Genomes
+    
+    expressions:
+      - id: 8beada7b93d5e55aa557138b39c6f930
+        filters:
+          tags: cancer 
