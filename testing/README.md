@@ -11,9 +11,9 @@ Implementors who wish to be included in this list can do so by providing their c
 
 ### Compliance report
 
-The compliance and testing suite generates an HTML report for every tested server.  The latest compliance report is provided here.
+The compliance and testing suite generates an HTML report for every tested server.  Running the test suite with the `--serve` option will automatically start a web server for viewing the results.  The latest compliance report is provided here as an archive.
 
-The following commands will let you create the server using python3:
+The following commands will let you view the report archive using python3:
 
 `tar -zxvf rnaget-compliance-results.tar.gz`
 `cd rnaget-compliance-results`
