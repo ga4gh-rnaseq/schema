@@ -5,23 +5,28 @@ servers:
       projects: true
       studies: true
       expressions: true
-      continuous: false
+      continuous: true
     
     projects:
       - id: 43378a5d48364f9d8cf3c3d5104df560
         filters:
           version: 1.0
-          name: PCAWG
     
     studies:
       - id: 6cccbbd76b9c4837bd7342dd616d0fec
         filters:
           version: 1.0
-          name: PCAWG
     
     expressions:
       - id: 2a7ab5533ef941eaa59edbfe887b58c4
         filters:
+          studyID: 6cccbbd76b9c4837bd7342dd616d0fec
+          format: loom
+    
+    continuous:
+      - id: fa057c6d18c44960a1b8b49d065b3889
+        filters:
+          version: 1.0
           studyID: 6cccbbd76b9c4837bd7342dd616d0fec
 
   - server_name: Centre for Genomic Regulation
@@ -49,4 +54,5 @@ servers:
     expressions:
       - id: 8beada7b93d5e55aa557138b39c6f930
         filters:
-          tags: cancer 
+          tags: cancer
+          format: tsv
