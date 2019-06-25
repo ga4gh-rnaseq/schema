@@ -527,11 +527,6 @@ paths:
         items:
           type: "string"
         collectionFormat: "csv"
-      - name: "projectID"
-        in: "query"
-        description: "project to filter by"
-        required: false
-        type: "string"
       - name: "studyID"
         in: "query"
         description: "study to filter by"

@@ -981,7 +981,8 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 
 | Parameter | Data Type | Required | Description
 |-----------|-----------|----------|-----------|
-| `studyID` | string    | Yes      |  study to filter by |
+| `format`  | string    | Yes      | Data format to return.  MUST be one of the supported data types returned by a request to the `/continuous/formats` endpoint |
+| `studyID` | string    | Optional |  study to filter by |
 | `tags`    | string    | Optional | Comma separated tag list to filter by |
 | `version` | string    | Optional | Version to return |
 | `sampleIDList` | string | Optional | comma separated list of sampleIDs to match |
