@@ -28,6 +28,7 @@ servers:
         filters:
           version: 1.0
           studyID: 6cccbbd76b9c4837bd7342dd616d0fec
+          format: loom
 
   - server_name: Centre for Genomic Regulation
     base_url: https://genome.crg.cat/rnaget/
@@ -36,7 +37,7 @@ servers:
         projects: true
         studies: true
         expressions: true
-        continuous: false
+        continuous: true
     
     projects:
       - id: E-MTAB-5200
@@ -54,5 +55,11 @@ servers:
     expressions:
       - id: 8beada7b93d5e55aa557138b39c6f930
         filters:
-          tags: cancer
           format: tsv
+          tags: cancer
+    
+    continuous:
+      - id: 482580efab4afe180dd0f3caa7b3394c
+        filters:
+          studyID: E-MTAB-5200-ST0
+          tags: cancer

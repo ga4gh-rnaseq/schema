@@ -28,3 +28,4 @@ servers:
         filters:
           version: 1.0
           studyID: 6cccbbd76b9c4837bd7342dd616d0fec
+          format: loom
