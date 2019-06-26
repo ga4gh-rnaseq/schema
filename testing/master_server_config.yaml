@@ -61,5 +61,5 @@ servers:
     continuous:
       - id: 482580efab4afe180dd0f3caa7b3394c
         filters:
-          studyID: E-MTAB-5200-ST0
+          format: tsv
           tags: cancer
