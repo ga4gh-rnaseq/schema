@@ -11,18 +11,7 @@ Implementors who wish to be included in this list can do so by providing their c
 
 ### Compliance report
 
-The compliance and testing suite generates an HTML report for every tested server.  Running the test suite with the `--serve` option will automatically start a web server for viewing the results.  The latest compliance report is provided here as an archive.
-
-The following commands will let you view the report archive using python3:
-
-`tar -zxvf rnaget-compliance-results.tar.gz`
-`cd rnaget-compliance-results`
-`python -m http.server 8000`
-
-If using python 2, you can run the following command instead:
-`python -m SimpleHTTPServer 8000`
-
-You will then be able to access the report from a web browser at http://localhost:8000
+The compliance and testing suite generates an HTML report for every tested server.  The latest compliance report can be viewed [here](https://ga4gh-rnaseq.github.io/rnaget-compliance-suite/report/).
 
 ### Server Implementations
 
@@ -39,6 +28,6 @@ You will then be able to access the report from a web browser at http://localhos
 
 These client implementations are provided by their respective developers as examples of using the API.  GA4GH does not have a client testing suite as each client is an individual effort.  Links to clients are presented as an "as is" resource for developers.
 
-* saupchurch client - This is an iPython notebook example designed to demonstrate basic navigation and operations on the demo PCAWG dataset.  It is available at: https://github.com/saupchurch/bioinformatics-tools/blob/master/ga4gh-rnaget-api/GA4GH-rnaget-API-examples.ipynb
+* saupchurch client - This is an iPython notebook example designed to demonstrate basic navigation and operations on the demo PCAWG dataset.  It is available at: https://github.com/saupchurch/bioinformatics-tools/blob/master/ga4gh-rnaget-api/GA4GH-rnaget-API-examples.ipynb.
 
 * emi80 client - This is a Go command line application covering the basic functionalities of the API. It is available at: https://github.com/guigolab/rnaget-client
