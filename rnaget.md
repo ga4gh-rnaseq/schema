@@ -614,6 +614,8 @@ The response to an expression query is a JSON object with the following fields:
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
 | `URL    ` | string | Yes      | URL to download file |
+| `headers` | object | Optional | For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL. |
+| `md5    ` | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
 
 #### An example response
 
@@ -623,7 +625,12 @@ The response to an expression query is a JSON object with the following fields:
     "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
     "fileType": "loom",
     "id": "2a7ab5533ef941eaa59edbfe887b58c4",
-    "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+    "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
+    "headers": {
+      "Authorization": "Bearer xxxx",
+      "Accept": "application/vnd.loom"
+    },
+    "md5": "(some 32 character hex value)"
   }
 ]
 ```
@@ -877,6 +884,8 @@ The response to a continuous query is a JSON object with the following fields:
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
 | `URL    ` | string | Yes      | URL to download file |
+| `headers` | object | Optional | For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL. |
+| `md5    ` | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
 
 #### An example response
 
@@ -885,7 +894,12 @@ The response to a continuous query is a JSON object with the following fields:
   "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.bw.loom",
   "fileType": "loom",
   "id": "2a7ab5533e33a82fbf21a30de87b58c4",
-  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
+  "headers": {
+      "Authorization": "Bearer xxxx",
+      "Accept": "application/vnd.loom"
+    },
+    "md5": "(some 32 character hex value)"
 }
 ```
 
