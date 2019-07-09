@@ -61,6 +61,8 @@ Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
 
 All response objects from the server are expected to be in JSON format, regardless of the response status code, unless otherwise negotiated with the client and allowed by the server.
 
+Object IDs are intended for persistent retrieval of their respective objects.  An object IDs MUST uniquely identify an object within the scope of a single data server.  Clients SHOULD implement additional means of identifying the server of origin for response objects as it is beyond the scope of this API to enforce uniqueness of ID between different data servers.
+
 ## Internet Media Types Handling
 
 When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so
