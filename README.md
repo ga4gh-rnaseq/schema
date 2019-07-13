@@ -14,8 +14,8 @@ This repository has several files describing the rnaget API specification:
 
 * The [API specification document](https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget.md)
 * A [machine-readable](https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget-openapi.yaml) OpenAPI instance of the specification. View in [online visualizer](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/master/rnaget-openapi.yaml)
-* Introduction to accessing and (testing implementations)[https://github.com/ga4gh-rnaseq/schema/blob/master/testing/README.md] for compliance
-* Additional (background)[https://github.com/ga4gh-rnaseq/schema/blob/master/rna_seq_design_notes.md] on the API
+* Introduction to accessing and [testing implementations](https://github.com/ga4gh-rnaseq/schema/blob/master/testing/README.md) for compliance
+* Additional [background](https://github.com/ga4gh-rnaseq/schema/blob/master/rna_seq_design_notes.md) on the API
 * The automated build of the compliance report is [here](https://ga4gh-rnaseq.github.io/rnaget-compliance-suite/report/)
 
 ### For current data providers
@@ -29,7 +29,7 @@ The testing and compliance suite can be used to test implemented endpoints for A
 A group or organization can use the rnaget API to make their data available to users.  The rnaget API descirbed a lightweight data hierachy and a set of endpoints compatible with client software implementing the API.  It is important to note that the rnaget API does not place any restrictions on the data backend.  A server implementor is free to select whatever back end best suits their individual needs.  There are several paths towards setting up a compliant server:
 
 * The [OpenAPI description](https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget-openapi.yaml) of the specification can be used with code generators like [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator).
-* The (testing and compliance page)[https://github.com/ga4gh-rnaseq/schema/blob/master/testing/README.md] includes a list of example server implementations which can be used as is or as a starting point.
+* The [testing and compliance page](https://github.com/ga4gh-rnaseq/schema/blob/master/testing/README.md) includes a list of example server implementations which can be used as is or as a starting point.
 * A custom solution can be implemented to link the API endpoints and queries to a local data backend (of any desired type) serving the data
 
 ### For client software developers
