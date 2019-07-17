@@ -17,6 +17,7 @@ This repository has several files describing the rnaget API specification:
 * Introduction to accessing and [testing implementations](https://github.com/ga4gh-rnaseq/schema/blob/master/testing/README.md) for compliance
 * Additional [background](https://github.com/ga4gh-rnaseq/schema/blob/master/rna_seq_design_notes.md) on the API
 * The automated build of the compliance report is [here](https://ga4gh-rnaseq.github.io/rnaget-compliance-suite/report/)
+* Complete documentation of the testing and compliance suite is [here](https://rnaget-compliance-suite.readthedocs.io/en/latest/)
 
 ### For current data providers
 

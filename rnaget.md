@@ -125,7 +125,7 @@ The project is the top level of the model hierarchy and contains a set of relate
 
 The primary method for accessing specific project data.  The reponse is the specified project in JSON format unless an alternative formatting supported by the server is requested.
 
-#### URL parameters
+#### Path parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
@@ -282,7 +282,7 @@ The study is a set of related RNA expression values.  It is assumed all samples 
 
 The primary method for accessing specific study data.  The reponse is the specified study in JSON format unless an alternative formatting supported by the server is requested.
 
-#### URL parameters
+#### Path parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
@@ -452,7 +452,7 @@ The primary method for accessing specific expression data.  The reponse is the s
 
 If the server will not be providing expression value matrix data it MUST still define the `/expressions` endpoint and MUST respond with an `Not Implemented` error to requests sent to this endpoint.
 
-#### URL parameters
+#### Path parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
@@ -763,11 +763,19 @@ Content-type: text/tab-separated-values
 Content-Disposition: attachment
 ```
 
+#### Path parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying a set of one or more records to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-continuousId or /byContributor/some-continuousId |
+
 #### URL parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-continuousId or /byContributor/some-continuousId |
+| `chr` | string | Optional |  The refererence to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
+| `start`   | 32-bit unsigned integer | Optional | The start position of the range on the sequence, 0-based, inclusive. The server MUST respond with a `Bad Request` error if start is specified and is larger than the total sequence length. The server must respond with a `Bad Request` error if start is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
+| `end`     | 32-bit unsigned integer | Optional | The end position of the range on the sequence, 0-based, exclusive. The server must respond with a `Bad Request` error if end is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
 
 #### Request parameters
 
