@@ -545,6 +545,25 @@ paths:
           required: true
           schema:
             type: string
+        - name: chr
+          in: query
+          description: The refererence to which start and end apply in the form chr? where
+            ? is the specific ID of the chromosome (ex. chr1, chrX).
+          required: false
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: The start position of the range on the sequence, 0-based, inclusive.
+          required: false
+          schema:
+            type: integer
+        - name: end
+          in: query
+          description: The end position of the range on the sequence, 0-based, exclusive.
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: successful operation
