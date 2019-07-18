@@ -39,27 +39,29 @@ Implementors can check if their rnaget implementations conform to the specificat
 
 ## Protocol essentials
 
-All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
+All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Queries containing [unsafe or reserved](https://www.ietf.org/rfc/rfc1738.txt) characters in the URL, including but not limited to "&", "/", "#", MUST encode all such characters.  Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
 
-Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.
-
-HTTP responses may be compressed using [RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html) transfer-coding, not content-coding.
-
-HTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured to follow redirects. `302`, `303` and `307` are all valid response codes to use.
-
-Requests MAY include an Accept header specifying the protocol version they are using:
+Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.  Unless specified, the default content type is the rnaget protocol version:
 
 ```
 Accept: application/vnd.ga4gh.rnaget.v1.0.0+json
 ```
 
-Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version:
+A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.
+
+HTTP responses may be compressed using [RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html) transfer-coding, not content-coding.
+
+HTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured to follow redirects. `302`, `303` and `307` are all valid response codes to use.
+
+Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version.  Unless negotiated with the client and allowed by the server, the default encoding is:
 
 ```
 Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
 ```
 
-All response objects from the server are expected to be in JSON format, regardless of the response status code.
+All response objects from the server are expected to be in JSON format, regardless of the response status code, unless otherwise negotiated with the client and allowed by the server.
+
+Object IDs are intended for persistent retrieval of their respective objects.  An object IDs MUST uniquely identify an object within the scope of a single data server.  Clients SHOULD implement additional means of identifying the server of origin for response objects as it is beyond the scope of this API to enforce uniqueness of ID between different data servers.
 
 ## Internet Media Types Handling
 
@@ -123,24 +125,11 @@ The project is the top level of the model hierarchy and contains a set of relate
 
 The primary method for accessing specific project data.  The reponse is the specified project in JSON format unless an alternative formatting supported by the server is requested.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### URL parameters
+#### Path parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
 | `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-projectId or /byContributor/some-projectId |
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned project, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -194,25 +183,12 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
 in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching projects in JSON format unless an alternative formatting supported by the server is requested.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
 #### URL parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
 | `tags`    | string    | Optional | Comma separated tag list to filter by |
 | `version` | string    | Optional | Version to return |
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned project list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -254,19 +230,6 @@ To support flexible search this provides a means of identifying the search filte
 `GET /projects/search/filters`
 
 The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
-
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -319,24 +282,11 @@ The study is a set of related RNA expression values.  It is assumed all samples 
 
 The primary method for accessing specific study data.  The reponse is the specified study in JSON format unless an alternative formatting supported by the server is requested.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### URL parameters
+#### Path parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
 | `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-studyId or /byContributor/some-studyId |
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned study, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -394,25 +344,12 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
 in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching studies in JSON format unless an alternative formatting supported by the server is requested.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
 #### URL parameters
 
 | Parameter | Data Type | Required | Description
 |-----------|-----------|----------|-----------|
 | `tags`    | string    | Optional | Comma separated tag list to filter by |
 | `version` | string    | Optional | Version to return |
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned study list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting.  The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -458,19 +395,6 @@ To support flexible search this provides a means of identifying the search filte
 `GET /studies/search/filters`
 
 The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
-
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -528,24 +452,11 @@ The primary method for accessing specific expression data.  The reponse is the s
 
 If the server will not be providing expression value matrix data it MUST still define the `/expressions` endpoint and MUST respond with an `Not Implemented` error to requests sent to this endpoint.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### URL parameters
+#### Path parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
 | `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-expressionId or /byContributor/some-expressionId |
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned expression object, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
 
 #### Response
 
@@ -639,19 +550,6 @@ Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes w
 
 If practical a data provider SHOULD adopt a means to indicate these states rather than use a zero.  It is recommended that the `NaN` value be used to indicate these states.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned formats, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
-
 #### Response
 
 The server shall return the supported formats as JSON formatted string array.  The server may return the list in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
@@ -685,13 +583,6 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
 in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching expressions in JSON format unless an alternative formatting supported by the server is requested.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
 #### URL parameters
 
 | Parameter | Data Type | Required | Description
@@ -723,6 +614,8 @@ The response to an expression query is a JSON object with the following fields:
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
 | `URL    ` | string | Yes      | URL to download file |
+| `headers` | object | Optional | For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL. |
+| `md5    ` | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
 
 #### An example response
 
@@ -732,7 +625,12 @@ The response to an expression query is a JSON object with the following fields:
     "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
     "fileType": "loom",
     "id": "2a7ab5533ef941eaa59edbfe887b58c4",
-    "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+    "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
+    "headers": {
+      "Authorization": "Bearer xxxx",
+      "Accept": "application/vnd.loom"
+    },
+    "md5": "(some 32 character hex value)"
   }
 ]
 ```
@@ -763,19 +661,6 @@ To support flexible search this provides a means of identifying the search filte
 `GET /expressions/search/filters`
 
 The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
-
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -857,8 +742,14 @@ The primary method for accessing specific continuous value data.  The reponse is
 
 If the server will not be providing numeric signal matrix data it MUST still define the `/continuous` endpoint and MUST respond with an `Not Implemented` error to requests sent to this endpoint.
 
-##### Default encoding
+##### Content encoding
 Unless negotiated with the client and allowed by the server, the default encoding for this method is:
+
+```
+Content-type: application/octet-stream
+```
+
+The encodings for loom and tsv files for this method are:
 
 For loom files:
 ```
@@ -872,17 +763,25 @@ Content-type: text/tab-separated-values
 Content-Disposition: attachment
 ```
 
+#### Path parameters
+
+| Parameter | Data Type | Required | Description 
+|-----------|-----------|----------|-----------|
+| `id`      | string    | Yes      | A string identifying a set of one or more records to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-continuousId or /byContributor/some-continuousId |
+
 #### URL parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `id`      | string    | Yes      | A string identifying which record to return.  The format of this identifier is left to the discretion of the API provider, including allowing embedded "/" characters. The following would be valid identifiers: some-continuousId or /byContributor/some-continuousId |
+| `chr` | string | Optional |  The refererence to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
+| `start`   | 32-bit unsigned integer | Optional | The start position of the range on the sequence, 0-based, inclusive. The server MUST respond with a `Bad Request` error if start is specified and is larger than the total sequence length. The server must respond with a `Bad Request` error if start is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
+| `end`     | 32-bit unsigned integer | Optional | The end position of the range on the sequence, 0-based, exclusive. The server must respond with a `Bad Request` error if end is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
 
 #### Request parameters
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned continuous object, defaults to `application/vnd.loom` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
+| `Accept`  | string    | Optional | The formatting of the returned continuous object, defaults to `application/octet-stream` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
 
 #### Response
 
@@ -924,19 +823,6 @@ A Tab delimited file can have any number of comment lines beginning with `#` for
 
 A Loom format file will have a 32-bit `float` matrix for the signal values with coordinates on the column axis and samples on the row axis.  Associated metadata can be stored as row and column attributes as described by the loom specification.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned formats, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server.|
-
 #### Response
 
 The server shall return the supported formats as JSON formatted string array.  The server may return the list in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
@@ -970,13 +856,6 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 
 in which each `filter#` key matches the corresponding URL parameter.  The reponse is a continuous object in JSON format unless an alternative formatting supported by the server is requested.
 
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
 #### URL parameters
 
 | Parameter | Data Type | Required | Description
@@ -989,12 +868,6 @@ Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
 | `chr` | string | Optional |  The refererence to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
 | `start`   | 32-bit unsigned integer | Optional | The start position of the range on the sequence, 0-based, inclusive. The server MUST respond with a `Bad Request` error if start is specified and is larger than the total sequence length. The server must respond with a `Bad Request` error if start is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
 | `end`     | 32-bit unsigned integer | Optional | The end position of the range on the sequence, 0-based, exclusive. The server must respond with a `Bad Request` error if end is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned study, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
@@ -1019,6 +892,8 @@ The response to a continuous query is a JSON object with the following fields:
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
 | `URL    ` | string | Yes      | URL to download file |
+| `headers` | object | Optional | For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL. |
+| `md5    ` | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
 
 #### An example response
 
@@ -1027,7 +902,12 @@ The response to a continuous query is a JSON object with the following fields:
   "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.bw.loom",
   "fileType": "loom",
   "id": "2a7ab5533e33a82fbf21a30de87b58c4",
-  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec"
+  "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
+  "headers": {
+      "Authorization": "Bearer xxxx",
+      "Accept": "application/vnd.loom"
+    },
+    "md5": "(some 32 character hex value)"
 }
 ```
 
@@ -1038,19 +918,6 @@ To support flexible search this provides a means of identifying the search filte
 `GET /continuous/search/filters`
 
 The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
-
-##### Default encoding
-Unless negotiated with the client and allowed by the server, the default encoding for this method is:
-
-```
-Content-type: application/vnd.ga4gh.rnaget.v1.0.0+json
-```
-
-#### Request parameters
-
-| Parameter | Data Type | Required | Description 
-|-----------|-----------|----------|-----------|
-| `Accept`  | string    | Optional | The formatting of the returned filter list, defaults to `application/vnd.ga4gh.rnaget.v1.0.0+json` if not specified. A server MAY support other formatting. The server SHOULD respond with an `Not Acceptable` error if the client requests a format not supported by the server. |
 
 #### Response
 
