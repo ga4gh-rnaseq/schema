@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: rnaget API
-  description: RNA API for expression value retrieval
+  description: A set of endpoints for search and retrieval of processed RNA data
   version: 1.0.0
 tags:
   - name: projects
