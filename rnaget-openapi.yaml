@@ -1,704 +1,887 @@
-swagger: "2.0"
+openapi: 3.0.0
 info:
-  title: "rnaget API"
-  description: "RNA API for expression value retrieval"
-  version: "1.0.0"
-basePath: "/rnaget"
-produces:
-  - application/json
+  title: rnaget API
+  description: A set of endpoints for search and retrieval of processed RNA data
+  version: 1.0.0
 tags:
-- name: "projects"
-  description: "High level collection of studies"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "studies"
-  description: "Collection of associated uniformly processed RNA samples"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "expressions"
-  description: "Feature level expression data"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
-- name: "continuous"
-  description: "Coordinate range based signal data"
-  externalDocs:
-    description: "Find out more"
-    url: "https://github.com/ga4gh-rnaseq/schema"
-schemes:
-- "https"
+  - name: projects
+    description: High level collection of studies
+    externalDocs:
+      description: Find out more
+      url: https://github.com/ga4gh-rnaseq/schema
+  - name: studies
+    description: Collection of associated uniformly processed RNA samples
+    externalDocs:
+      description: Find out more
+      url: https://github.com/ga4gh-rnaseq/schema
+  - name: expressions
+    description: Feature level expression data
+    externalDocs:
+      description: Find out more
+      url: https://github.com/ga4gh-rnaseq/schema
+  - name: continuous
+    description: Coordinate range based signal data
+    externalDocs:
+      description: Find out more
+      url: https://github.com/ga4gh-rnaseq/schema
 paths:
-  /projects/{projectId}:
+  "/projects/{projectId}":
     get:
       tags:
-      - "projects"
-      summary: "Find project by ID"
-      description: "Returns a single specified project"
-      operationId: "getProjectById"
+        - projects
+      summary: Find project by ID
+      description: Returns a single specified project
+      operationId: getProjectById
       parameters:
-      - name: "projectId"
-        in: "path"
-        description: "ID of project to return"
-        required: true
-        type: "string"
+        - name: projectId
+          in: path
+          description: ID of project to return
+          required: true
+          schema:
+            type: string
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/project"
-        400:
-          description: "Invalid ID supplied"
-          schema:
-            $ref: "#/definitions/error"
-        404:
-          description: "Project not found"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/project"
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:project"
+        - rnaget_auth:
+            - read:project
   /projects/search:
     get:
       tags:
-      - "projects"
-      summary: "Search for projects matching filters"
-      description: "Search for projects matching filters"
-      operationId: "searchProjects"
+        - projects
+      summary: Search for projects matching filters
+      description: Search for projects matching filters
+      operationId: searchProjects
       parameters:
-      - name: "tags"
-        in: "query"
-        description: "Comma separated tag list to filter by"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "csv"
-      - name: "version"
-        in: "query"
-        description: "version to return"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
+        - name: tags
+          in: query
+          description: Comma separated tag list to filter by
+          required: false
+          style: form
+          explode: false
           schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/project"
-        400:
-          description: "The requested data format is not supported"
+              type: string
+        - name: version
+          in: query
+          description: version to return
+          required: false
           schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/project"
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:project"
+        - rnaget_auth:
+            - read:project
   /projects/search/filters:
     get:
       tags:
-      - "projects"
-      summary: "Returns filters for project searches"
-      description: "Get filters for project searches"
-      operationId: "searchProjectFilters"
+        - projects
+      summary: Returns filters for project searches
+      description: Get filters for project searches
+      operationId: searchProjectFilters
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/searchFilter"
-        400:
-          description: "The requested data format is not supported"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/searchFilter"
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:project"
-  /studies/{studyId}:
+        - rnaget_auth:
+            - read:project
+  "/studies/{studyId}":
     get:
       tags:
-      - "studies"
-      summary: "Find study by ID"
-      description: "Returns a single specified study"
-      operationId: "getStudyById"
+        - studies
+      summary: Find study by ID
+      description: Returns a single specified study
+      operationId: getStudyById
       parameters:
-      - name: "studyId"
-        in: "path"
-        description: "ID of study to return"
-        required: true
-        type: "string"
+        - name: studyId
+          in: path
+          description: ID of study to return
+          required: true
+          schema:
+            type: string
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/study"
-        400:
-          description: "Invalid ID supplied"
-          schema:
-            $ref: "#/definitions/error"
-        404:
-          description: "Study not found"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/study"
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Study not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:study"
+        - rnaget_auth:
+            - read:study
   /studies/search:
     get:
       tags:
-      - "studies"
-      summary: "Search for studies matching filters"
-      description: "Search for studies matching filters"
-      operationId: "searchStudies"
+        - studies
+      summary: Search for studies matching filters
+      description: Search for studies matching filters
+      operationId: searchStudies
       parameters:
-      - name: "tags"
-        in: "query"
-        description: "Comma separated tag list to filter by"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "csv"
-      - name: "version"
-        in: "query"
-        description: "version to return"
-        required: false
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
+        - name: tags
+          in: query
+          description: Comma separated tag list to filter by
+          required: false
+          style: form
+          explode: false
           schema:
-            type: "array"
+            type: array
             items:
-              $ref: "#/definitions/study"
-        400:
-          description: "The requested data format is not supported"
+              type: string
+        - name: version
+          in: query
+          description: version to return
+          required: false
           schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/study"
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:study"
+        - rnaget_auth:
+            - read:study
   /studies/search/filters:
     get:
       tags:
-      - "studies"
-      summary: "Returns filters for study searches"
-      description: "Get filters for study searches"
-      operationId: "searchStudyFilters"
+        - studies
+      summary: Returns filters for study searches
+      description: Get filters for study searches
+      operationId: searchStudyFilters
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/searchFilter"
-        400:
-          description: "The requested data format is not supported"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/searchFilter"
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:study"
-  /expressions/{expressionId}:
+        - rnaget_auth:
+            - read:study
+  "/expressions/{expressionId}":
     get:
       tags:
-      - "expressions"
-      summary: "Find expression data by ID"
-      description: "Returns a single specified expression matrix"
-      operationId: "getExpressionById"
+        - expressions
+      summary: Find expression data by ID
+      description: Returns a single specified expression matrix
+      operationId: getExpressionById
       parameters:
-      - name: "expressionId"
-        in: "path"
-        description: "ID of expression to return"
-        required: true
-        type: "string"
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/file"
-        400:
-          description: "Invalid ID supplied"
-          schema:
-            $ref: "#/definitions/error"
-        404:
-          description: "Expression not found"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/file"
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Expression not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:expression"
+        - rnaget_auth:
+            - read:expression
   /expressions/formats:
     get:
       tags:
-      - "expressions"
-      summary: "Get output formats"
-      description: "Returns a list of supported expression matrix formats"
-      operationId: "getExpressionFormats"
+        - expressions
+      summary: Get output formats
+      description: Returns a list of supported expression matrix formats
+      operationId: getExpressionFormats
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              type: "string"
-        404:
-          description: "Format list not found"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Format list not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:expression"
+        - rnaget_auth:
+            - read:expression
   /expressions/search:
     get:
       tags:
-      - "expressions"
-      summary: "Search for expressions matching filters"
-      description: "Search for expressions matching filters"
-      operationId: "searchExpressions"
+        - expressions
+      summary: Search for expressions matching filters
+      description: Search for expressions matching filters
+      operationId: searchExpressions
       parameters:
-      - name: "format"
-        in: "query"
-        description: "Data format to return"
-        required: true
-        type: "string"
-      - name: "tags"
-        in: "query"
-        description: "Comma separated tag list to filter by"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "csv"
-      - name: "sampleIDList"
-        in: "query"
-        description: "comma separated list of sampleIDs to match"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "csv"
-      - name: "projectID"
-        in: "query"
-        description: "project to filter by"
-        required: false
-        type: "string"
-      - name: "studyID"
-        in: "query"
-        description: "study to filter by"
-        required: false
-        type: "string"
-      - name: "version"
-        in: "query"
-        description: "version to filter by"
-        required: false
-        type: "string"
-      - name: "featureIDList"
-        in: "query"
-        description: "return only values for listed feature IDs"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-      - name: "featureNameList"
-        in: "query"
-        description: "return only values for listed features"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-      responses:
-        200:
-          description: "Successful operation"
+        - name: format
+          in: query
+          description: Data format to return
+          required: true
           schema:
-            type: "array"
+            type: string
+        - name: tags
+          in: query
+          description: Comma separated tag list to filter by
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
             items:
-              $ref: "#/definitions/file"
-        400:
-          description: "The requested data format is not supported"
+              type: string
+        - name: sampleIDList
+          in: query
+          description: comma separated list of sampleIDs to match
+          required: false
+          style: form
+          explode: false
           schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
+            type: array
+            items:
+              type: string
+        - name: projectID
+          in: query
+          description: project to filter by
+          required: false
           schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
+            type: string
+        - name: studyID
+          in: query
+          description: study to filter by
+          required: false
           schema:
-            $ref: "#/definitions/error"
+            type: string
+        - name: version
+          in: query
+          description: version to filter by
+          required: false
+          schema:
+            type: string
+        - name: featureIDList
+          in: query
+          description: return only values for listed feature IDs
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: featureNameList
+          in: query
+          description: return only values for listed features
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/file"
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:expression"
+        - rnaget_auth:
+            - read:expression
   /expressions/search/filters:
     get:
       tags:
-      - "expressions"
-      summary: "Returns filters for expression searches"
-      description: "Get filters for expression searches"
-      operationId: "searchExpressionFilters"
+        - expressions
+      summary: Returns filters for expression searches
+      description: Get filters for expression searches
+      operationId: searchExpressionFilters
       parameters:
-      - name: "type"
-        in: "query"
-        description: "one of `feature` or `sample` reflecting which axis to request filters for.  If blank, both will be returned"
-        required: false
-        type: "string"
+        - name: type
+          in: query
+          description: one of `feature` or `sample` reflecting which axis to request
+            filters for.  If blank, both will be returned
+          required: false
+          schema:
+            type: string
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/searchFilter"
-        400:
-          description: "The requested data format is not supported"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/searchFilter"
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:expression"
-  /continuous/{continuousId}:
+        - rnaget_auth:
+            - read:expression
+  "/continuous/{continuousId}":
     get:
       tags:
-      - "continuous"
-      summary: "Retrieve continuous signal data by ID"
-      description: "Returns a single specified signal matrix"
-      operationId: "getContinuousById"
+        - continuous
+      summary: Retrieve continuous signal data by ID
+      description: Returns a single specified signal matrix
+      operationId: getContinuousById
       parameters:
-      - name: "continuousId"
-        in: "path"
-        description: "ID of continuous matrix to return"
-        required: true
-        type: "string"
-      produces:
-        - application/vnd.loom
-        - text/tab-separated-values
+        - name: continuousId
+          in: path
+          description: ID of continuous matrix to return
+          required: true
+          schema:
+            type: string
+        - name: chr
+          in: query
+          description: The refererence to which start and end apply in the form chr? where
+            ? is the specific ID of the chromosome (ex. chr1, chrX).
+          required: false
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: The start position of the range on the sequence, 0-based, inclusive.
+          required: false
+          schema:
+            type: integer
+        - name: end
+          in: query
+          description: The end position of the range on the sequence, 0-based, exclusive.
+          required: false
+          schema:
+            type: integer
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "file"
-        400:
-          description: "Invalid ID supplied"
-          schema:
-            $ref: "#/definitions/error"
-        404:
-          description: "Continuous matrix not found"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Continuous matrix not found
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:continuous"
+        - rnaget_auth:
+            - read:continuous
   /continuous/formats:
     get:
       tags:
-      - "continuous"
-      summary: "Get output formats"
-      description: "Returns a list of supported continuous matrix formats"
-      operationId: "getContinuousFormats"
+        - continuous
+      summary: Get output formats
+      description: Returns a list of supported continuous matrix formats
+      operationId: getContinuousFormats
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              type: "string"
-        404:
-          description: "Format list not found"
-          schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
-          schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
-          schema:
-            $ref: "#/definitions/error"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Format list not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:continuous"
+        - rnaget_auth:
+            - read:continuous
   /continuous/search:
     get:
       tags:
-      - "continuous"
-      summary: "Search for continuous data matching filters"
-      description: "Search for continuous data matching filters"
-      operationId: "searchContinuous"
+        - continuous
+      summary: Search for continuous data matching filters
+      description: Search for continuous data matching filters
+      operationId: searchContinuous
       parameters:
-      - name: "format"
-        in: "query"
-        description: "Data format to return"
-        required: true
-        type: "string"
-      - name: "tags"
-        in: "query"
-        description: "Comma separated tag list to filter by"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "csv"
-      - name: "sampleIDList"
-        in: "query"
-        description: "comma separated list of sampleIDs to match"
-        required: false
-        type: "array"
-        items:
-          type: "string"
-        collectionFormat: "csv"
-      - name: "studyID"
-        in: "query"
-        description: "study to filter by"
-        required: false
-        type: "string"
-      - name: "version"
-        in: "query"
-        description: "version to filter by"
-        required: false
-        type: "string"
-      - name: "chr"
-        in: "query"
-        description: "The refererence to which start and end apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX)."
-        required: false
-        type: "string"
-      - name: "start"
-        in: "query"
-        description: "The start position of the range on the sequence, 0-based, inclusive."
-        required: false
-        type: "integer"
-      - name: "end"
-        in: "query"
-        description: "The end position of the range on the sequence, 0-based, exclusive."
-        required: false
-        type: "integer"
-      responses:
-        200:
-          description: "Successful operation"
+        - name: format
+          in: query
+          description: Data format to return
+          required: true
           schema:
-            type: "array"
+            type: string
+        - name: tags
+          in: query
+          description: Comma separated tag list to filter by
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
             items:
-              $ref: "#/definitions/file"
-        400:
-          description: "The requested data format is not supported"
+              type: string
+        - name: sampleIDList
+          in: query
+          description: comma separated list of sampleIDs to match
+          required: false
+          style: form
+          explode: false
           schema:
-            $ref: "#/definitions/error"
-        406:
-          description: "Requested formatting not supported"
+            type: array
+            items:
+              type: string
+        - name: studyID
+          in: query
+          description: study to filter by
+          required: false
           schema:
-            $ref: "#/definitions/error"
-        501:
-          description: "The specified request is not supported by the server"
+            type: string
+        - name: version
+          in: query
+          description: version to filter by
+          required: false
           schema:
-            $ref: "#/definitions/error"
+            type: string
+        - name: chr
+          in: query
+          description: The refererence to which start and end apply in the form chr? where
+            ? is the specific ID of the chromosome (ex. chr1, chrX).
+          required: false
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: The start position of the range on the sequence, 0-based, inclusive.
+          required: false
+          schema:
+            type: integer
+        - name: end
+          in: query
+          description: The end position of the range on the sequence, 0-based, exclusive.
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/file"
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
-      - rnaget_auth:
-        - "read:continuous"
+        - rnaget_auth:
+            - read:continuous
   /continuous/search/filters:
     get:
       tags:
-      - "continuous"
-      summary: "Returns filters for continuous searches"
-      description: "Get filters for continuous searches"
-      operationId: "searchContinuousFilters"
+        - continuous
+      summary: Returns filters for continuous searches
+      description: Get filters for continuous searches
+      operationId: searchContinuousFilters
       responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/searchFilter"
-        400:
-          description: "The requested data format is not supported"
-        406:
-          description: "Requested formatting not supported"
-        501:
-          description: "The specified request is not supported by the server"
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/searchFilter"
+        "400":
+          description: The requested data format is not supported
+        "406":
+          description: Requested formatting not supported
+        "501":
+          description: The specified request is not supported by the server
       security:
-      - rnaget_auth:
-        - "read:continuous"
-securityDefinitions:
-  rnaget_auth:
-    type: "oauth2"
-    authorizationUrl: "http://ga4gh.org/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      read:expression: "read expression data"
-      read:continuous: "read continuous data"
-      read:project: "read information about projects"
-      read:study: "read information about studies"
-      read:info: "read general info"
-definitions:
-  project:
-    type: "object"
-    properties:
-      id:
-        type: "string"
-      version:
-        type: "string"
-      tags:
-        type: "array"
-        items:
-          type: "string"
-      name:
-        type: "string"
-      description:
-        type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-  study:
-    type: "object"
-    properties:
-      id:
-        type: "string"
-      version:
-        type: "string"
-      tags:
-        type: "array"
-        items:
-          type: "string"
-      name:
-        type: "string"
-      description:
-        type: "string"
-      parentProjectID:
-        type: "string"
-      genome:
-        type: "string"
-      sampleList:
-        type: "array"
-        items:
-          type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-  searchFilter:
-    type: "object"
-    description: "parameter name to use for filter when searching"
-    properties:
-      filter:
-        type: "string"
-      fieldType:
-        type: "string"
-      description:
-        type: "string"
-      values:
-        type: "array"
-        items:
-          type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-  file:
-    type: "object"
-    description: "URL and type for data files"
-    properties:
-      id:
-        type: "string"
-      version:
-        type: "string"
-      tags:
-        type: "array"
-        items:
-          type: "string"
-      fileType:
-        type: "string"
-      studyID:
-        type: "string"
-      URL:
-        type: "string"
-      units:
-        type: "string"
-    externalDocs:
-      description: "Find out more"
-      url: "https://github.com/ga4gh-rnaseq/schema"
-  error:
-    type: "object"
-    description: "General API error model"
-    properties:
-      message:
-        type: "string"
+        - rnaget_auth:
+            - read:continuous
 externalDocs:
-  description: "Find out more about GA4GH"
-  url: "http://ga4gh.org"
+  description: Find out more about GA4GH
+  url: http://ga4gh.org
+servers:
+  - url: /rnaget
+components:
+  securitySchemes:
+    rnaget_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: http://ga4gh.org/oauth/dialog
+          scopes:
+            read:expression: read expression data
+            read:continuous: read continuous data
+            read:project: read information about projects
+            read:study: read information about studies
+            read:info: read general info
+  schemas:
+    project:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+      externalDocs:
+        description: Find out more
+        url: https://github.com/ga4gh-rnaseq/schema
+    study:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        parentProjectID:
+          type: string
+        genome:
+          type: string
+        sampleList:
+          type: array
+          items:
+            type: string
+      externalDocs:
+        description: Find out more
+        url: https://github.com/ga4gh-rnaseq/schema
+    searchFilter:
+      type: object
+      description: parameter name to use for filter when searching
+      properties:
+        filter:
+          type: string
+        fieldType:
+          type: string
+        description:
+          type: string
+        values:
+          type: array
+          items:
+            type: string
+      externalDocs:
+        description: Find out more
+        url: https://github.com/ga4gh-rnaseq/schema
+    file:
+      type: object
+      description: URL and type for data files
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        fileType:
+          type: string
+        studyID:
+          type: string
+        URL:
+          type: string
+        units:
+          type: string
+        headers:
+          type: object
+        md5:
+          type: string
+      externalDocs:
+        description: Find out more
+        url: https://github.com/ga4gh-rnaseq/schema
+    error:
+      type: object
+      description: General API error model
+      properties:
+        message:
+          type: string
