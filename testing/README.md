@@ -28,6 +28,6 @@ The compliance and testing suite generates an HTML report for every tested serve
 
 These client implementations are provided by their respective developers as examples of using the API.  GA4GH does not have a client testing suite as each client is an individual effort.  Links to clients are presented as an "as is" resource for developers.
 
-* saupchurch client - This is an iPython notebook example designed to demonstrate basic navigation and operations on the demo PCAWG dataset.  It is available at: https://github.com/saupchurch/bioinformatics-tools/blob/master/ga4gh-rnaget-api/GA4GH-rnaget-API-examples.ipynb.
+* saupchurch client - This is an iPython notebook example designed to demonstrate basic navigation and operations on the demo PCAWG dataset.  It is available [here](https://github.com/saupchurch/bioinformatics-tools/blob/master/GA4GH-rnaget-API-examples.ipynb).  An [interactive version](https://gke.mybinder.org/v2/gh/saupchurch/bioinformatics-tools/master) is accessible via [Binder](https://gke.mybinder.org).
 
 * emi80 client - This is a Go command line application covering the basic functionalities of the API. It is available at: https://github.com/guigolab/rnaget-client
