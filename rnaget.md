@@ -645,7 +645,7 @@ To allow for filtering on a range of expression values for multiple features the
 | `featureID`        | string    | Optional | ID of feature this threshold corresponds to |
 | `featureName`      | string    | Optional | Name of feature this threshold corresponds to |
 
-For each threshold tuple the request SHOULD provide only one of `featureID` or `featureName`.  If none of these are provided the query will return all samples containing 1 or more features satisfying the `threshold` value and condition (min or max).
+For each threshold tuple the request MUST provide only one of `featureID` or `featureName`.
 
 #### Sample `threshold`
 
@@ -653,6 +653,10 @@ For each threshold tuple the request SHOULD provide only one of `featureID` or `
   "threshold": 10,
   "featureName": "GABARAPL2"
 }
+
+Reminder: if passed as a URL parameter to a GET endpoint the list of `threshold` objects MUST be encoded.  The sample `threshold` ahen encoded as an argument for `minExpression` is:
+
+`'%5B%7B%22threshold%22%3A%2010%2C%20%22featureName%22%3A%20%22GABARAPL2%22%7D%5D'`
 
 #### Expression: Get available search filters
 
