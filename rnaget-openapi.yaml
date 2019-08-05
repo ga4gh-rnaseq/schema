@@ -868,7 +868,7 @@ components:
           type: string
         studyID:
           type: string
-        URL:
+        url:
           type: string
         units:
           type: string
