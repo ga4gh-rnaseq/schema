@@ -621,6 +621,7 @@ The response to an expression query is a JSON object with the following fields:
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
 | `url    ` | string | Yes      | An `https:` URL to download file |
+| `units  ` | string | Yes      | Units for the values. Examples include: TPM, FPKM, counts |
 | `headers` | object | Optional | For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply verbatim as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL. |
 | `md5    ` | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
 
@@ -633,6 +634,7 @@ The response to an expression query is a JSON object with the following fields:
     "fileType": "loom",
     "id": "2a7ab5533ef941eaa59edbfe887b58c4",
     "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
+    "units": "TPM",
     "headers": {
       "Authorization": "Bearer xxxx",
       "Accept": "application/vnd.loom"
