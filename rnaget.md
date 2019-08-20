@@ -473,14 +473,14 @@ The response to an expression query is a JSON object with the following fields:
 | `tags`     | string array | Optional | List of tags for the object |
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
-| `URL    ` | string | Yes      | URL to download file |
+| `url    ` | string | Yes      | An `https:` URL to download file |
 | `units  ` | string | Yes      | Units for the values. Examples include: TPM, FPKM, counts |
 
 #### An example response
 
 ```
 {
-  "URL": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
+  "url": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
   "fileType": "loom",
   "id": "2a7ab5533ef941eaa59edbfe887b58c4",
   "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
