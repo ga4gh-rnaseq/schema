@@ -602,8 +602,6 @@ in which each `filter#` key matches the corresponding URL parameter.  The repons
 | `studyID` | string | Optional |  study to filter by |
 | `featureIDList` | string | Optional | return only values for listed comma separated feature ID values |
 | `featureNameList` | string | Optional | return only values for listed comma separated features |
-| `minExpression` | `threshold` array | Optional | return only samples with expression values greater than listed threshold for each corresponding feature in the array |
-| `maxExpression` | `threshold` array | Optional | return only samples with expression values less than listed threshold for each corresponding feature in the array |
 
 #### Response
 
@@ -643,29 +641,6 @@ The response to an expression query is a JSON object with the following fields:
   }
 ]
 ```
-
-#### Expression Threshold
-
-To allow for filtering on a range of expression values for multiple features the `/expressions/search` endpoint optionally accepts an array of `threshold` object.  This is a JSON formatted object with the following fields.
-
-| Data Field         | Data Type | Required | Description
-|--------------------|-----------|----------|-----------|
-| `threshold`        | 32-bit float | Yes      | Numeric value to compare to expression value when filtering |
-| `featureID`        | string    | Optional | ID of feature this threshold corresponds to |
-| `featureName`      | string    | Optional | Name of feature this threshold corresponds to |
-
-For each threshold tuple the request MUST provide only one of `featureID` or `featureName`.
-
-#### Sample `threshold`
-
-{
-  "threshold": 10,
-  "featureName": "GABARAPL2"
-}
-
-Reminder: if passed as a URL parameter to a GET endpoint the list of `threshold` objects MUST be encoded.  The sample `threshold` ahen encoded as an argument for `minExpression` is:
-
-`'%5B%7B%22threshold%22%3A%2010%2C%20%22featureName%22%3A%20%22GABARAPL2%22%7D%5D'`
 
 #### Expression: Get available search filters
 
@@ -728,18 +703,6 @@ The response to an expression search filter query is a list of JSON objects each
     filter: "featureNameList",
     fieldType: "string",
     description: "comma separated list of feature names to match",
-    values: []
-  },
-  {
-    filter: "minExpression",
-    fieldType: "32-bit float",
-    description: "return values with expression greater than this value",
-    values: []
-  },
-  {
-    filter: "maxExpression",
-    fieldType: "32-bit float",
-    description: "return values with expression less than this value",
     values: []
   }
 ]
