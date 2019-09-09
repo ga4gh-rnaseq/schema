@@ -468,7 +468,6 @@ The response to an expression query is a JSON object with the following fields:
 
 | Data Field | Data Type | Required | Description 
 |------------|-----------|----------|-----------|
-| `id`       | string    | Yes      | A unique identifier assigned to this object |
 | `version`  | string    | Optional | Version number of the object |
 | `tags`     | string array | Optional | List of tags for the object |
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
@@ -484,7 +483,6 @@ The response to an expression query is a JSON object with the following fields:
 {
   "url": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
   "fileType": "loom",
-  "id": "2a7ab5533ef941eaa59edbfe887b58c4",
   "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
   "units": "TPM",
   "headers": {
