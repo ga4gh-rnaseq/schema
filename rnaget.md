@@ -26,7 +26,7 @@ Features of this API include:
 Out of the scope of this API are:
 
 * A means of retrieving primary (raw) read sequence data. Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads. The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.
-* A means of retrieving reference sequences. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The [rnaget API](https://samtools.github.io/hts-specs/rnaget.html) is designed for retrieval of references sequences.
+* A means of retrieving reference sequences. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The [refget API](https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.
 * A means of retrieving feature annotation details. Expression matrices provide the identity of each mapped feature. Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.
 
 ## OpenAPI Description
@@ -95,7 +95,7 @@ If the data holder requires client authentication and/or authorization, then the
 Authorization: Bearer [access_token]
 ```
 
-Data providers SHOULD verify user identity and credentials.  The policies and processes used to perform user authentication and authorization, and the means through which access tokens are issued, are beyond the scope of this API specification. GA4GH recommends the use of the OAuth 2.0 framework ([RFC 6749](https://tools.ietf.org/html/rfc6749)) for authentication and authorization.  It is also recommended that implementions of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
+Data providers SHOULD verify user identity and credentials.  The policies and processes used to perform user authentication and authorization, and the means through which access tokens are issued, are beyond the scope of this API specification. GA4GH recommends the use of the OAuth 2.0 framework ([RFC 6749](https://tools.ietf.org/html/rfc6749)) for authentication and authorization.  It is also recommended that implementations of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
 
 ## CORS
 Cross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.
@@ -123,7 +123,7 @@ The project is the top level of the model hierarchy and contains a set of relate
 
 `GET /projects/<id>`
 
-The primary method for accessing specific project data.  The reponse is the specified project in JSON format unless an alternative formatting supported by the server is requested.
+The primary method for accessing specific project data.  The response is the specified project in JSON format unless an alternative formatting supported by the server is requested.
 
 #### Path parameters
 
@@ -181,7 +181,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching projects in JSON format unless an alternative formatting supported by the server is requested.
+in which each `filter#` key matches the corresponding URL parameter.  The response is a list of matching projects in JSON format unless an alternative formatting supported by the server is requested.
 
 #### URL parameters
 
@@ -229,7 +229,7 @@ To support flexible search this provides a means of identifying the search filte
 
 `GET /projects/search/filters`
 
-The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
+The response is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
 #### Response
 
@@ -280,7 +280,7 @@ The study is a set of related RNA expression values.  It is assumed all samples 
 
 `GET /studies/<id>`
 
-The primary method for accessing specific study data.  The reponse is the specified study in JSON format unless an alternative formatting supported by the server is requested.
+The primary method for accessing specific study data.  The response is the specified study in JSON format unless an alternative formatting supported by the server is requested.
 
 #### Path parameters
 
@@ -342,7 +342,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching studies in JSON format unless an alternative formatting supported by the server is requested.
+in which each `filter#` key matches the corresponding URL parameter.  The response is a list of matching studies in JSON format unless an alternative formatting supported by the server is requested.
 
 #### URL parameters
 
@@ -394,7 +394,7 @@ To support flexible search this provides a means of identifying the search filte
 
 `GET /studies/search/filters`
 
-The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
+The response is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
 #### Response
 
@@ -448,7 +448,7 @@ The expression is a matrix of calculated expression values.  Expression requests
 
 `GET /expressions/<id>`
 
-The primary method for accessing specific expression data.  The reponse is the specified expression object in JSON format unless an alternative formatting supported by the server is requested.
+The primary method for accessing specific expression data.  The response is the specified expression object in JSON format unless an alternative formatting supported by the server is requested.
 
 If the server will not be providing expression value matrix data it MUST still define the `/expressions` endpoint and MUST respond with an `Not Implemented` error to requests sent to this endpoint.
 
@@ -473,10 +473,10 @@ The response to an expression query is a JSON object with the following fields:
 | `tags`     | string array | Optional | List of tags for the object |
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
-| `url    ` | string | Yes      | An `https:` URL to download file |
+| `url`     | string | Yes      | An `https:` URL to download file |
 | `units  ` | string | Yes      | Units for the values. Examples include: TPM, FPKM, counts |
 | `headers` | object | Optional | For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply verbatim as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL. |
-| `md5    ` | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
+| `md5`     | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
 
 #### An example response
 
@@ -588,7 +588,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.  The reponse is a list of matching expressions in JSON format unless an alternative formatting supported by the server is requested.
+in which each `filter#` key matches the corresponding URL parameter.  The response is a list of matching expressions in JSON format unless an alternative formatting supported by the server is requested.
 
 #### URL parameters
 
@@ -620,10 +620,10 @@ The response to an expression query is a JSON object with the following fields:
 | `tags`     | string array | Optional | List of tags for the object |
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
-| `url    ` | string | Yes      | An `https:` URL to download file |
+| `url`     | string | Yes      | An `https:` URL to download file |
 | `units  ` | string | Yes      | Units for the values. Examples include: TPM, FPKM, counts |
 | `headers` | object | Optional | For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply verbatim as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL. |
-| `md5    ` | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
+| `md5`     | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
 
 #### An example response
 
@@ -673,7 +673,7 @@ To support flexible search this provides a means of identifying the search filte
 
 `GET /expressions/search/filters`
 
-The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
+The response is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
 #### Response
 
@@ -751,7 +751,7 @@ The continuous object is a matrix of numeric signal values.  Continuous requests
 
 `GET /continuous/<id>`
 
-The primary method for accessing specific continuous value data.  The reponse is the specified continuous matrix as a downloadable attachment.
+The primary method for accessing specific continuous value data.  The response is the specified continuous matrix as a downloadable attachment.
 
 If the server will not be providing numeric signal matrix data it MUST still define the `/continuous` endpoint and MUST respond with an `Not Implemented` error to requests sent to this endpoint.
 
@@ -786,7 +786,7 @@ Content-Disposition: attachment
 
 | Parameter | Data Type | Required | Description 
 |-----------|-----------|----------|-----------|
-| `chr` | string | Optional |  The refererence to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
+| `chr` | string | Optional |  The reference to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
 | `start`   | 32-bit unsigned integer | Optional | The start position of the range on the sequence, 0-based, inclusive. The server MUST respond with a `Bad Request` error if start is specified and is larger than the total sequence length. The server must respond with a `Bad Request` error if start is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
 | `end`     | 32-bit unsigned integer | Optional | The end position of the range on the sequence, 0-based, exclusive. The server must respond with a `Bad Request` error if end is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
 
@@ -823,7 +823,7 @@ The response is a list of the supported data formats as a JSON formatted object 
   * Tab delimited text (.tsv)
   * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
 
-A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  The first line of the tsv file will be a tab-delimited list beginning with `#labels` and containing the labels for text fields in the main matrix.  The second line of the tsv file will be a tab-delimited list containing 2 items: `#range` and the range in the form chr?:start-stop where the start coordinate is zero-based, inclusive and the stop coordinate is zero-based, exclusive.  Any additonal comments may follow these 2 lines.  The data matrix follows the comment block.  Sample names and/or ID fields should be the first columns of the header row, be in the same order as listed in the `#labels` comment  and have the `string` type.  All coordinates in the continuous range described in the `#range` comment will be in the following columns with each base position in its own column.  The coordinate columns will contain 32-bit `float` values in each row corresponding to the measured signal value at that coordiante for the sample correponding to that row.
+A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  The first line of the tsv file will be a tab-delimited list beginning with `#labels` and containing the labels for text fields in the main matrix.  The second line of the tsv file will be a tab-delimited list containing 2 items: `#range` and the range in the form chr?:start-stop where the start coordinate is zero-based, inclusive and the stop coordinate is zero-based, exclusive.  Any additional comments may follow these 2 lines.  The data matrix follows the comment block.  Sample names and/or ID fields should be the first columns of the header row, be in the same order as listed in the `#labels` comment and have the `string` type.  All coordinates in the continuous range described in the `#range` comment will be in the following columns with each base position in its own column.  The coordinate columns will contain 32-bit `float` values in each row corresponding to the measured signal value at that coordinante for the sample corresponding to that row.
 
 ##### Example .tsv file
 
@@ -867,7 +867,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.  The reponse is a continuous object in JSON format unless an alternative formatting supported by the server is requested.
+in which each `filter#` key matches the corresponding URL parameter.  The response is a continuous object in JSON format unless an alternative formatting supported by the server is requested.
 
 #### URL parameters
 
@@ -878,7 +878,7 @@ in which each `filter#` key matches the corresponding URL parameter.  The repons
 | `tags`    | string    | Optional | Comma separated tag list to filter by |
 | `version` | string    | Optional | Version to return |
 | `sampleIDList` | string | Optional | comma separated list of sampleIDs to match |
-| `chr` | string | Optional |  The refererence to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
+| `chr` | string | Optional |  The reference to which `start` and `end` apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).  The server MUST respond with a `Bad Request` if either start or end are specified and chr is not specified. |
 | `start`   | 32-bit unsigned integer | Optional | The start position of the range on the sequence, 0-based, inclusive. The server MUST respond with a `Bad Request` error if start is specified and is larger than the total sequence length. The server must respond with a `Bad Request` error if start is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
 | `end`     | 32-bit unsigned integer | Optional | The end position of the range on the sequence, 0-based, exclusive. The server must respond with a `Bad Request` error if end is specified and chr is not specified.  The server MUST respond with a `Not Implemented` if the start is greater than the end. |
 
@@ -904,9 +904,9 @@ The response to a continuous query is a JSON object with the following fields:
 | `tags`     | string array | Optional | List of tags for the object |
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
 | `studyID` | string | Optional | ID of containing study |
-| `url    ` | string | Yes      | An `https:` URL to download file |
+| `url`     | string | Yes      | An `https:` URL to download file |
 | `headers` | object | Optional | For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply verbatim as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL. |
-| `md5    ` | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
+| `md5`     | hex string | Optional | MD5 digest of the “payload” data — the url data blocks |
 
 #### An example response
 
@@ -930,7 +930,7 @@ To support flexible search this provides a means of identifying the search filte
 
 `GET /continuous/search/filters`
 
-The reponse is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
+The response is a list of search filters in JSON format unless an alternative formatting supported by the server is requested.
 
 #### Response
 
