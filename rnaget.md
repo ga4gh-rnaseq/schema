@@ -112,7 +112,7 @@ This section lists the recommended URL endpoints a server SHOULD implement in or
 
 Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as a UTF8-encoded JSON key-value dictionary.
 
-When processing requests containing multiple filters, the data provider SHOULD use a logical `AND` for selecting the results to return.
+When processing requests containing multiple filters and filters with lists of items, the data provider MUST use a logical `AND` for selecting the results to return.
 
 ### Project: Get project by id
 
