@@ -856,8 +856,6 @@ components:
       type: object
       description: URL and type for data files
       properties:
-        id:
-          type: string
         version:
           type: string
         tags:

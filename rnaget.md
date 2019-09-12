@@ -61,7 +61,7 @@ Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
 
 All response objects from the server are expected to be in JSON format, regardless of the response status code, unless otherwise negotiated with the client and allowed by the server.
 
-Object IDs are intended for persistent retrieval of their respective objects.  An object IDs MUST uniquely identify an object within the scope of a single data server.  Clients SHOULD implement additional means of identifying the server of origin for response objects as it is beyond the scope of this API to enforce uniqueness of ID between different data servers.
+Object IDs are intended for persistent retrieval of their respective objects.  An object ID MUST uniquely identify an object within the scope of a single data server.  It is beyond the scope of this API to enforce uniqueness of ID among different data servers.
 
 ## Internet Media Types Handling
 
@@ -468,7 +468,6 @@ The response to an expression query is a JSON object with the following fields:
 
 | Data Field | Data Type | Required | Description 
 |------------|-----------|----------|-----------|
-| `id`       | string    | Yes      | A unique identifier assigned to this object |
 | `version`  | string    | Optional | Version number of the object |
 | `tags`     | string array | Optional | List of tags for the object |
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
@@ -484,7 +483,6 @@ The response to an expression query is a JSON object with the following fields:
 {
   "url": "http://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
   "fileType": "loom",
-  "id": "2a7ab5533ef941eaa59edbfe887b58c4",
   "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
   "units": "TPM",
   "headers": {
@@ -613,7 +611,6 @@ The response to an expression query is a JSON object with the following fields:
 
 | Data Field | Data Type | Required | Description
 |------------|-----------|----------|-----------|
-| `id`       | string    | Yes      | A unique identifier assigned to this object |
 | `version`  | string    | Optional | Version number of the object |
 | `tags`     | string array | Optional | List of tags for the object |
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
@@ -630,7 +627,6 @@ The response to an expression query is a JSON object with the following fields:
   {
     "url": "https://server.com/rnaget/E-MTAB-5423-query-results.tpms.loom",
     "fileType": "loom",
-    "id": "2a7ab5533ef941eaa59edbfe887b58c4",
     "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
     "units": "TPM",
     "headers": {
@@ -862,7 +858,6 @@ The response to a continuous query is a JSON object with the following fields:
 
 | Data Field | Data Type | Required | Description
 |------------|-----------|----------|-----------|
-| `id`       | string    | Yes      | A unique identifier assigned to this object |
 | `version`  | string    | Optional | Version number of the object |
 | `tags`     | string array | Optional | List of tags for the object |
 | `fileType` | string    | Optional | Type of file.  Examples include: loom, tsv |
@@ -877,7 +872,6 @@ The response to a continuous query is a JSON object with the following fields:
 { 
   "url": "https://server.com/rnaget/E-MTAB-5423-query-results.bw.loom",
   "fileType": "loom",
-  "id": "2a7ab5533e33a82fbf21a30de87b58c4",
   "studyID": "6cccbbd76b9c4837bd7342dd616d0fec",
   "headers": {
       "Authorization": "Bearer xxxx",
