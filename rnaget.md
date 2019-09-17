@@ -1,10 +1,10 @@
 ---
 layout: default
-title: rnaget API specification
+title: RNAget API specification
 suppress_footer: true
 ---
 
-# rnaget API
+# RNAget API
 
 # Version: 1.0.0
 
@@ -35,13 +35,13 @@ An OpenAPI description of this specification is available and [describes the 1.0
 
 ## Compliance
 
-Implementors can check if their rnaget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
+Implementors can check if their RNAget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
 
 ## Protocol essentials
 
 All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Queries containing [unsafe or reserved](https://www.ietf.org/rfc/rfc1738.txt) characters in the URL, including but not limited to "&", "/", "#", MUST encode all such characters.  Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
 
-Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.  Unless specified, the default content type is the rnaget protocol version:
+Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.  Unless specified, the default content type is the RNAget protocol version:
 
 ```
 Accept: application/vnd.ga4gh.rnaget.v1.0.0+json
@@ -85,7 +85,7 @@ The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when a
 
 ## Security
 
-The rnaget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.
+The RNAget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.
 
 Sensitive information transmitted on public networks, such as access tokens and human genomic data, MUST be protected using Transport Level Security (TLS) version 1.2 or later, as specified in [RFC 5246](https://tools.ietf.org/html/rfc5246).
 
@@ -104,7 +104,12 @@ GA4GH is publishing a [CORS best practices document](https://docs.google.com/doc
 
 ## Responsible data sharing
 
-The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing](https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
+The GA4GH promotes secure, federated and ethical approaches to data sharing.  It is increasingly important to measure and share gene expression values from RNA Sequencing, along with genomic data, to understand disease initiation, prognosis and treatment; to improve understanding of disease variation among different populations; and to identify therapeutic targets.
+
+Gene expression values are simply a number. They do not contain by themselves identifiable information. They are a cellular measurement (similar to height or weight). Gene expression values do not contain actual base-by-base genetic or RNA transcript sequences.
+
+Biological source of the RNA such as tissue type is not specific to the individual.  Identification of a specific bio sample may be OPTIONALLY linked, in which case the privacy concerns are dependent on access to bio sample specifics through the metadata.
+
 
 ## API Methods
 
@@ -164,7 +169,7 @@ The response to a project query is a JSON object with the following fields:
 
 ### Project:  Search for matching projects
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /projects/search`
 
@@ -325,7 +330,7 @@ The response to a study query is a JSON object with the following fields:
 
 ### Study: Search for matching studies
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /studies/search`
 
@@ -495,7 +500,7 @@ The response to an expression query is a JSON object with the following fields:
 
 ### Expression: Get supported data formats
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /expressions/formats`
 
@@ -553,7 +558,7 @@ Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes w
 3. _Restricted access_ – measured but require further authentication to view
 4. _Not applicable_ – measurement does not apply to the sample
 
-If practical a data provider SHOULD adopt a means to indicate these states rather than use a zero.  It is recommended that the `NaN` value be used to indicate these states.
+If applicable, the `NaN` value MUST be used to indicate these states.
 
 #### Response
 
@@ -570,7 +575,7 @@ GET /expressions/formats
 
 ### Expression: Search for matching RNA expressions
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /expressions/search`
 
@@ -586,7 +591,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.  The response is a list of matching expressions in JSON format unless an alternative formatting supported by the server is requested.
+in which each `filter#` key matches the corresponding URL parameter.  The response is a URL to download matching expressions in JSON format unless an alternative formatting supported by the server is requested.
 
 #### URL parameters
 
@@ -603,7 +608,7 @@ in which each `filter#` key matches the corresponding URL parameter.  The respon
 
 #### Response
 
-The server shall return the filtered expression as a JSON formatted object.  The server may return the expression in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+The server shall return a download URL for the expression data as a JSON formatted object.  The server may return a response in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
 On success and an expression is returned the server MUST issue a 200 status code.
 
@@ -672,10 +677,10 @@ The response to an expression search filter query is a list of JSON objects each
     values: ["1.0"]
   },
   {
-    filter: "sampleID",
+    filter: "sampleIDList",
     fieldType: "string",
-    description: "ID of the sample",
-    values: ["tag1", "tag2"]
+    description: "comma separated list of sampleIDs to match",
+    values: []
   },
   {
     filter: "projectID",
@@ -773,7 +778,7 @@ Content-Disposition: attachment
 
 ### Continuous: Get supported data formats
 
-The recommended endpoint is:
+The endpoint is:
 
 `GET /continuous/formats`
 
@@ -810,7 +815,7 @@ GET /continuous/formats
 
 ### Continuous: Search for matching values
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /continuous/search`
 
