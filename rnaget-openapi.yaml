@@ -444,6 +444,8 @@ paths:
           in: query
           description: return only values for listed feature IDs
           required: false
+          style: form
+          explode: false
           schema:
             type: array
             items:
@@ -452,6 +454,8 @@ paths:
           in: query
           description: return only values for listed features
           required: false
+          style: form
+          explode: false
           schema:
             type: array
             items:
