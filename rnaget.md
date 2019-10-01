@@ -518,7 +518,7 @@ A Loom format file will have a 32-bit `float` matrix for the expression values w
 
 ##### Expression metadata
 
-This describes a set of minimal metadata appropriate for several types of RNA experiments.  The purpose is to define a common naming scheme for metadata to enable client software to have some expectation of data fields for improved interoperability.  These definitions are not intended to be a comprehensive set of metadata and defining such a universal set is beyond the scope of this effort.
+This describes a set of minimal metadata appropriate for several types of RNA experiments.  The purpose is to define a common naming scheme for metadata to enable client software to have some expectation of data fields for improved interoperability.  These definitions are not intended to be a comprehensive set of metadata and defining such a universal set is beyond the scope of this effort. 
 
 Where possible details are incorporated by reference.  This is to reduce the final size of matrix files, support existing metadata standards and support server-defined metadata fields.
 
@@ -526,7 +526,7 @@ All field names are presented here in camel case.  Parsers should treat field na
 
 sampleID == sampleid == Sample ID != sample_id
 
-All fields are optional.
+All fields are optional. Fields that utilize an ontology term assume both an id and a label. Later implementations will utilize schemablocks and/or Phenopackets as referenced entities. 
 
 | Metadata Field   | Description
 |------------------|-------------|
@@ -536,13 +536,18 @@ All fields are optional.
 | libraryPrepProtocol | reference to a resource or webpage describing the protocol used to prepare the library for sequencing |
 | annotation       | a reference to the specific annotation used for quantifying the reads |
 | analysisPipeline | reference to a resource or webpage describing the analysis protocol.  This description should include a full listing of all software used including the exact version and command line options used.  If containerized software is used a reference to the specific containers should be included. The GA4GH [Tool Registry Service](https://github.com/ga4gh/tool-registry-service-schemas) is a resource for discovering and registering genomic tools and workflows. |
-| cellType         | a term from the [CL ontology](http://www.ontobee.org/ontology/CL) |
-| phenotype        | phenotype term applicable to the sample |
-| phenotypeSource  | reference to the ontology used for `phenotype` (example: Human Phenotype Ontology, https://hpo.jax.org/app/) |
-| sex              | sex of the organism providing the sample [PATO 47 term](http://purl.obolibrary.org/obo/PATO_0000047) |
-| organism         | organism of origin for the sample |
-| tissue           | tissue of origin or organism part of origin |
-| cellLine         | name of [cell line](http://www.ontobee.org/ontology/CLO) |
+| cellTypeID         | a cell type term ID |
+| cellTypeLabel         | a cell type term label from the [CL ontology](http://www.ontobee.org/ontology/CL) |
+| phenotypeID        | phenotype ID applicable to the sample |
+| phenotypeLabel  | phenotype term (recommended ontologies: [Human Phenotype Ontology](http://www.human-phenotype-ontology.org/), [NCIT](http://www.obofoundry.org/ontology/ncit.html), or [ICD](https://www.icd10data.com/)) |
+| sexID              | sex ID of the organism providing the sample |
+| sexTerm              | sex label of the organism providing the sample [PATO 47 term](http://purl.obolibrary.org/obo/PATO_0000047) |
+| organismID         | organism ID for the sample origin |
+| organismlabel         | organism label for the sample origin [NCBITaxon](http://www.obofoundry.org/ontology/ncbitaxon.html) |
+| tissueID           | tissue ID of origin or organism part of origin |
+| tissueLabel           | tissue Label of origin or organism part of origin (recommended to use [Uberon](http://www.obofoundry.org/ontology/uberon.html) |
+| cellLineID         | ID of cell line |
+| cellLineLabel         | Label of [cell line](http://www.ontobee.org/ontology/CLO) |
 
 ##### The meaning of zero
 
