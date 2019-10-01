@@ -549,6 +549,15 @@ All fields are optional.
 | tissue           | tissue of origin or organism part of origin |
 | cellLine         | name of [cell line](http://www.ontobee.org/ontology/CLO) |
 
+For metadata ID values it is recommended that implementors use the `id:label` CURIE notation as described in [Identifiers and CURIEs](https://schemablocks.org/standards/identifiers-curies.html)
+
+#### Example metadata using CURIE
+
+| Metadata Field   | Value
+|------------------|------------------|
+| `organismID`     | `NCBITaxon:9606` |
+| `organismLabel`  | `human`          |
+
 ##### The meaning of zero
 
 Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes which may not have 100% coverage of the annotation reference.  The consequence is that some features which show zero expression may not necessarily have a truly zero expression.  This idea can be extended further in the context of submitted data as well as potentially access restricted data.  The result is that a zero value can indicate one of several states:
