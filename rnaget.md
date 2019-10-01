@@ -536,16 +536,16 @@ All fields are optional. Fields that utilize an ontology term assume both an id 
 | libraryPrepProtocol | reference to a resource or webpage describing the protocol used to prepare the library for sequencing |
 | annotation       | a reference to the specific annotation used for quantifying the reads |
 | analysisPipeline | reference to a resource or webpage describing the analysis protocol.  This description should include a full listing of all software used including the exact version and command line options used.  If containerized software is used a reference to the specific containers should be included. The GA4GH [Tool Registry Service](https://github.com/ga4gh/tool-registry-service-schemas) is a resource for discovering and registering genomic tools and workflows. |
-| cellTypeID         | a term ID from the [CL ontology](http://www.ontobee.org/ontology/CL) |
-| cellTypeLabel         | a term label from the [CL ontology](http://www.ontobee.org/ontology/CL) |
+| cellTypeID         | a cell type term ID |
+| cellTypeLabel         | a cell type term label from the [CL ontology](http://www.ontobee.org/ontology/CL) |
 | phenotypeID        | phenotype ID applicable to the sample |
-| phenotypeLabel  | phenotype term (recommended ontologies: Human Phenotype Ontology, NCIT, or ICD) |
+| phenotypeLabel  | phenotype term (recommended ontologies: [Human Phenotype Ontology](http://www.human-phenotype-ontology.org/), [NCIT](http://www.obofoundry.org/ontology/ncit.html), or [ICD](https://www.icd10data.com/)) |
 | sexID              | sex ID of the organism providing the sample |
 | sexTerm              | sex label of the organism providing the sample [PATO 47 term](http://purl.obolibrary.org/obo/PATO_0000047) |
 | organismID         | organism ID for the sample origin |
-| organismlabel         | organism label for the sample origin (http://www.obofoundry.org/ontology/ncbitaxon.html) |
+| organismlabel         | organism label for the sample origin [NCBITaxon](http://www.obofoundry.org/ontology/ncbitaxon.html) |
 | tissueID           | tissue ID of origin or organism part of origin |
-| tissueLabel           | tissue Label of origin or organism part of origin (recommended to use Uberon http://www.obofoundry.org/ontology/uberon.html) |
+| tissueLabel           | tissue Label of origin or organism part of origin (recommended to use [Uberon](http://www.obofoundry.org/ontology/uberon.html) |
 | cellLineID         | ID of cell line |
 | cellLineLabel         | Label of [cell line](http://www.ontobee.org/ontology/CLO) |
 
