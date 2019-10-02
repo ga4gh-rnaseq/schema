@@ -104,12 +104,11 @@ GA4GH is publishing a [CORS best practices document](https://docs.google.com/doc
 
 ## Responsible data sharing
 
-The GA4GH promotes secure, federated and ethical approaches to data sharing.  It is increasingly important to measure and share gene expression values from RNA Sequencing, along with genomic data, to understand disease initiation, prognosis and treatment; to improve understanding of disease variation among different populations; and to identify therapeutic targets.
+The GA4GH promotes secure, federated and ethical approaches to data sharing. It is increasingly important to measure and share gene expression values from RNA Sequencing, along with genomic data, to understand disease initiation, prognosis and treatment; to contribute to diagnosis and patient stratification, to improve understanding of disease variation among different populations; and to identify and evaluate therapeutic targets.
 
-Gene expression values are simply a number. They do not contain by themselves identifiable information. They are a cellular measurement (similar to height or weight). Gene expression values do not contain actual base-by-base genetic or RNA transcript sequences.
+Gene expression values are simply numbers.  They can be thought of as cellular measurements that are analogous to height and weight at the whole organisim level.  Gene expression values do not contain actual base-by-base genetic or RNA transcript sequences.  They therefore do not contain, in and of themselves, donor-identifiable information.   
 
-Biological source of the RNA such as tissue type is not specific to the individual.  Identification of a specific bio sample may be OPTIONALLY linked, in which case the privacy concerns are dependent on access to bio sample specifics through the metadata.
-
+The biological source of an RNA sample tissue type or cell population (i.e. liver or lung; neurons or blood cells) is not specific to an individual.  However, a specific bio-sample may be OPTIONALLY linked to additional identifiable information within a study, in which case privacy concerns will depend on access to bio-sample specifics through the metadata.
 
 ## API Methods
 

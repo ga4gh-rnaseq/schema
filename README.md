@@ -6,7 +6,7 @@ The RNAget API describes a common set of endpoints for search and retrieval of p
 
 By using these common endpoints, data providers make it easier for client software to access their data with no to minimal modifications to underlying code.  This improves interoperability with other compliant data providers and makes it easier for investigators to retrieve and compare data from multiple sites.
 
-For the software developer, these common endpoints and patterns make it easier to access multiple compliant server sites with the same client software.  This reduces development time which may have otherwise been spend writing parsers and custom request generators.  Using the API it becomes much easier to write software to conduct comparisons, data mingling or other analyses on data retrieved from multiple, potentially geographically dispersed data servers.
+For the software developer, these common endpoints and patterns make it easier to access multiple compliant server sites with the same client software.  This reduces development time which may have otherwise been spent writing parsers and custom request generators.  Using the API it becomes much easier to write software to conduct comparisons, data mingling or other analyses on data retrieved from multiple, potentially geographically dispersed data servers.
 
 ## Getting started with RNAget
 
