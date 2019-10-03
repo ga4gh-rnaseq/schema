@@ -1,10 +1,10 @@
 ---
 layout: default
-title: rnaget API specification
+title: RNAget API specification
 suppress_footer: true
 ---
 
-# rnaget API
+# RNAget API
 
 # Version: 1.0.0
 
@@ -35,13 +35,13 @@ An OpenAPI description of this specification is available and [describes the 1.0
 
 ## Compliance
 
-Implementors can check if their rnaget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
+Implementors can check if their RNAget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
 
 ## Protocol essentials
 
 All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Queries containing [unsafe or reserved](https://www.ietf.org/rfc/rfc1738.txt) characters in the URL, including but not limited to "&", "/", "#", MUST encode all such characters.  Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.
 
-Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.  Unless specified, the default content type is the rnaget protocol version:
+Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.  Unless specified, the default content type is the RNAget protocol version:
 
 ```
 Accept: application/vnd.ga4gh.rnaget.v1.0.0+json
@@ -85,7 +85,7 @@ The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when a
 
 ## Security
 
-The rnaget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.
+The RNAget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.
 
 Sensitive information transmitted on public networks, such as access tokens and human genomic data, MUST be protected using Transport Level Security (TLS) version 1.2 or later, as specified in [RFC 5246](https://tools.ietf.org/html/rfc5246).
 
@@ -101,10 +101,6 @@ Data providers SHOULD verify user identity and credentials.  The policies and pr
 Cross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.
 
 GA4GH is publishing a [CORS best practices document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing), which implementers should refer to for guidance when enabling CORS on public API instances.
-
-## Responsible data sharing
-
-The GA4GH promotes secure, federated and ethical approaches to data sharing.  For a discussion of the nature of RNA expression data, the importance of sharing expression data and some of the privacy considerations to be aware of please refer to the [Ethics Toolkit for Sharing Gene Expression Data from RNA Sequencing](https://docs.google.com/document/d/1QeiYFkJDE81Bdl88LEYH0R6fQ-BgOQiKz0-dqaZqeWE).
 
 ## API Methods
 
@@ -164,7 +160,7 @@ The response to a project query is a JSON object with the following fields:
 
 ### Project:  Search for matching projects
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /projects/search`
 
@@ -325,7 +321,7 @@ The response to a study query is a JSON object with the following fields:
 
 ### Study: Search for matching studies
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /studies/search`
 
@@ -495,7 +491,7 @@ The response to an expression query is a JSON object with the following fields:
 
 ### Expression: Get supported data formats
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /expressions/formats`
 
@@ -549,6 +545,15 @@ All fields are optional. Fields that utilize an ontology term assume both an id 
 | cellLineID         | ID of cell line |
 | cellLineLabel         | Label of [cell line](http://www.ontobee.org/ontology/CLO) |
 
+For metadata ID values it is recommended that implementors use the `id:label` CURIE notation as described in [Identifiers and CURIEs](https://schemablocks.org/standards/identifiers-curies.html)
+
+#### Example metadata using CURIE
+
+| Metadata Field   | Value
+|------------------|------------------|
+| `organismID`     | `NCBITaxon:9606` |
+| `organismLabel`  | `human`          |
+
 ##### The meaning of zero
 
 Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes which may not have 100% coverage of the annotation reference.  The consequence is that some features which show zero expression may not necessarily have a truly zero expression.  This idea can be extended further in the context of submitted data as well as potentially access restricted data.  The result is that a zero value can indicate one of several states:
@@ -558,7 +563,7 @@ Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes w
 3. _Restricted access_ – measured but require further authentication to view
 4. _Not applicable_ – measurement does not apply to the sample
 
-If practical a data provider SHOULD adopt a means to indicate these states rather than use a zero.  It is recommended that the `NaN` value be used to indicate these states.
+If applicable, the `NaN` value MUST be used to indicate these states.
 
 #### Response
 
@@ -575,7 +580,7 @@ GET /expressions/formats
 
 ### Expression: Search for matching RNA expressions
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /expressions/search`
 
@@ -591,7 +596,7 @@ accepting a UTF-8 JSON encoded key-value dictionary in the form:
 }
 ```
 
-in which each `filter#` key matches the corresponding URL parameter.  The response is a list of matching expressions in JSON format unless an alternative formatting supported by the server is requested.
+in which each `filter#` key matches the corresponding URL parameter.  The response is a URL to download matching expressions in JSON format unless an alternative formatting supported by the server is requested.
 
 #### URL parameters
 
@@ -608,7 +613,7 @@ in which each `filter#` key matches the corresponding URL parameter.  The respon
 
 #### Response
 
-The server shall return the filtered expression as a JSON formatted object.  The server may return the expression in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
+The server shall return a download URL for the expression data as a JSON formatted object.  The server may return a response in an alternative formatting, such as plain text, if requested by the client via the `Accept` header and the format is supported by the server.
 
 On success and an expression is returned the server MUST issue a 200 status code.
 
@@ -677,10 +682,10 @@ The response to an expression search filter query is a list of JSON objects each
     values: ["1.0"]
   },
   {
-    filter: "sampleID",
+    filter: "sampleIDList",
     fieldType: "string",
-    description: "ID of the sample",
-    values: ["tag1", "tag2"]
+    description: "comma separated list of sampleIDs to match",
+    values: []
   },
   {
     filter: "projectID",
@@ -778,7 +783,7 @@ Content-Disposition: attachment
 
 ### Continuous: Get supported data formats
 
-The recommended endpoint is:
+The endpoint is:
 
 `GET /continuous/formats`
 
@@ -815,7 +820,7 @@ GET /continuous/formats
 
 ### Continuous: Search for matching values
 
-The recommended search endpoint is:
+The search endpoint is:
 
 `GET /continuous/search`
 

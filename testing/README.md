@@ -1,11 +1,11 @@
 
 # Testing and Interoperability
 
-## rnaget API Compliance Testing
+## RNAget API Compliance Testing
 
-Implementors can check if their rnaget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).  Full documentation is available [here](https://rnaget-compliance-suite.readthedocs.io/en/latest/)
+Implementors can check if their RNAget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).  Full documentation is available [here](https://rnaget-compliance-suite.readthedocs.io/en/latest/)
 
-Several sources have written test servers and clients for the rnaget API.  These are available for testing.  Testing configuration files required for the compliance tests can be found in this repository.  A combined configuration file for testing all available servers is also provided.
+Several sources have written test servers and clients for the RNAget API.  These are available for testing.  Testing configuration files required for the compliance tests can be found in this repository.  A combined configuration file for testing all available servers is also provided.
 
 Implementors who wish to be included in this list can do so by providing their configuration file.
 

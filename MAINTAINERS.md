@@ -3,7 +3,7 @@
 
 The current specification maintainers are listed below.
 
-### rnaget api
+### RNAget api
 * Sean Upchurch (@saupchurch)
 * Emilio Palumbo (@emi80)
 
