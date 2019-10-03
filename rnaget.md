@@ -102,14 +102,6 @@ Cross-origin resource sharing (CORS) is an essential technique used to overcome 
 
 GA4GH is publishing a [CORS best practices document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing), which implementers should refer to for guidance when enabling CORS on public API instances.
 
-## Responsible data sharing
-
-The GA4GH promotes secure, federated and ethical approaches to data sharing. It is increasingly important to measure and share gene expression values from RNA Sequencing, along with genomic data, to understand disease initiation, prognosis and treatment; to contribute to diagnosis and patient stratification, to improve understanding of disease variation among different populations; and to identify and evaluate therapeutic targets.
-
-Gene expression values are simply numbers.  They can be thought of as cellular measurements that are analogous to height and weight at the whole organisim level.  Gene expression values do not contain actual base-by-base genetic or RNA transcript sequences.  They therefore do not contain, in and of themselves, donor-identifiable information.   
-
-The biological source of an RNA sample tissue type or cell population (i.e. liver or lung; neurons or blood cells) is not specific to an individual.  However, a specific bio-sample may be OPTIONALLY linked to additional identifiable information within a study, in which case privacy concerns will depend on access to bio-sample specifics through the metadata.
-
 ## API Methods
 
 This section lists the recommended URL endpoints a server SHOULD implement in order to navigate the RNA-seq data hierarchy and allow retrieval of expression data.
