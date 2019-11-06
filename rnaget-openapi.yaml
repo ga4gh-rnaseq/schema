@@ -386,43 +386,6 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
-  /expressions/formats:
-    get:
-      tags:
-        - expressions
-      summary: Get output formats
-      description: Returns a list of supported expression matrix formats
-      operationId: getExpressionFormats
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Format list not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-        "406":
-          description: Requested formatting not supported
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-        "501":
-          description: The specified request is not supported by the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-      security:
-        - rnaget_auth:
-            - read:expression
   /expressions/tickets:
     get:
       tags:
@@ -443,12 +406,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: studyID
-          in: query
-          description: study to filter by
-          required: false
-          schema:
-            type: string
+        - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
@@ -503,12 +461,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: studyID
-          in: query
-          description: study to filter by
-          required: false
-          schema:
-            type: string
+        - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
@@ -550,6 +503,43 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
             text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+  /expressions/formats:
+    get:
+      tags:
+        - expressions
+      summary: Get output formats
+      description: Returns a list of supported expression matrix formats
+      operationId: getExpressionFormats
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Format list not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
       security:
@@ -719,43 +709,6 @@ paths:
       security:
         - rnaget_auth:
             - read:continuous
-  /continuous/formats:
-    get:
-      tags:
-        - continuous
-      summary: Get output formats
-      description: Returns a list of supported continuous matrix formats
-      operationId: getContinuousFormats
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-        "404":
-          description: Format list not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-        "406":
-          description: Requested formatting not supported
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-        "501":
-          description: The specified request is not supported by the server
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
-      security:
-        - rnaget_auth:
-            - read:continuous
   /continuous/ticket:
     get:
       tags:
@@ -770,12 +723,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: studyID
-          in: query
-          description: study to filter by
-          required: false
-          schema:
-            type: string
+        - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/chrParam"
@@ -825,12 +773,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: studyID
-          in: query
-          description: study to filter by
-          required: false
-          schema:
-            type: string
+        - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/chrParam"
@@ -873,6 +816,43 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
             text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:continuous
+  /continuous/formats:
+    get:
+      tags:
+        - continuous
+      summary: Get output formats
+      description: Returns a list of supported continuous matrix formats
+      operationId: getContinuousFormats
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Format list not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
       security:
@@ -1055,6 +1035,15 @@ components:
         type: string
       example:
         1.0
+    studyIDParam:
+      name: studyID
+      in: query
+      description: study to filter by
+      required: false
+      schema:
+        type: string
+      example:
+        c4cf910c9ae54832902c954cb439e30c
     sampleIDListParam:
       name: sampleIDList
       in: query
