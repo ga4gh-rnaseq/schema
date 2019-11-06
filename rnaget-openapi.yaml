@@ -273,7 +273,7 @@ paths:
       security:
         - rnaget_auth:
             - read:study
-  "/expressions/{expressionId}/ticket":
+  "/expressions/{expressionId}/tickets":
     get:
       tags:
         - expressions
@@ -321,6 +321,71 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
+  "/expressions/{expressionId}/bytes":
+    get:
+      tags:
+        - expressions
+      summary: Find expression data by ID
+      description: Returns a single specified expression matrix
+      operationId: getExpressionFileById
+      parameters:
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Expression not found
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
   /expressions/formats:
     get:
       tags:
@@ -358,7 +423,7 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
-  /expressions/ticket:
+  /expressions/tickets:
     get:
       tags:
         - expressions
@@ -418,6 +483,78 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
+  /expressions/bytes:
+    get:
+      tags:
+        - expressions
+      summary: Download expression data matching filters
+      description: Returns an expression data file matching filters
+      operationId: getExpressionFile
+      parameters:
+        - name: format
+          in: query
+          description: Data format to return
+          required: true
+          schema:
+            type: string
+        - name: projectID
+          in: query
+          description: project to filter by
+          required: false
+          schema:
+            type: string
+        - name: studyID
+          in: query
+          description: study to filter by
+          required: false
+          schema:
+            type: string
+        - $ref: "#/components/parameters/versionParam"
+        - $ref: "#/components/parameters/sampleIDListParam"
+        - $ref: "#/components/parameters/featureIDListParam"
+        - $ref: "#/components/parameters/featureNameListParam"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
   /expressions/filters:
     get:
       tags:
@@ -463,6 +600,57 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
+  "/continuous/{continuousId}/tickets":
+    get:
+      tags:
+        - continuous
+      summary: Retrieve continuous signal data by ID
+      description: Returns a single specified signal matrix
+      operationId: getContinuousTicketById
+      parameters:
+        - name: continuousId
+          in: path
+          description: ID of continuous matrix to return
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/chrParam"
+        - $ref: "#/components/parameters/startParam"
+        - $ref: "#/components/parameters/endParam"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ticket"
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Continuous matrix not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:continuous
   "/continuous/{continuousId}/bytes":
     get:
       tags:
@@ -618,6 +806,73 @@ paths:
           description: The specified request is not supported by the server
           content:
             application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:continuous
+  /continuous/bytes:
+    get:
+      tags:
+        - continuous
+      summary: Download continuous data matching filters
+      description: Returns a continuous data file matching filters
+      operationId: getContinuousFile
+      parameters:
+        - name: format
+          in: query
+          description: Data format to return
+          required: true
+          schema:
+            type: string
+        - name: studyID
+          in: query
+          description: study to filter by
+          required: false
+          schema:
+            type: string
+        - $ref: "#/components/parameters/versionParam"
+        - $ref: "#/components/parameters/sampleIDListParam"
+        - $ref: "#/components/parameters/chrParam"
+        - $ref: "#/components/parameters/startParam"
+        - $ref: "#/components/parameters/endParam"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: The requested data format is not supported
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/vnd.loom:
+              schema:
+                $ref: "#/components/schemas/error"
+            text/tab-separated-values:
               schema:
                 $ref: "#/components/schemas/error"
       security:
