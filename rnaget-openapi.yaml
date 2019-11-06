@@ -73,30 +73,15 @@ paths:
       security:
         - rnaget_auth:
             - read:project
-  /projects/search:
+  /projects:
     get:
       tags:
         - projects
-      summary: Search for projects matching filters
-      description: Search for projects matching filters
-      operationId: searchProjects
+      summary: Returns a list of projects matching filters
+      description: Get a list of projects matching filters
+      operationId: getProjects
       parameters:
-        - name: tags
-          in: query
-          description: Comma separated tag list to filter by
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: version
-          in: query
-          description: version to return
-          required: false
-          schema:
-            type: string
+        - $ref: "#/components/parameters/versionParam"
       responses:
         "200":
           description: successful operation
@@ -127,13 +112,13 @@ paths:
       security:
         - rnaget_auth:
             - read:project
-  /projects/search/filters:
+  /projects/filters:
     get:
       tags:
         - projects
       summary: Returns filters for project searches
       description: Get filters for project searches
-      operationId: searchProjectFilters
+      operationId: getProjectFilters
       responses:
         "200":
           description: successful operation
@@ -142,7 +127,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/searchFilter"
+                  $ref: "#/components/schemas/filter"
         "400":
           description: The requested data format is not supported
           content:
@@ -212,30 +197,15 @@ paths:
       security:
         - rnaget_auth:
             - read:study
-  /studies/search:
+  /studies:
     get:
       tags:
         - studies
-      summary: Search for studies matching filters
-      description: Search for studies matching filters
-      operationId: searchStudies
+      summary: Returns a list of studies matching filters
+      description: Get a list of studies matching filters
+      operationId: getStudies
       parameters:
-        - name: tags
-          in: query
-          description: Comma separated tag list to filter by
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: version
-          in: query
-          description: version to return
-          required: false
-          schema:
-            type: string
+        - $ref: "#/components/parameters/versionParam"
       responses:
         "200":
           description: successful operation
@@ -266,13 +236,13 @@ paths:
       security:
         - rnaget_auth:
             - read:study
-  /studies/search/filters:
+  /studies/filters:
     get:
       tags:
         - studies
       summary: Returns filters for study searches
       description: Get filters for study searches
-      operationId: searchStudyFilters
+      operationId: getStudyFilters
       responses:
         "200":
           description: successful operation
@@ -281,7 +251,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/searchFilter"
+                  $ref: "#/components/schemas/filter"
         "400":
           description: The requested data format is not supported
           content:
@@ -303,13 +273,13 @@ paths:
       security:
         - rnaget_auth:
             - read:study
-  "/expressions/{expressionId}":
+  "/expressions/{expressionId}/ticket":
     get:
       tags:
         - expressions
       summary: Find expression data by ID
       description: Returns a single specified expression matrix
-      operationId: getExpressionById
+      operationId: getExpressionTicketById
       parameters:
         - name: expressionId
           in: path
@@ -323,7 +293,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/file"
+                $ref: "#/components/schemas/ticket"
         "400":
           description: Invalid ID supplied
           content:
@@ -388,13 +358,13 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
-  /expressions/search:
+  /expressions/ticket:
     get:
       tags:
         - expressions
-      summary: Search for expressions matching filters
-      description: Search for expressions matching filters
-      operationId: searchExpressions
+      summary: Get a ticket to download expression data
+      description: Returns a download ticket for expression data  matching filters
+      operationId: getExpressionTicket
       parameters:
         - name: format
           in: query
@@ -402,26 +372,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: tags
-          in: query
-          description: Comma separated tag list to filter by
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: sampleIDList
-          in: query
-          description: comma separated list of sampleIDs to match
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
         - name: projectID
           in: query
           description: project to filter by
@@ -434,32 +384,10 @@ paths:
           required: false
           schema:
             type: string
-        - name: version
-          in: query
-          description: version to filter by
-          required: false
-          schema:
-            type: string
-        - name: featureIDList
-          in: query
-          description: return only values for listed feature IDs
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: featureNameList
-          in: query
-          description: return only values for listed features
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
+        - $ref: "#/components/parameters/versionParam"
+        - $ref: "#/components/parameters/sampleIDListParam"
+        - $ref: "#/components/parameters/featureIDListParam"
+        - $ref: "#/components/parameters/featureNameListParam"
       responses:
         "200":
           description: Successful operation
@@ -468,7 +396,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/file"
+                  $ref: "#/components/schemas/ticket"
         "400":
           description: The requested data format is not supported
           content:
@@ -490,13 +418,13 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
-  /expressions/search/filters:
+  /expressions/filters:
     get:
       tags:
         - expressions
       summary: Returns filters for expression searches
       description: Get filters for expression searches
-      operationId: searchExpressionFilters
+      operationId: getExpressionFilters
       parameters:
         - name: type
           in: query
@@ -513,7 +441,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/searchFilter"
+                  $ref: "#/components/schemas/filter"
         "400":
           description: The requested data format is not supported
           content:
@@ -535,13 +463,13 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
-  "/continuous/{continuousId}":
+  "/continuous/{continuousId}/bytes":
     get:
       tags:
         - continuous
       summary: Retrieve continuous signal data by ID
       description: Returns a single specified signal matrix
-      operationId: getContinuousById
+      operationId: getContinuousFileById
       parameters:
         - name: continuousId
           in: path
@@ -549,25 +477,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: chr
-          in: query
-          description: The refererence to which start and end apply in the form chr? where
-            ? is the specific ID of the chromosome (ex. chr1, chrX).
-          required: false
-          schema:
-            type: string
-        - name: start
-          in: query
-          description: The start position of the range on the sequence, 0-based, inclusive.
-          required: false
-          schema:
-            type: integer
-        - name: end
-          in: query
-          description: The end position of the range on the sequence, 0-based, exclusive.
-          required: false
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/chrParam"
+        - $ref: "#/components/parameters/startParam"
+        - $ref: "#/components/parameters/endParam"
       responses:
         "200":
           description: successful operation
@@ -656,13 +568,13 @@ paths:
       security:
         - rnaget_auth:
             - read:continuous
-  /continuous/search:
+  /continuous/ticket:
     get:
       tags:
         - continuous
-      summary: Search for continuous data matching filters
-      description: Search for continuous data matching filters
-      operationId: searchContinuous
+      summary: Get a ticket to download continuous data
+      description: Returns a download ticket for continuous data  matching filters
+      operationId: getContinuousTicket
       parameters:
         - name: format
           in: query
@@ -670,57 +582,17 @@ paths:
           required: true
           schema:
             type: string
-        - name: tags
-          in: query
-          description: Comma separated tag list to filter by
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: sampleIDList
-          in: query
-          description: comma separated list of sampleIDs to match
-          required: false
-          style: form
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
         - name: studyID
           in: query
           description: study to filter by
           required: false
           schema:
             type: string
-        - name: version
-          in: query
-          description: version to filter by
-          required: false
-          schema:
-            type: string
-        - name: chr
-          in: query
-          description: The refererence to which start and end apply in the form chr? where
-            ? is the specific ID of the chromosome (ex. chr1, chrX).
-          required: false
-          schema:
-            type: string
-        - name: start
-          in: query
-          description: The start position of the range on the sequence, 0-based, inclusive.
-          required: false
-          schema:
-            type: integer
-        - name: end
-          in: query
-          description: The end position of the range on the sequence, 0-based, exclusive.
-          required: false
-          schema:
-            type: integer
+        - $ref: "#/components/parameters/versionParam"
+        - $ref: "#/components/parameters/sampleIDListParam"
+        - $ref: "#/components/parameters/chrParam"
+        - $ref: "#/components/parameters/startParam"
+        - $ref: "#/components/parameters/endParam"
       responses:
         "200":
           description: Successful operation
@@ -729,7 +601,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/file"
+                  $ref: "#/components/schemas/ticket"
         "400":
           description: The requested data format is not supported
           content:
@@ -751,7 +623,7 @@ paths:
       security:
         - rnaget_auth:
             - read:continuous
-  /continuous/search/filters:
+  /continuous/filters:
     get:
       tags:
         - continuous
@@ -766,7 +638,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/searchFilter"
+                  $ref: "#/components/schemas/filter"
         "400":
           description: The requested data format is not supported
         "406":
@@ -800,16 +672,22 @@ components:
       properties:
         id:
           type: string
+          description: A unique identifier assigned to this object
+          example: c2fe2aa6ad3043108bd88a30fc0303da
         version:
           type: string
-        tags:
-          type: array
-          items:
-            type: string
+          description: Version number of the object
+          example: 1.0
         name:
           type: string
+          description: Short, readable name
+          example: Demo Project
         description:
           type: string
+          description: Detailed description of the object
+          example: This is a small project to demo API funtions
+      required:
+      - id
       externalDocs:
         description: Find out more
         url: https://github.com/ga4gh-rnaseq/schema
@@ -818,66 +696,91 @@ components:
       properties:
         id:
           type: string
+          description: A unique identifier assigned to this object
+          example: c4cf910c9ae54832902c954cb439e30c
         version:
           type: string
-        tags:
-          type: array
-          items:
-            type: string
+          description: Version number of the object
+          example: 1.0
         name:
           type: string
+          description: Short, readable name
+          example: Demo Study
         description:
           type: string
+          description: Detailed description of the object
+          example: This study is part of the demo project
         parentProjectID:
           type: string
+          description: ID of the project containing the study
+          example: c2fe2aa6ad3043108bd88a30fc0303da
         genome:
           type: string
-        sampleList:
-          type: array
-          items:
-            type: string
+          description: Name of the reference genome build used for aligning samples in the study
+          example: human GRCh38
+      required:
+      - id
       externalDocs:
         description: Find out more
         url: https://github.com/ga4gh-rnaseq/schema
-    searchFilter:
+    filter:
       type: object
       description: parameter name to use for filter when searching
       properties:
         filter:
           type: string
+          description: A unique name for the filter for use in query URLs
+          example: tissue
         fieldType:
           type: string
+          description: The dataType (string, float, etc.) of the filter
+          example: string
         description:
           type: string
+          description: Detailed description of the filter
+          example: tissue of origin
         values:
           type: array
           items:
             type: string
+            example: liver
+          description: List of supported values for the filter
+      required:
+      - filter
       externalDocs:
         description: Find out more
         url: https://github.com/ga4gh-rnaseq/schema
-    file:
+    ticket:
       type: object
       description: URL and type for data files
       properties:
         version:
           type: string
-        tags:
-          type: array
-          items:
-            type: string
+          description: Version number of the object
+          example: 1.0
         fileType:
           type: string
+          description: Type of file. Examples include: loom, tsv
+          example: loom
         studyID:
           type: string
+          description: ID of containing study
+          example: c4cf910c9ae54832902c954cb439e30c
         url:
           type: string
+          description: An `https:` URL to download file
         units:
           type: string
+          description: Units for the values. Examples include: TPM, FPKM, counts
         headers:
           type: object
+          description: For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply verbatim as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL.
         md5:
           type: string
+          description: MD5 digest of the file
+      required:
+      - url
+      - units
       externalDocs:
         description: Find out more
         url: https://github.com/ga4gh-rnaseq/schema
@@ -887,3 +790,73 @@ components:
       properties:
         message:
           type: string
+  parameters:
+    versionParam:
+      name: version
+        in: query
+        description: version to filter by
+        required: false
+        schema:
+          type: string
+        example:
+          1.0
+    sampleIDListParam:
+      name: sampleIDList
+        in: query
+        description: comma separated list of sampleIDs to match
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+    featureIDListParam:
+      name: featureIDList
+        in: query
+        description: return only values for listed feature IDs
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+    featureNameListParam:
+      name: featureNameList
+        in: query
+        description: return only values for listed features
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+    chrParam:
+      name: chr
+      in: query
+      description: The refererence to which start and end apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).
+      required: false
+      schema:
+        type: string
+      example:
+        chr3
+    startParam:
+      name: start
+      in: query
+      description: The start position of the range on the sequence, 0-based, inclusive.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+    endParam:
+      name: end
+      in: query
+      description: The end position of the range on the sequence, 0-based, exclusive.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
