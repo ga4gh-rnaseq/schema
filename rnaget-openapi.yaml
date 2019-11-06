@@ -1015,7 +1015,7 @@ components:
           example: 1.0
         fileType:
           type: string
-          description: Type of file. Examples include: loom, tsv
+          description: "Type of file. Examples include: loom, tsv"
           example: loom
         studyID:
           type: string
@@ -1026,10 +1026,10 @@ components:
           description: An `https:` URL to download file
         units:
           type: string
-          description: Units for the values. Examples include: TPM, FPKM, counts
+          description: "Units for the values. Examples include: TPM, FPKM, counts"
         headers:
           type: object
-          description: For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply verbatim as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL.
+          description: 'For HTTPS URLs, the server may supply a JSON object containing one or more string key-value pairs which the client MUST supply verbatim as headers with any request to the URL. For example, if headers is `{"Authorization": "Bearer xxxx"}`, then the client must supply the header `Authorization: Bearer xxxx` with the HTTPS request to the URL.'
         md5:
           type: string
           description: MD5 digest of the file
@@ -1048,46 +1048,46 @@ components:
   parameters:
     versionParam:
       name: version
-        in: query
-        description: version to filter by
-        required: false
-        schema:
-          type: string
-        example:
-          1.0
+      in: query
+      description: version to filter by
+      required: false
+      schema:
+        type: string
+      example:
+        1.0
     sampleIDListParam:
       name: sampleIDList
-        in: query
-        description: comma separated list of sampleIDs to match
-        required: false
-        style: form
-        explode: false
-        schema:
-          type: array
-          items:
-            type: string
+      in: query
+      description: comma separated list of sampleIDs to match
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
     featureIDListParam:
       name: featureIDList
-        in: query
-        description: return only values for listed feature IDs
-        required: false
-        style: form
-        explode: false
-        schema:
-          type: array
-          items:
-            type: string
+      in: query
+      description: return only values for listed feature IDs
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
     featureNameListParam:
       name: featureNameList
-        in: query
-        description: return only values for listed features
-        required: false
-        style: form
-        explode: false
-        schema:
-          type: array
-          items:
-            type: string
+      in: query
+      description: return only values for listed features
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
     chrParam:
       name: chr
       in: query
