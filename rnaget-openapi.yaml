@@ -339,6 +339,10 @@ paths:
         "200":
           description: successful operation
           content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
             application/vnd.loom:
               schema:
                 type: string
@@ -350,6 +354,9 @@ paths:
         "400":
           description: Invalid ID supplied
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -359,6 +366,9 @@ paths:
         "404":
           description: Expression not found
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -368,6 +378,9 @@ paths:
         "406":
           description: Requested formatting not supported
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -377,6 +390,9 @@ paths:
         "501":
           description: The specified request is not supported by the server
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -470,6 +486,10 @@ paths:
         "200":
           description: Successful operation
           content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
             application/vnd.loom:
               schema:
                 type: string
@@ -481,6 +501,9 @@ paths:
         "400":
           description: The requested data format is not supported
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -490,6 +513,9 @@ paths:
         "406":
           description: Requested formatting not supported
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -499,6 +525,9 @@ paths:
         "501":
           description: The specified request is not supported by the server
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -662,6 +691,10 @@ paths:
         "200":
           description: successful operation
           content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
             application/vnd.loom:
               schema:
                 type: string
@@ -673,6 +706,9 @@ paths:
         "400":
           description: Invalid ID supplied
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -682,6 +718,9 @@ paths:
         "404":
           description: Continuous matrix not found
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -691,6 +730,9 @@ paths:
         "406":
           description: Requested formatting not supported
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -700,6 +742,9 @@ paths:
         "501":
           description: The specified request is not supported by the server
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -783,6 +828,10 @@ paths:
         "200":
           description: Successful operation
           content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
             application/vnd.loom:
               schema:
                 type: string
@@ -794,6 +843,9 @@ paths:
         "400":
           description: The requested data format is not supported
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -803,6 +855,9 @@ paths:
         "406":
           description: Requested formatting not supported
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
@@ -812,6 +867,9 @@ paths:
         "501":
           description: The specified request is not supported by the server
           content:
+            application/octet-stream:
+              schema:
+                $ref: "#/components/schemas/error"
             application/vnd.loom:
               schema:
                 $ref: "#/components/schemas/error"
