@@ -190,6 +190,35 @@ tags:
     externalDocs:
       description: Find out more
       url: https://github.com/ga4gh-rnaseq/schema
+  - name: projectModel
+    x-displayName: The Project Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/project" />
+  - name: studyModel
+    x-displayName: The Study Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/study" />
+  - name: filterModel
+    x-displayName: The Filter Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/filter" />
+  - name: ticketModel
+    x-displayName: The Ticket Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/ticket" />
+x-tagGroups:
+  - name: Interface
+    tags:
+      - projects
+      - studies
+      - expressions
+      - continuous
+  - name: Models
+    tags:
+      - projectModel
+      - studyModel
+      - filterModel
+      - ticketModel
 paths:
   "/projects/{projectId}":
     get:
