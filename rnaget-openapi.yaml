@@ -31,7 +31,8 @@ info:
 
     ## Compliance
 
-    Implementors can check if their RNAget implementations conform to the specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
+    Implementors can check if their RNAget implementations conform to the
+    specification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
 
     ## Protocol essentials
 
@@ -49,7 +50,7 @@ info:
 
     All response objects from the server are expected to be in JSON format, regardless of the response status code, unless otherwise negotiated with the client and allowed by the server.
 
-    Object IDs are intended for persistent retrieval of their respective objects.  An object ID MUST uniquely identify an object within the scope of a single data server.  It is beyond the scope of this API to enforce uniqueness of ID among different data servers.
+    Object IDs are intended for persistent retrieval of their respective objects.  An object ID MUST uniquely identify an object within the scope of a single data server.  It is beyond the scope of this API to enforce uniqueness of ID among different data servers.  IDs are strings made up of uppercase and lowercase letters, decimal digits, hypen, period, underscore and tilde [A-Za-z0-9.-_~]. See [RFC 3986 § 2.3](https://tools.ietf.org/html/rfc3986#section-2.3).
 
     ## Internet Media Types Handling
 
