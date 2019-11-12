@@ -52,15 +52,17 @@ info:
 
     Object IDs are intended for persistent retrieval of their respective objects.  An object ID MUST uniquely identify an object within the scope of a single data server.  It is beyond the scope of this API to enforce uniqueness of ID among different data servers.  IDs are strings made up of uppercase and lowercase letters, decimal digits, hypen, period, underscore and tilde [A-Za-z0-9.-_~]. See [RFC 3986 § 2.3](https://tools.ietf.org/html/rfc3986#section-2.3).
 
+    Endpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as a UTF8-encoded JSON key-value dictionary.
+
+    When processing requests containing multiple filters and filters with lists of items, the data provider MUST use a logical `AND` for selecting the results to return.
+
     ## Internet Media Types Handling
 
     When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so
 
       - `application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii`
       - `application/vnd.ga4gh.rnaget.v1.0.0+json`
-      - `application/json`
-
-    When processing requests containing multiple filters and filters with lists of items, the data provider MUST use a logical `AND` for selecting the results to return.
+      - `application/json`    
 
     ## Errors
 
