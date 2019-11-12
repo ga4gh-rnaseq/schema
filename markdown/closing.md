@@ -1,3 +1,0 @@
-# Closing
-
-The final section
