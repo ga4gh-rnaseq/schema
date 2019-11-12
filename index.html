@@ -1,0 +1,2761 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RNAget API</title>
+    <link rel="stylesheet" type="text/css" href="https://gitcdn.xyz/repo/jb-adams/ga4gh-autodocs/master/assets/styles/style.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    
+
+    
+    <nav style="background-color: #1b75bb;" class="navbar navbar-dark fixed-top">
+  <a class="navbar-brand" href="#">
+    <img src="https://gitcdn.xyz/repo/jb-adams/ga4gh-autodocs/master/assets/img/ga4gh-white.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    GA4GH OpenAPI
+  </a>
+</nav><div id="sidebar">
+    <div>
+      <span class="heading tier3">Table of Contents</h4>
+    </div>
+    
+    <ol class="toc doc-counter">
+
+          <li class="toc-entry doc-counter">
+            <a class="toc-link" href="#_overview">Overview</a>
+            <ol class="doc-counter">
+                <li class="toc-entry toc-tab1 doc-counter">
+                  <a class="toc-link" href="#_version_information">
+                    Version Information
+                  </a>
+                </li>
+
+                <li class="toc-entry toc-tab1 doc-counter">
+                  <a class="toc-link" href="#_contact_information">
+                    Contact Information
+                  </a>
+                </li>
+
+            </ol>
+          </li>
+
+        <li class="toc-entry doc-counter">
+        <a class="toc-link" href="#_introduction">Introduction</a>
+        <ol class="doc-counter"><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_introduction_getting_started_with_rnaget">Getting started with RNAget</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_introduction_for_current_data_providers">For current data providers</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_introduction_for_new_data_providers">For new data providers</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_introduction_for_client_software_developers">For client software developers</a>
+        </li>
+        </ol>
+    </li>
+        <li class="toc-entry doc-counter">
+        <a class="toc-link" href="#_design">Design Principles</a>
+        <ol class="doc-counter"><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_design_openapi_description">OpenAPI Description</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_design_compliance">Compliance</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_design_protocol_essentials">Protocol essentials</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_design_internet_media_types_handling">Internet Media Types Handling</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_design_errors">Errors</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_design_security">Security</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_design_cors">CORS</a>
+        </li>
+        </ol>
+    </li>
+
+          <li class="toc-entry doc-counter">
+            <a class="toc-link" href="#_paths">Paths</a>
+            <ol class="doc-counter">
+                <li class="toc-entry toc-tab1 doc-counter">
+                  <a class="toc-link" href="#_paths_projects">
+                    projects
+                  </a>
+                  <ol class="doc-counter">
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_projects_find_project_by_id">
+                            Find project by ID
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_projects_find_project_by_id_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_projects_find_project_by_id_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_projects_find_project_by_id_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_projects_find_project_by_id_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_projects_search_for_projects_matching_filters">
+                            Search for projects matching filters
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_projects_search_for_projects_matching_filters_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_projects_search_for_projects_matching_filters_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_projects_search_for_projects_matching_filters_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_projects_search_for_projects_matching_filters_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_projects_returns_filters_for_project_searches">
+                            Returns filters for project searches
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_projects_returns_filters_for_project_searches_description">
+                                Description
+                              </a>
+                            </li>
+
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_projects_returns_filters_for_project_searches_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_projects_returns_filters_for_project_searches_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                  </ol>
+                </li>
+                <li class="toc-entry toc-tab1 doc-counter">
+                  <a class="toc-link" href="#_paths_studies">
+                    studies
+                  </a>
+                  <ol class="doc-counter">
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_studies_find_study_by_id">
+                            Find study by ID
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_studies_find_study_by_id_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_studies_find_study_by_id_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_studies_find_study_by_id_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_studies_find_study_by_id_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_studies_search_for_studies_matching_filters">
+                            Search for studies matching filters
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_studies_search_for_studies_matching_filters_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_studies_search_for_studies_matching_filters_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_studies_search_for_studies_matching_filters_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_studies_search_for_studies_matching_filters_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_studies_returns_filters_for_study_searches">
+                            Returns filters for study searches
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_studies_returns_filters_for_study_searches_description">
+                                Description
+                              </a>
+                            </li>
+
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_studies_returns_filters_for_study_searches_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_studies_returns_filters_for_study_searches_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                  </ol>
+                </li>
+                <li class="toc-entry toc-tab1 doc-counter">
+                  <a class="toc-link" href="#_paths_expressions">
+                    expressions
+                  </a>
+                  <ol class="doc-counter">
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_expressions_find_expression_data_by_id">
+                            Find expression data by ID
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_expressions_find_expression_data_by_id_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_expressions_find_expression_data_by_id_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_expressions_find_expression_data_by_id_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_expressions_find_expression_data_by_id_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_expressions_get_output_formats">
+                            Get output formats
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_expressions_get_output_formats_description">
+                                Description
+                              </a>
+                            </li>
+
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_expressions_get_output_formats_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_expressions_get_output_formats_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_expressions_search_for_expressions_matching_filters">
+                            Search for expressions matching filters
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_expressions_search_for_expressions_matching_filters_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_expressions_search_for_expressions_matching_filters_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_expressions_search_for_expressions_matching_filters_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_expressions_search_for_expressions_matching_filters_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_expressions_returns_filters_for_expression_searches">
+                            Returns filters for expression searches
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_expressions_returns_filters_for_expression_searches_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_expressions_returns_filters_for_expression_searches_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_expressions_returns_filters_for_expression_searches_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_expressions_returns_filters_for_expression_searches_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                  </ol>
+                </li>
+                <li class="toc-entry toc-tab1 doc-counter">
+                  <a class="toc-link" href="#_paths_continuous">
+                    continuous
+                  </a>
+                  <ol class="doc-counter">
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_continuous_retrieve_continuous_signal_data_by_id">
+                            Retrieve continuous signal data by ID
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_continuous_retrieve_continuous_signal_data_by_id_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_continuous_retrieve_continuous_signal_data_by_id_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_continuous_retrieve_continuous_signal_data_by_id_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_continuous_retrieve_continuous_signal_data_by_id_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_continuous_get_output_formats">
+                            Get output formats
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_continuous_get_output_formats_description">
+                                Description
+                              </a>
+                            </li>
+
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_continuous_get_output_formats_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_continuous_get_output_formats_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_continuous_search_for_continuous_data_matching_filters">
+                            Search for continuous data matching filters
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_continuous_search_for_continuous_data_matching_filters_description">
+                                Description
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_continuous_search_for_continuous_data_matching_filters_parameters">
+                                  Parameters
+                                </a>
+                              </li>
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_continuous_search_for_continuous_data_matching_filters_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_continuous_search_for_continuous_data_matching_filters_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                        <li class="toc-entry toc-tab2 doc-counter">
+                          <a class="toc-link" href="#_paths_continuous_returns_filters_for_continuous_searches">
+                            Returns filters for continuous searches
+                          </a>
+                          <ol class="doc-counter">
+                            
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_continuous_returns_filters_for_continuous_searches_description">
+                                Description
+                              </a>
+                            </li>
+
+
+                            <li class="toc-entry toc-tab3 doc-counter">
+                              <a class="toc-link" href="#_paths_continuous_returns_filters_for_continuous_searches_responses">
+                                Responses
+                              </a>
+                            </li>
+
+                              <li class="toc-entry toc-tab3 doc-counter">
+                                <a class="toc-link" href="#_paths_continuous_returns_filters_for_continuous_searches_tags">
+                                  Tags
+                                </a>
+                              </li>
+                          </ol>
+                        </li>
+                  </ol>
+                </li>
+            </ol>
+          </li>
+
+            <li class="toc-entry doc-counter">
+              <a href="#_definitions" class="toc-link">
+                Definitions
+              </a>
+              <ol class="doc-counter">
+                  <li class="toc-entry toc-tab1 doc-counter">
+                    <a href="#_definitions_project" class="toc-link">project</a>
+                  </li>
+                  <li class="toc-entry toc-tab1 doc-counter">
+                    <a href="#_definitions_study" class="toc-link">study</a>
+                  </li>
+                  <li class="toc-entry toc-tab1 doc-counter">
+                    <a href="#_definitions_searchfilter" class="toc-link">searchFilter</a>
+                  </li>
+                  <li class="toc-entry toc-tab1 doc-counter">
+                    <a href="#_definitions_file" class="toc-link">file</a>
+                  </li>
+                  <li class="toc-entry toc-tab1 doc-counter">
+                    <a href="#_definitions_error" class="toc-link">error</a>
+                  </li>
+              </ol>
+
+            </li>
+
+
+        <li class="toc-entry doc-counter">
+        <a class="toc-link" href="#_background">Appendix: General background on RNA Data</a>
+        <ol class="doc-counter"><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_background_target_users">Target Users</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_background_use_case_overview">Use Case Overview</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_background_metadata-based_searches">Metadata-based Searches</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_background_data-based_searches">Data-based Searches</a>
+        </li><li class="toc-entry toc-tab1 doc-counter">
+            <a class="toc-link" href="#_background_matrix_manipulation">Matrix Manipulation</a>
+        </li>
+        </ol>
+    </li>
+    </ol>
+  </div>
+<div id="main">
+  <div class="container">
+    <ol class="doc-counter">
+
+        <h1 class="title">RNAget API</h1>
+      
+        <div class="section">
+          <li id="_overview" class="heading tier1 doc-counter avoid-navbar">
+            <span class="heading tier1 section-header">Overview</span>
+            <div class="section-block">
+              <p class="p">A set of endpoints for search and retrieval of processed RNA data</p>
+
+            </div>
+            <ol class="doc-counter">
+                <li id="_version_information" class="heading tier2 doc-counter avoid-navbar">
+                  <span>Version Information</span>
+                  <div class="section-block">
+                    <p class="p">Version: 1.0.0</p>
+                  </div>
+                </li>
+
+                <li id="_contact_information" class="heading tier2 doc-counter avoid-navbar">
+                  <span>Contact Information</span>
+                  <div class="section-block">
+                    <p class="p">Contact: GA4GH RNASeq Working Group</p>
+                    <p class="p">Contact Email: ga4gh-rnaseq@ga4gh.org</p>
+                  </div>
+                </li>
+            </ol>
+          </li>
+        </div>
+
+        <div class="section">
+          <li id="_introduction" class="heading tier1 doc-counter avoid-navbar">
+            <span class="section-header">Introduction</span><ol class="doc-counter"><p class="p">The RNAget API describes a common set of endpoints for search and retrieval of processed RNA data. This currently include feature level expression data from RNA-Seq type assays and signal data over a range of bases from ChIP-seq, methylation or similar epigenetic experiments.</p><p class="p">By using these common endpoints, data providers make it easier for client software to access their data with no to minimal modifications to underlying code. This improves interoperability with other compliant data providers and makes it easier for investigators to retrieve and compare data from multiple sites.</p><p class="p">For the software developer, these common endpoints and patterns make it easier to access multiple compliant server sites with the same client software. This reduces development time which may have otherwise been spent writing parsers and custom request generators. Using the API it becomes much easier to write software to conduct comparisons, data mingling or other analyses on data retrieved from multiple, potentially geographically dispersed data servers.</p><li id="_introduction_getting_started_with_rnaget" class="doc-counter heading tier2 avoid-navbar"><span>Getting started with RNAget</span></li><p class="p">This repository has several files describing the RNAget API specification:</p><ul><li class="p"><p class="p">The <a href="https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget.md">API specification</a> document</p></li><li class="p"><p class="p">A <a href="https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget-openapi.yaml">machine-readable</a> OpenAPI instance of the specification. View in <a href="https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/master/rnaget-openapi.yaml">online visualizer</a></p></li><li class="p"><p class="p">Introduction to accessing and <a href="https://github.com/ga4gh-rnaseq/schema/blob/master/testing/README.md">testing implementations</a> for compliance</p></li><li class="p"><p class="p">Additional <a href="https://github.com/ga4gh-rnaseq/schema/blob/master/rna_seq_design_notes.md">background</a> on the API</p></li><li class="p"><p class="p">The automated build of the compliance report is <a href="https://ga4gh-rnaseq.github.io/rnaget-compliance-suite/report/">here</a></p></li><li class="p"><p class="p">Complete documentation of the testing and compliance suite is <a href="https://rnaget-compliance-suite.readthedocs.io/en/latest/">here</a></p></li></ul><li id="_introduction_for_current_data_providers" class="doc-counter heading tier3 avoid-navbar"><span>For current data providers</span></li><p class="p">The RNAget API is designed to be implemented in parallel to an existing web interface. Current data providers with their own web interfaces in use by their current users can implement the RNAget endpoints without disrupting those users. The API does not place any requirements on the backend database and query engines - a data server is free to use their existing data infrastructure if desired. To implement the RNAget API the appropriate endpoints need to be created and then linked to the existing backend.</p><p class="p">The testing and compliance suite can be used to test implemented endpoints for API compliance.</p><li id="_introduction_for_new_data_providers" class="doc-counter heading tier3 avoid-navbar"><span>For new data providers</span></li><p class="p">A group or organization can use the RNAget API to make their data available to users. The RNAget API descirbed a lightweight data hierachy and a set of endpoints compatible with client software implementing the API. It is important to note that the RNAget API does not place any restrictions on the data backend. A server implementor is free to select whatever back end best suits their individual needs. There are several paths towards setting up a compliant server:</p><ul><li class="p"><p class="p">The <a href="https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget-openapi.yaml">OpenAPI description</a> of the specification can be used with code generators like <a href="https://github.com/OpenAPITools/openapi-generator">OpenAPI Generator</a>.</p></li><li class="p"><p class="p">The <a href="https://github.com/ga4gh-rnaseq/schema/blob/master/testing/README.md">testing and compliance page</a> includes a list of example server implementations which can be used as is or as a starting point.</p></li><li class="p"><p class="p">A custom solution can be implemented to link the API endpoints and queries to a local data backend (of any desired type) serving the data</p></li></ul><li id="_introduction_for_client_software_developers" class="doc-counter heading tier3 avoid-navbar"><span>For client software developers</span></li><p class="p">The API specification describes a common data retrieval interface. The purpose is to make it easy to retrieve data from any compatible server for use in downstream local analyses. The RNAget API does not contain analytical tools. It describes the format of the requests that should be sent to servers to search, slice and retrieve rna data as well as the format of the responses. Client software compatible with these specifications can access data from any compliant server without having to rewrite the interface.</p></ol>
+          </li>
+        </div>
+        <div class="section">
+          <li id="_design" class="heading tier1 doc-counter avoid-navbar">
+            <span class="section-header">Design Principles</span><ol class="doc-counter"><p class="p">This API provides a means of retrieving data from several types of RNA experiments including:</p><ul><li class="p"><p class="p">Feature-level expression data from RNA-seq type measurements</p></li><li class="p"><p class="p">Coordinate-based signal/intensity data similar to a bigwig representation via a client/server model.</p></li></ul><p class="p">Features of this API include:</p><ul><li class="p"><p class="p">Support for a hierarchical data model which provides the option for servers to associate expression data for discovery and retrieval</p></li><li class="p"><p class="p">Support for accessing subsets of expression data through slicing operations on the expression matrix and/or query filters to specify features to be included</p></li><li class="p"><p class="p">Support for accessing signal/intensity data by specifying a range of genomic coordinates to be included</p></li></ul><p class="p">Out of the scope of this API are:</p><ul><li class="p"><p class="p">A means of retrieving primary (raw) read sequence data. Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads. The <a href="https://samtools.github.io/hts-specs/htsget.html">htsget API</a> is designed for retrieval of read data.</p></li><li class="p"><p class="p">A means of retrieving reference sequences. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The <a href="https://samtools.github.io/hts-specs/refget.html">refget API</a> is designed for retrieval of references sequences.</p></li><li class="p"><p class="p">A means of retrieving feature annotation details. Expression matrices provide the identity of each mapped feature. Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.</p></li></ul><li id="_design_openapi_description" class="doc-counter heading tier2 avoid-navbar"><span>OpenAPI Description</span></li><p class="p">An OpenAPI description of this specification is available and <a href="rnaget-openapi.yaml">describes the 1.0.0 version</a>. OpenAPI is an independent API description format for describing REST services and is compatible with a number of <a href="http://openapi.tools/">third party tools</a>.</p><li id="_design_compliance" class="doc-counter heading tier2 avoid-navbar"><span>Compliance</span></li><p class="p">Implementors can check if their RNAget implementations conform to the specification by using our <a href="https://github.com/ga4gh-rnaseq/rnaget-compliance-suite">compliance suite</a>.</p><li id="_design_protocol_essentials" class="doc-counter heading tier2 avoid-navbar"><span>Protocol essentials</span></li><p class="p">All API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Queries containing <a href="https://www.ietf.org/rfc/rfc1738.txt">unsafe or reserved</a> characters in the URL, including but not limited to "&", "/", "#", MUST encode all such characters.  Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.</p><p class="p">Requests adhering to this specification MAY include an Accept header specifying an alternative formatting of the response, if the server allows this. Otherwise the server shall return the default content type specified for the invoked method.  Unless specified, the default content type is the RNAget protocol version:</p><p class="p">A server MAY support other formatting.  The server SHOULD respond with an <span class="code">Not Acceptable</span> error if the client requests a format not supported by the server.</p><p class="p">HTTP responses may be compressed using <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html">RFC 2616</a> transfer-coding, not content-coding.</p><p class="p">HTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by <a href="https://tools.ietf.org/html/rfc7231">RFC 7231</a>, clients SHOULD be configured to follow redirects. <span class="code">302</span>, <span class="code">303</span> and <span class="code">307</span> are all valid response codes to use.</p><p class="p">Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version.  Unless negotiated with the client and allowed by the server, the default encoding is:</p><p class="p">All response objects from the server are expected to be in JSON format, regardless of the response status code, unless otherwise negotiated with the client and allowed by the server.</p><p class="p">Object IDs are intended for persistent retrieval of their respective objects.  An object ID MUST uniquely identify an object within the scope of a single data server.  It is beyond the scope of this API to enforce uniqueness of ID among different data servers.</p><li id="_design_internet_media_types_handling" class="doc-counter heading tier2 avoid-navbar"><span>Internet Media Types Handling</span></li><p class="p">When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so</p><ul><li class="p"><p class="p">application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii</p></li><li class="p"><p class="p">application/vnd.ga4gh.rnaget.v1.0.0+json</p></li><li class="p"><p class="p">application/json</p></li></ul><li id="_design_errors" class="doc-counter heading tier2 avoid-navbar"><span>Errors</span></li><p class="p">The server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected. In the case of transient server errors (e.g., 503 and other 5xx status codes), the client SHOULD implement appropriate retry logic. For example, if a client sends an alphanumeric string for a parameter that is specified as unsigned integer the server MUST reply with <span class="code">Bad Request</span>.</p><table class="tbl"><thead><tr><th class="tbl-cell tbl-header">Error type</th><th class="tbl-cell tbl-header">HTTP status code</th><th class="tbl-cell tbl-header">Description</th></tr></thead><tbody><tr><td class="tbl-cell">Bad Request</td><td class="tbl-cell">400</td><td class="tbl-cell">Cannot process due to malformed request, the requested parameters do not adhere to the specification</td></tr><tr><td class="tbl-cell">Unauthorized</td><td class="tbl-cell">401</td><td class="tbl-cell">Authorization provided is invalid</td></tr><tr><td class="tbl-cell">Not Found</td><td class="tbl-cell">404</td><td class="tbl-cell">The resource requested was not found</td></tr><tr><td class="tbl-cell">Not Acceptable</td><td class="tbl-cell">406</td><td class="tbl-cell">The requested formatting is not supported by the server</td></tr><tr><td class="tbl-cell">Not Implemented</td><td class="tbl-cell">501</td><td class="tbl-cell">The specified request is not supported by the server</td></tr></tbody></table><li id="_design_security" class="doc-counter heading tier2 avoid-navbar"><span>Security</span></li><p class="p">The RNAget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.</p><p class="p">Sensitive information transmitted on public networks, such as access tokens and human genomic data, MUST be protected using Transport Level Security (TLS) version 1.2 or later, as specified in <a href="https://tools.ietf.org/html/rfc5246">RFC 5246</a>.</p><p class="p">If the data holder requires client authentication and/or authorization, then the client's HTTPS API request MUST present an OAuth 2.0 bearer access token as specified in <a href="https://tools.ietf.org/html/rfc6750">RFC 6750</a>, in the Authorization request header field with the Bearer authentication scheme:</p><p class="p">Data providers SHOULD verify user identity and credentials.  The policies and processes used to perform user authentication and authorization, and the means through which access tokens are issued, are beyond the scope of this API specification. GA4GH recommends the use of the OAuth 2.0 framework (<a href="https://tools.ietf.org/html/rfc6749">RFC 6749</a>) for authentication and authorization.  It is also recommended that implementations of this standard also implement and follow the GA4GH <a href="https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow">Authentication and Authorization Infrastructure (AAI) standard</a>.</p><li id="_design_cors" class="doc-counter heading tier2 avoid-navbar"><span>CORS</span></li><p class="p">Cross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.</p><p class="p">GA4GH is publishing a <a href="https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing">CORS best practices document</a>, which implementers should refer to for guidance when enabling CORS on public API instances.</p></ol>
+          </li>
+        </div>
+
+          <div class="section">
+            <li id="_paths" class="heading tier1 doc-counter avoid-navbar">
+              <span>Paths</span>
+              <ol class="doc-counter">
+                  <li id="_paths_projects" class="heading tier2 doc-counter avoid-navbar">
+                    <span>projects</span>
+                    <ol class="doc-counter">
+                          <li id="_paths_projects_find_project_by_id" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Find project by ID</span>
+                            <p class="p">get /projects/{projectId}</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_projects_find_project_by_id_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Returns a single specified project</p>
+                              </li>
+
+                                <li id="_paths_projects_find_project_by_id_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">path</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">projectId</div>
+                                            <em>
+                                              required
+                                              
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">ID of project to return</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_projects_find_project_by_id_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_project">project</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">Invalid ID supplied</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">404</td>
+                                        <td class="tbl-cell">Project not found</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_projects_find_project_by_id_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>projects</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_projects_search_for_projects_matching_filters" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Search for projects matching filters</span>
+                            <p class="p">get /projects/search</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_projects_search_for_projects_matching_filters_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Search for projects matching filters</p>
+                              </li>
+
+                                <li id="_paths_projects_search_for_projects_matching_filters_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">tags</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">Comma separated tag list to filter by</td>
+                                          <td class="tbl-cell">
+                                              array
+                                                 [<em>string</em>]
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">version</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">version to return</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_projects_search_for_projects_matching_filters_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  
+                                                    [<a href="#_definitions_project"><em>project</em></a>]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">The requested data format is not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_projects_search_for_projects_matching_filters_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>projects</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_projects_returns_filters_for_project_searches" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Returns filters for project searches</span>
+                            <p class="p">get /projects/search/filters</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_projects_returns_filters_for_project_searches_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Get filters for project searches</p>
+                              </li>
+
+
+                              <li id="_paths_projects_returns_filters_for_project_searches_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  
+                                                    [<a href="#_definitions_searchfilter"><em>searchFilter</em></a>]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">The requested data format is not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_projects_returns_filters_for_project_searches_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>projects</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                    </ol>
+                  </li>
+                  <li id="_paths_studies" class="heading tier2 doc-counter avoid-navbar">
+                    <span>studies</span>
+                    <ol class="doc-counter">
+                          <li id="_paths_studies_find_study_by_id" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Find study by ID</span>
+                            <p class="p">get /studies/{studyId}</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_studies_find_study_by_id_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Returns a single specified study</p>
+                              </li>
+
+                                <li id="_paths_studies_find_study_by_id_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">path</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">studyId</div>
+                                            <em>
+                                              required
+                                              
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">ID of study to return</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_studies_find_study_by_id_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_study">study</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">Invalid ID supplied</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">404</td>
+                                        <td class="tbl-cell">Study not found</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_studies_find_study_by_id_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>studies</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_studies_search_for_studies_matching_filters" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Search for studies matching filters</span>
+                            <p class="p">get /studies/search</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_studies_search_for_studies_matching_filters_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Search for studies matching filters</p>
+                              </li>
+
+                                <li id="_paths_studies_search_for_studies_matching_filters_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">tags</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">Comma separated tag list to filter by</td>
+                                          <td class="tbl-cell">
+                                              array
+                                                 [<em>string</em>]
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">version</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">version to return</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_studies_search_for_studies_matching_filters_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  
+                                                    [<a href="#_definitions_study"><em>study</em></a>]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">The requested data format is not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_studies_search_for_studies_matching_filters_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>studies</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_studies_returns_filters_for_study_searches" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Returns filters for study searches</span>
+                            <p class="p">get /studies/search/filters</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_studies_returns_filters_for_study_searches_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Get filters for study searches</p>
+                              </li>
+
+
+                              <li id="_paths_studies_returns_filters_for_study_searches_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  
+                                                    [<a href="#_definitions_searchfilter"><em>searchFilter</em></a>]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">The requested data format is not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_studies_returns_filters_for_study_searches_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>studies</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                    </ol>
+                  </li>
+                  <li id="_paths_expressions" class="heading tier2 doc-counter avoid-navbar">
+                    <span>expressions</span>
+                    <ol class="doc-counter">
+                          <li id="_paths_expressions_find_expression_data_by_id" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Find expression data by ID</span>
+                            <p class="p">get /expressions/{expressionId}</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_expressions_find_expression_data_by_id_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Returns a single specified expression matrix</p>
+                              </li>
+
+                                <li id="_paths_expressions_find_expression_data_by_id_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">path</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">expressionId</div>
+                                            <em>
+                                              required
+                                              
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">ID of expression to return</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_expressions_find_expression_data_by_id_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_file">file</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">Invalid ID supplied</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">404</td>
+                                        <td class="tbl-cell">Expression not found</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_expressions_find_expression_data_by_id_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>expressions</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_expressions_get_output_formats" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Get output formats</span>
+                            <p class="p">get /expressions/formats</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_expressions_get_output_formats_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Returns a list of supported expression matrix formats</p>
+                              </li>
+
+
+                              <li id="_paths_expressions_get_output_formats_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  [string]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">404</td>
+                                        <td class="tbl-cell">Format list not found</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_expressions_get_output_formats_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>expressions</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_expressions_search_for_expressions_matching_filters" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Search for expressions matching filters</span>
+                            <p class="p">get /expressions/search</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_expressions_search_for_expressions_matching_filters_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Search for expressions matching filters</p>
+                              </li>
+
+                                <li id="_paths_expressions_search_for_expressions_matching_filters_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">format</div>
+                                            <em>
+                                              required
+                                              
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">Data format to return</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">tags</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">Comma separated tag list to filter by</td>
+                                          <td class="tbl-cell">
+                                              array
+                                                 [<em>string</em>]
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">sampleIDList</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">comma separated list of sampleIDs to match</td>
+                                          <td class="tbl-cell">
+                                              array
+                                                 [<em>string</em>]
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">projectID</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">project to filter by</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">studyID</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">study to filter by</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">version</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">version to filter by</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">featureIDList</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">return only values for listed feature IDs</td>
+                                          <td class="tbl-cell">
+                                              array
+                                                 [<em>string</em>]
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">featureNameList</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">return only values for listed features</td>
+                                          <td class="tbl-cell">
+                                              array
+                                                 [<em>string</em>]
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_expressions_search_for_expressions_matching_filters_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">Successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  
+                                                    [<a href="#_definitions_file"><em>file</em></a>]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">The requested data format is not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_expressions_search_for_expressions_matching_filters_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>expressions</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_expressions_returns_filters_for_expression_searches" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Returns filters for expression searches</span>
+                            <p class="p">get /expressions/search/filters</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_expressions_returns_filters_for_expression_searches_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Get filters for expression searches</p>
+                              </li>
+
+                                <li id="_paths_expressions_returns_filters_for_expression_searches_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">type</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">one of <span class="code">feature</span> or <span class="code">sample</span> reflecting which axis to request filters for.  If blank, both will be returned</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_expressions_returns_filters_for_expression_searches_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  
+                                                    [<a href="#_definitions_searchfilter"><em>searchFilter</em></a>]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">The requested data format is not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_expressions_returns_filters_for_expression_searches_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>expressions</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                    </ol>
+                  </li>
+                  <li id="_paths_continuous" class="heading tier2 doc-counter avoid-navbar">
+                    <span>continuous</span>
+                    <ol class="doc-counter">
+                          <li id="_paths_continuous_retrieve_continuous_signal_data_by_id" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Retrieve continuous signal data by ID</span>
+                            <p class="p">get /continuous/{continuousId}</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_continuous_retrieve_continuous_signal_data_by_id_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Returns a single specified signal matrix</p>
+                              </li>
+
+                                <li id="_paths_continuous_retrieve_continuous_signal_data_by_id_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">path</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">continuousId</div>
+                                            <em>
+                                              required
+                                              
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">ID of continuous matrix to return</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">chr</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">The refererence to which start and end apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">start</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">The start position of the range on the sequence, 0-based, inclusive.</td>
+                                          <td class="tbl-cell">
+                                              integer
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">end</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">The end position of the range on the sequence, 0-based, exclusive.</td>
+                                          <td class="tbl-cell">
+                                              integer
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_continuous_retrieve_continuous_signal_data_by_id_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                string
+
+
+                                              (application/vnd.loom)
+                                            </div>
+                                            <div>
+                                                string
+
+
+                                              (text/tab-separated-values)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">Invalid ID supplied</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/vnd.loom)
+                                            </div>
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (text/tab-separated-values)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">404</td>
+                                        <td class="tbl-cell">Continuous matrix not found</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/vnd.loom)
+                                            </div>
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (text/tab-separated-values)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/vnd.loom)
+                                            </div>
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (text/tab-separated-values)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/vnd.loom)
+                                            </div>
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (text/tab-separated-values)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_continuous_retrieve_continuous_signal_data_by_id_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>continuous</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_continuous_get_output_formats" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Get output formats</span>
+                            <p class="p">get /continuous/formats</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_continuous_get_output_formats_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Returns a list of supported continuous matrix formats</p>
+                              </li>
+
+
+                              <li id="_paths_continuous_get_output_formats_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  [string]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">404</td>
+                                        <td class="tbl-cell">Format list not found</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_continuous_get_output_formats_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>continuous</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_continuous_search_for_continuous_data_matching_filters" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Search for continuous data matching filters</span>
+                            <p class="p">get /continuous/search</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_continuous_search_for_continuous_data_matching_filters_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Search for continuous data matching filters</p>
+                              </li>
+
+                                <li id="_paths_continuous_search_for_continuous_data_matching_filters_parameters" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Parameters</span>
+                                  <table class="tbl">
+                                    <thead>
+                                      <tr class="tbl-header">
+                                        <th class="tbl-cell">Type</th>
+                                        <th class="tbl-cell">Name</th>
+                                        <th class="tbl-cell">Description</th>
+                                        <th class="tbl-cell">Schema</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">format</div>
+                                            <em>
+                                              required
+                                              
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">Data format to return</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">tags</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">Comma separated tag list to filter by</td>
+                                          <td class="tbl-cell">
+                                              array
+                                                 [<em>string</em>]
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">sampleIDList</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">comma separated list of sampleIDs to match</td>
+                                          <td class="tbl-cell">
+                                              array
+                                                 [<em>string</em>]
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">studyID</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">study to filter by</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">version</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">version to filter by</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">chr</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">The refererence to which start and end apply in the form chr? where ? is the specific ID of the chromosome (ex. chr1, chrX).</td>
+                                          <td class="tbl-cell">
+                                              string
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">start</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">The start position of the range on the sequence, 0-based, inclusive.</td>
+                                          <td class="tbl-cell">
+                                              integer
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td class="tbl-cell bold">query</td>
+                                          <td class="tbl-cell">
+                                            <div class="bold">end</div>
+                                            <em>
+                                              
+                                              optional
+                                            </em>
+                                          </td>
+                                          <td class="tbl-cell">The end position of the range on the sequence, 0-based, exclusive.</td>
+                                          <td class="tbl-cell">
+                                              integer
+                                          </td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </li>
+
+                              <li id="_paths_continuous_search_for_continuous_data_matching_filters_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">Successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  
+                                                    [<a href="#_definitions_file"><em>file</em></a>]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">The requested data format is not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                
+
+
+                                                  <a href="#_definitions_error">error</a>
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_continuous_search_for_continuous_data_matching_filters_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>continuous</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                          <li id="_paths_continuous_returns_filters_for_continuous_searches" class="heading tier3 doc-counter avoid-navbar">
+                            <span>Returns filters for continuous searches</span>
+                            <p class="p">get /continuous/search/filters</p>
+
+                            <ol class="doc-counter">
+                              <li id="_paths_continuous_returns_filters_for_continuous_searches_description" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Description</span>
+                                <p class="p">Get filters for continuous searches</p>
+                              </li>
+
+
+                              <li id="_paths_continuous_returns_filters_for_continuous_searches_responses" class="heading tier4 doc-counter avoid-navbar">
+                                <span>Responses</span>
+                                <table class="tbl">
+                                  <thead>
+                                    <tr class="tbl-header">
+                                      <th class="tbl-cell">HTTP Code</th>
+                                      <th class="tbl-cell">Description</th>
+                                      <th class="tbl-cell">Schema</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td class="tbl-cell">200</td>
+                                        <td class="tbl-cell">successful operation</td>
+                                        <td class="tbl-cell">
+                                            <div>
+                                                array
+
+                                                  
+                                                    [<a href="#_definitions_searchfilter"><em>searchFilter</em></a>]
+
+                                              (application/json)
+                                            </div>
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">400</td>
+                                        <td class="tbl-cell">The requested data format is not supported</td>
+                                        <td class="tbl-cell">
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">406</td>
+                                        <td class="tbl-cell">Requested formatting not supported</td>
+                                        <td class="tbl-cell">
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td class="tbl-cell">501</td>
+                                        <td class="tbl-cell">The specified request is not supported by the server</td>
+                                        <td class="tbl-cell">
+                                        </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </li>
+
+                                <li id="_paths_continuous_returns_filters_for_continuous_searches_tags" class="heading tier4 doc-counter avoid-navbar">
+                                  <span>Tags</span>
+                                  <ul class="p">
+                                      <li>continuous</li>
+                                  </ul>
+                                </li>
+
+                            </ol>
+                          </li>
+                    </ol>
+                  </li>
+              </ol>
+            </li>
+          </div>
+
+            <div class="section">
+              <li id="_definitions" class="heading tier1 doc-counter avoid-navbar">
+                <span>Definitions</span>
+                <ol class="doc-counter">
+                    <li id="_definitions_project" class="heading tier2 doc-counter avoid-navbar">
+                      <span>project</span>
+                      <p class="p"></p>
+                      <table class="tbl">
+                        <thead>
+                          <tr class="tbl-header">
+                            <th class="tbl-cell">Property Name</th>
+                            <th class="tbl-cell">Description</th>
+                            <th class="tbl-cell">Schema</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                              <td class="tbl-cell bold">id</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">version</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">tags</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                array
+                                [<em>string</em>]
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">name</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">description</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </li>
+                    <li id="_definitions_study" class="heading tier2 doc-counter avoid-navbar">
+                      <span>study</span>
+                      <p class="p"></p>
+                      <table class="tbl">
+                        <thead>
+                          <tr class="tbl-header">
+                            <th class="tbl-cell">Property Name</th>
+                            <th class="tbl-cell">Description</th>
+                            <th class="tbl-cell">Schema</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                              <td class="tbl-cell bold">id</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">version</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">tags</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                array
+                                [<em>string</em>]
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">name</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">description</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">parentProjectID</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">genome</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">sampleList</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                array
+                                [<em>string</em>]
+                              </td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </li>
+                    <li id="_definitions_searchfilter" class="heading tier2 doc-counter avoid-navbar">
+                      <span>searchFilter</span>
+                      <p class="p">parameter name to use for filter when searching</p>
+                      <table class="tbl">
+                        <thead>
+                          <tr class="tbl-header">
+                            <th class="tbl-cell">Property Name</th>
+                            <th class="tbl-cell">Description</th>
+                            <th class="tbl-cell">Schema</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                              <td class="tbl-cell bold">filter</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">fieldType</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">description</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">values</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                array
+                                [<em>string</em>]
+                              </td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </li>
+                    <li id="_definitions_file" class="heading tier2 doc-counter avoid-navbar">
+                      <span>file</span>
+                      <p class="p">URL and type for data files</p>
+                      <table class="tbl">
+                        <thead>
+                          <tr class="tbl-header">
+                            <th class="tbl-cell">Property Name</th>
+                            <th class="tbl-cell">Description</th>
+                            <th class="tbl-cell">Schema</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                              <td class="tbl-cell bold">version</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">tags</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                array
+                                [<em>string</em>]
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">fileType</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">studyID</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">url</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">units</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">headers</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                object
+                                
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="tbl-cell bold">md5</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </li>
+                    <li id="_definitions_error" class="heading tier2 doc-counter avoid-navbar">
+                      <span>error</span>
+                      <p class="p">General API error model</p>
+                      <table class="tbl">
+                        <thead>
+                          <tr class="tbl-header">
+                            <th class="tbl-cell">Property Name</th>
+                            <th class="tbl-cell">Description</th>
+                            <th class="tbl-cell">Schema</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                              <td class="tbl-cell bold">message</td>
+                              <td class="tbl-cell"></td>
+                              <td class="tbl-cell">
+                                string
+                                
+                              </td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </li>
+                </ol>
+              </li>
+            </div>
+
+
+        <div class="section">
+          <li id="_background" class="heading tier1 doc-counter avoid-navbar">
+            <span class="section-header">Appendix: General background on RNA Data</span><ol class="doc-counter"><p class="p">Transcriptome profiling of a cell, tissue, or tumor is a powerful and universal phenotyping tool in both research and clinical settings.  When a mutation or epigenetic aberration exerts its biological effects, the affected cells and tissues typically display multiple quantitative and qualitative changes in gene expression, often in coherent pathways and structures.  While pioneering studies used microarray-based methods to profile the transcriptome, the main contemporary method for genome-wide profiling of gene expression is RNA-seq, which is based on DNA sequencing of cDNA made from RNA.</p><p class="p">Gene expression output in the form of quantifications needs to cover several forms.  The most basic is aggregate gene quantification but it is also very important to support transcript level quantification.  This can be further broken down into the exon level as well as splice junction quantification.  Additionally, it is very common for an investigator to want to look at differential comparisons between multiple related RNA quantifications.  For bulk RNA it is not uncommon to just download the full quantification results for the set of comparable experiments for later comparison.  In the single cell RNA-seq world each cell is an experiment so to do the same will result in potentially millions of files.  This will be a significant challenge to both download and manage on the client end.</p><li id="_background_target_users" class="doc-counter heading tier1 avoid-navbar"><span class="section-header">Target Users</span></li><p class="p">We aim to build this infrastructure to be useful for three distinct groups of users of the data servers which implement the API.</p><ol><li class="p"><p class="p">Research data scientists who integrate new and/or existing datasets to derive new hypotheses and experimental paradigms</p></li><li class="p"><p class="p">Methodologists who are developing new analytical methods in this API for RNA-seq analysis - including quantification, differential expression, dimension reduction and clustering modules.</p></li><li class="p"><p class="p">Data aggregators and portal developers who are creating computational solutions to collecting and analyzing large scale (multi-million+ samples) datasets</p></li></ol><li id="_background_use_case_overview" class="doc-counter heading tier1 avoid-navbar"><span class="section-header">Use Case Overview</span></li><p class="p">The collected use cases are organized into several categories.  Two of these are query based and influence the data to be returned via the API.  These will generally be called early in a downstream analysis pipeline to focus on relevant input datasets.</p><li id="_background_metadata-based_searches" class="doc-counter heading tier3 avoid-navbar"><span>Metadata-based Searches</span></li><p class="p">Metadata-based searches filter the search query on one or more of the annotated metadata items associated with the samples.  These include:</p><ul><li class="p"><p class="p">Cell type</p></li><li class="p"><p class="p">Condition</p></li><li class="p"><p class="p">Gene or set of genes</p></li></ul><li id="_background_data-based_searches" class="doc-counter heading tier3 avoid-navbar"><span>Data-based Searches</span></li><p class="p">A set of use cases require data-based searches.  These are characterized by attempting to filter the response based on similarity to user supplied expression data.  This expression profile to match may be either for one of more cells or for a set of specified genes.  A key feature of these data-based queries is that expression data in the form of a vector or similar construct needs to be provided as an argument to the query.</p><ul><li class="p"><p class="p">Match to input cell expression values</p></li><li class="p"><p class="p">Match profile and filter by metadata</p></li></ul><li id="_background_matrix_manipulation" class="doc-counter heading tier3 avoid-navbar"><span>Matrix Manipulation</span></li><p class="p">A set of use cases describe manipulation of the expression matrix.  This supports operations on subsets of the original matrix for remote processing either serially or in parallel.  It is important to note that these use cases are designed around slices of a matrix and not filters on the contents of the matrix.</p><ul><li class="p"><p class="p">Slice along columns and/or rows</p></li><li class="p"><p class="p">Support out of core compute</p></li><li class="p"><p class="p">Stream chunks of the matrix</p></li></ul></ol>
+          </li>
+        </div>
+
+    </ol>
+  </div>
+</div>
+
+  </body>
+</html>

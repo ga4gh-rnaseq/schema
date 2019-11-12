@@ -3,6 +3,9 @@ info:
   title: RNAget API
   description: A set of endpoints for search and retrieval of processed RNA data
   version: 1.0.0
+  contact:
+    name: GA4GH RNASeq Working Group
+    email: ga4gh-rnaseq@ga4gh.org
 tags:
   - name: projects
     description: High level collection of studies
