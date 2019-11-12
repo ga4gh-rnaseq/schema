@@ -488,6 +488,9 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/sampleIDListParam"
+        - $ref: "#/components/parameters/featureIDListParam"
+        - $ref: "#/components/parameters/featureNameListParam"
       responses:
         "200":
           description: successful operation
