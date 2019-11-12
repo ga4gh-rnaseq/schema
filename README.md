@@ -10,9 +10,7 @@ For the software developer, these common endpoints and patterns make it easier t
 
 ## Getting started with RNAget
 
-This repository has several files describing the RNAget API specification:
-
-* The [API specification document](https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget.md)
+* The interactive ReDoc [API specification document](https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/master/rnaget-openapi.yaml)
 * A [machine-readable](https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget-openapi.yaml) OpenAPI instance of the specification. View in [online visualizer](https://editor.swagger.io/?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/master/rnaget-openapi.yaml)
 * Introduction to accessing and [testing implementations](https://github.com/ga4gh-rnaseq/schema/blob/master/testing/README.md) for compliance
 * Additional [background](https://github.com/ga4gh-rnaseq/schema/blob/master/rna_seq_design_notes.md) on the API
