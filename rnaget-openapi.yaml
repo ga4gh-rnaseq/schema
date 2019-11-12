@@ -106,6 +106,9 @@ info:
     1.0.0    Initial release version
 
   version: 1.0.0
+  contact:
+    name: GA4GH RNA-seq Working Group
+    email: ga4gh-rnaseq@ga4gh.org
 externalDocs:
   description: Find out more about GA4GH
   url: http://ga4gh.org
@@ -533,6 +536,9 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/sampleIDListParam"
+        - $ref: "#/components/parameters/featureIDListParam"
+        - $ref: "#/components/parameters/featureNameListParam"
       responses:
         "200":
           description: successful operation
