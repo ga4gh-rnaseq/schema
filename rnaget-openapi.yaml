@@ -109,6 +109,9 @@ info:
   contact:
     name: GA4GH RNA-seq Working Group
     email: ga4gh-rnaseq@ga4gh.org
+  license:
+    name: Apache 2.0
+    url: https://github.com/ga4gh-rnaseq/schema/blob/master/LICENSE
 externalDocs:
   description: Find out more about GA4GH
   url: http://ga4gh.org
@@ -561,49 +564,25 @@ paths:
         "400":
           description: Invalid ID supplied
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "404":
           description: Expression not found
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "406":
           description: Requested formatting not supported
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "501":
           description: The specified request is not supported by the server
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
       security:
@@ -706,37 +685,19 @@ paths:
         "400":
           description: The requested data format is not supported
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "406":
           description: Requested formatting not supported
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "501":
           description: The specified request is not supported by the server
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
       security:
@@ -927,55 +888,31 @@ paths:
         "400":
           description: Invalid ID supplied
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "404":
           description: Continuous matrix not found
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "406":
           description: Requested formatting not supported
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "501":
           description: The specified request is not supported by the server
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
       security:
         - rnaget_auth:
             - read:continuous
-  /continuous/ticket:
+  /continuous/tickets:
     get:
       tags:
         - continuous
@@ -1062,37 +999,19 @@ paths:
         "400":
           description: The requested data format is not supported
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "406":
           description: Requested formatting not supported
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
         "501":
           description: The specified request is not supported by the server
           content:
-            application/octet-stream:
-              schema:
-                $ref: "#/components/schemas/error"
-            application/vnd.loom:
-              schema:
-                $ref: "#/components/schemas/error"
-            text/tab-separated-values:
+            application/json:
               schema:
                 $ref: "#/components/schemas/error"
       security:
@@ -1193,6 +1112,7 @@ components:
   schemas:
     project:
       type: object
+      description: The project is the top level of the model hierarchy and contains one or more studies.
       properties:
         id:
           type: string
@@ -1217,6 +1137,7 @@ components:
         url: https://github.com/ga4gh-rnaseq/schema
     study:
       type: object
+      description: The study is a container for one or more related RNA expression matrices.
       properties:
         id:
           type: string
@@ -1249,7 +1170,7 @@ components:
         url: https://github.com/ga4gh-rnaseq/schema
     filter:
       type: object
-      description: parameter name to use for filter when searching
+      description: Implementation defined parameter to use for filtering collections
       properties:
         filter:
           type: string
@@ -1336,7 +1257,7 @@ components:
     sampleIDListParam:
       name: sampleIDList
       in: query
-      description: comma separated list of sampleIDs to match
+      description: return only values for listed sampleIDs
       required: false
       style: form
       explode: false

@@ -40,3 +40,10 @@ A group or organization can use the RNAget API to make their data available to u
 
 The API specification describes a common data retrieval interface.  The purpose is to make it easy to retrieve data from any compatible server for use in downstream local analyses.  The RNAget API does not contain analytical tools.  It describes the format of the requests that should be sent to servers to search, slice and retrieve RNA data as well as the format of the responses.  Client software compatible with these specifications can access data from any compliant server without having to rewrite the interface.
 
+# License
+
+See the [LICENSE](LICENSE).
+
+# More Information
+
+* [Global Alliance for Genomics and Health](http://genomicsandhealth.org)
