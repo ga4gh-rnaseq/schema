@@ -230,8 +230,8 @@ paths:
     get:
       tags:
         - projects
-      summary: Find project by ID
-      description: Returns a single specified project
+      summary: Get a single project by ID
+      description: Returns the project matching the provided ID
       operationId: getProjectById
       parameters:
         - name: projectId
@@ -318,7 +318,7 @@ paths:
       tags:
         - projects
       summary: Returns filters for project searches
-      description: To support flexible search this provides a means of identifying the search filters supported by the data provider.
+      description: To support flexible search this provides a means of discovering the search filters supported by the data provider.
       operationId: getProjectFilters
       responses:
         "200":
@@ -354,8 +354,8 @@ paths:
     get:
       tags:
         - studies
-      summary: Find study by ID
-      description: Returns a single specified study
+      summary: Get a single study by ID
+      description: Returns the study matching the provided ID
       operationId: getStudyById
       parameters:
         - name: studyId
@@ -442,7 +442,7 @@ paths:
       tags:
         - studies
       summary: Returns filters for study searches
-      description: To support flexible search this provides a means of identifying the search filters supported by the data provider.
+      description: To support flexible search this provides a means of discovering the search filters supported by the data provider.
       operationId: getStudyFilters
       responses:
         "200":
@@ -640,9 +640,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ticket"
+                $ref: "#/components/schemas/ticket"
         "400":
           description: The requested data format is not supported
           content:
@@ -802,7 +800,7 @@ paths:
       tags:
         - expressions
       summary: Returns filters for expression searches
-      description: To support flexible search this provides a means of identifying the search filters supported by the data provider.
+      description: To support flexible search this provides a means of discovering the search filters supported by the data provider.
       operationId: getExpressionFilters
       parameters:
         - name: type
@@ -1003,9 +1001,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ticket"
+                $ref: "#/components/schemas/ticket"
         "400":
           description: The requested data format is not supported
           content:
@@ -1161,7 +1157,7 @@ paths:
       tags:
         - continuous
       summary: Returns filters for continuous searches
-      description: To support flexible search this provides a means of identifying the search filters supported by the data provider.
+      description: To support flexible search this provides a means of discovering the search filters supported by the data provider.
       operationId: searchContinuousFilters
       responses:
         "200":
@@ -1378,7 +1374,7 @@ components:
       schema:
         type: string
       example:
-        chr3
+        chr10
     startParam:
       name: start
       in: query
