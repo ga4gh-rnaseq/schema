@@ -1089,10 +1089,22 @@ paths:
                   $ref: "#/components/schemas/filter"
         "400":
           description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         "406":
           description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
         "501":
           description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
       security:
         - rnaget_auth:
             - read:continuous
@@ -1235,6 +1247,7 @@ components:
       properties:
         message:
           type: string
+          description: Error message details
   parameters:
     versionParam:
       name: version
