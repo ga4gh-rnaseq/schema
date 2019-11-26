@@ -1077,7 +1077,7 @@ paths:
         - continuous
       summary: Returns filters for continuous searches
       description: To support flexible search this provides a means of discovering the search filters supported by the data provider.
-      operationId: searchContinuousFilters
+      operationId: getContinuousFilters
       responses:
         "200":
           description: successful operation
