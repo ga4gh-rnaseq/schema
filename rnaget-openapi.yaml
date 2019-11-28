@@ -916,6 +916,7 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/projectIDParam"
         - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
@@ -964,6 +965,7 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/projectIDParam"
         - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
