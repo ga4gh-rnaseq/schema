@@ -1,0 +1,17 @@
+name: Validate spec
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12 
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - run: npm install -g swagger-cli
+    - run: swagger-cli validate rnaget-openapi.yaml
