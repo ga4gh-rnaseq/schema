@@ -602,12 +602,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: projectID
-          in: query
-          description: project to filter by
-          required: false
-          schema:
-            type: string
+        - $ref: "#/components/parameters/projectIDParam"
         - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
@@ -655,12 +650,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: projectID
-          in: query
-          description: project to filter by
-          required: false
-          schema:
-            type: string
+        - $ref: "#/components/parameters/projectIDParam"
         - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
@@ -926,6 +916,7 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/projectIDParam"
         - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
@@ -974,6 +965,7 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: "#/components/parameters/projectIDParam"
         - $ref: "#/components/parameters/studyIDParam"
         - $ref: "#/components/parameters/versionParam"
         - $ref: "#/components/parameters/sampleIDListParam"
@@ -1258,6 +1250,15 @@ components:
         type: string
       example:
         1.0
+    projectIDParam:
+      name: projectID
+      in: query
+      description: project to filter by
+      required: false
+      schema:
+        type: string
+      example:
+        9c0eba51095d3939437e220db196e27b
     studyIDParam:
       name: studyID
       in: query
