@@ -477,7 +477,7 @@ paths:
       security:
         - rnaget_auth:
             - read:study
-  "/expressions/{expressionId}/tickets":
+  "/expressions/{expressionId}/ticket":
     get:
       tags:
         - expressions
@@ -588,7 +588,7 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
-  /expressions/tickets:
+  /expressions/ticket:
     get:
       tags:
         - expressions
@@ -791,7 +791,7 @@ paths:
       security:
         - rnaget_auth:
             - read:expression
-  "/continuous/{continuousId}/tickets":
+  "/continuous/{continuousId}/ticket":
     get:
       tags:
         - continuous
@@ -902,7 +902,7 @@ paths:
       security:
         - rnaget_auth:
             - read:continuous
-  /continuous/tickets:
+  /continuous/ticket:
     get:
       tags:
         - continuous
