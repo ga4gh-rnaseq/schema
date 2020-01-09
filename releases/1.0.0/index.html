@@ -60,56 +60,54 @@
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_design_principles">Design principles</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_openapi_description">OpenAPI Description</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_compliance">Compliance</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_protocol_essentials">Protocol essentials</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_internet_media_types_handling">Internet Media Types Handling</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_errors">Errors</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_security">Security</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_cors">CORS</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_possible_future_api_enhancements">Possible Future API Enhancements</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_description_api_specification_change_log">API specification change log</a>
                   </li>
-                  
-                  
                   </ol>
                 </li>
       
+              <li class="toc-entry doc-counter">
+                <ol class="doc-counter">
+                  
+                      <a class="toc-link" href="#_using">Using the API</a>
+                  
+                  <li class="toc-entry doc-counter toc-tab1">
+                      <a class="toc-link" href="#_using_supported_rna_data_types">Supported RNA Data Types</a>
+                  </li>
+                  <li class="toc-entry doc-counter toc-tab1">
+                      <a class="toc-link" href="#_using_selecting_and_retrieving_the_rna_data_matrix">Selecting and Retrieving the RNA Data Matrix</a>
+                  </li>
+                  <li class="toc-entry doc-counter toc-tab1">
+                      <a class="toc-link" href="#_using_matrix_selection_by_id_vs._matrix_selection_and_joining_by_metadata">Matrix selection by ID vs. matrix selection and joining by metadata</a>
+                  </li>
+                  <li class="toc-entry doc-counter toc-tab1">
+                      <a class="toc-link" href="#_using_matrix_download_ticket_vs._bytes">Matrix Download: Ticket vs. Bytes</a>
+                  </li></ol>
+              </li>
       
                 <li class="toc-entry doc-counter">
                   <a class="toc-link" href="#_paths">Paths</a>
@@ -703,37 +701,27 @@
                   </li>
       
       
-              
-                  <li class="toc-entry doc-counter">
+              <li class="toc-entry doc-counter">
+                <ol class="doc-counter">
+                  
                       <a class="toc-link" href="#_background">Appendix: General background on RNA Data</a>
-                  </li>
-                  <ol class="doc-counter">
                   
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_background_target_users">Target Users</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_background_use_case_overview">Use Case Overview</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_background_metadatabased_searches">Metadata-based Searches</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_background_databased_searches">Data-based Searches</a>
                   </li>
-                  
-                  
                   <li class="toc-entry doc-counter toc-tab1">
                       <a class="toc-link" href="#_background_matrix_manipulation">Matrix Manipulation</a>
-                  </li>
-                  
-                  </ol>
+                  </li></ol>
+              </li>
           </ol>
         </div>
     </div>
@@ -790,6 +778,11 @@ specification by using our <a href="https://github.com/ga4gh-rnaseq/rnaget-compl
                 </li>
               </div>
 
+              <div class="section">
+                <li id="_using" class="heading tier1 doc-counter avoid-navbar">
+                  <span class="section-header">Using the API</span><ol class="doc-counter"><li id="_using_supported_rna_data_types" class="doc-counter heading tier2 avoid-navbar"><span>Supported RNA Data Types</span></li><p class="p"><strong>Expression</strong> refers to feature-based quantifications.  The output from RNA-seq quantification software (e.g. RSEM, kallisto or Cell Ranger) is Expression data.  Features may be genes, transcripts or any annotated region of the genome.  Quantifications may be counts (raw or estimated) or calculated values such as TPM or FPKM.</p><p class="p"><strong>Continuous</strong> refers to genomic coordinate-based counts at every base in an interval.  A wiggle file used for visualizing expression in a genome browser is an example of Continuous data.</p><li id="_using_selecting_and_retrieving_the_rna_data_matrix" class="doc-counter heading tier2 avoid-navbar"><span>Selecting and Retrieving the RNA Data Matrix</span></li><p class="p">RNAget supports two means of selecting RNA data: selection by ID and selection by metadata.  For each of these, the resultant matrix can either be downloaded as an inline attachment or a ticket object containing a download URL can be requested.  The API flow for both Expression and Continuous are nearly identical, differing only in data-type specific row/column filtering parameters.</p><p class="p"><img src="https://raw.githubusercontent.com/jb-adams/ga4gh-autodocs/master/standards/RNAget/releases/1.0.0/img/figure1.png" alt="selecting and retrieving the RNA Data Matrix"></p><li id="_using_matrix_selection_by_id_vs._matrix_selection_and_joining_by_metadata" class="doc-counter heading tier2 avoid-navbar"><span>Matrix selection by ID vs. matrix selection and joining by metadata</span></li><p class="p">Expression and continuous matrices can be selected by one of two methods: by <strong>ID</strong> or <strong>matrix metadata</strong>, depending on the requested endpoint.</p><p class="p"><strong>Matrix selection by ID</strong></p><p class="p">Expression/continuous matrices can be stored as permanent objects and referenced by a single, persistent, unique identifier (ID). Using the ID as a path parameter, the client can request the associated matrix for download.</p><p class="p">The client can also filter expression matrix rows/columns (by sampleIDList, featureIDList, and featureNameList query parameters) or continuous matrix columns (by chr, start, and end query parameters). This will result in a dynamically-generated matrix containing only the requested rows and columns found in the original matrix.</p><p class="p">In summary, requesting a matrix by its ID will:</p><ol><li class="p"><p class="p">Find the matrix associated with the specified ID</p></li><li class="p"><p class="p">(if filtering parameters provided) Filter the matrix, only providing the requested rows/columns</p></li><li class="p"><p class="p">Make the new matrix available for download</p></li></ol><p class="p">The following API endpoints will return a single matrix according to the requested ID, its rows/columns filtered according to filter criteria:</p><ul><li class="p"><p class="p"><span class="code">/expressions/{expressionId}/ticket</span></p></li><li class="p"><p class="p"><span class="code">/expressions/{expressionId}/bytes</span></p></li><li class="p"><p class="p"><span class="code">/continuous/{continuousId}/ticket</span></p></li><li class="p"><p class="p"><span class="code">/continuous/{continuousId}/bytes</span></p></li></ul><p class="p"><strong>Matrix selection and joining by metadata</strong></p><p class="p">Each permanent matrix has associated metadata (version, parent project id, parent study id, etc). Using query string parameters, the client can request all matrices with metadata properties matching requested values. For example, the client can request all matrices with a parent study id of <span class="code">f3ba0b59bed0fa2f1030e7cb508324d1</span>.</p><p class="p">Matrices requested via this method are joined into a single matrix, containing all rows/columns. The client can also filter the joined matrix rows/columns by query parameters.</p><p class="p">In summary, requesting a set of matrices by metadata properties will:</p><ol><li class="p"><p class="p">Find all matrices that match all requested metadata property values (i.e. AND filtering)</p></li><li class="p"><p class="p">Combine the set of matrices into a single, joined matrix</p></li><li class="p"><p class="p">(if filtering parameters provided) Filter the matrix, only providing the requested rows/columns</p></li><li class="p"><p class="p">Make the new matrix available for download</p></li></ol><p class="p">The following API endpoints will join multiple matrices into a single matrix, then filter rows/columns according to filter criteria:</p><ul><li class="p"><p class="p"><span class="code">/expressions/ticket</span></p></li><li class="p"><p class="p"><span class="code">/continuous/ticket</span></p></li><li class="p"><p class="p"><span class="code">/expressions/bytes</span></p></li><li class="p"><p class="p"><span class="code">/continuous/bytes</span></p></li></ul><li id="_using_matrix_download_ticket_vs._bytes" class="doc-counter heading tier2 avoid-navbar"><span>Matrix Download: Ticket vs. Bytes</span></li><p class="p">Expression and continuous matrices can be downloaded in one of two ways: by <strong>ticket</strong> or <strong>bytes</strong>, depending on the requested endpoint.</p><p class="p"><strong>Ticket</strong></p><p class="p">The JSON response from certain expression and continuous-related endpoints is a <strong>ticket</strong>, which provides the client with all information required to download the desired data in the specified format. The ticket contains a url (and optionally, auth or formatting headers) that the client can submit an additional request to in order to download a dynamically-generated matrix. Thus, the ticket API flow involves 2 requests to obtain the expression or continuous matrix: the first request obtains the ticket, and the second request returns the matrix from the url and headers specified in the ticket. The ticket flow, while more complex, is also modular, enabling additional auth mechanisms to access data.</p><p class="p">The following API endpoints will return a JSON ticket:</p><ul><li class="p"><p class="p"><span class="code">/expressions/{expressionId}/ticket</span></p></li><li class="p"><p class="p"><span class="code">/expressions/ticket</span></p></li><li class="p"><p class="p"><span class="code">/continuous/{continuousId}/ticket</span></p></li><li class="p"><p class="p"><span class="code">/continuous/ticket</span></p></li></ul><p class="p"><strong>Bytes</strong></p><p class="p">In contrast to a JSON ticket request, a <strong>bytes</strong> request yields the matrix file directly. The bytes API flow involves a single request, the response of which contains the dynamically-generated matrix.</p><p class="p">The following API endpoints will return matrix bytes directly:</p><ul><li class="p"><p class="p"><span class="code">/expressions/{expressionId}/bytes</span></p></li><li class="p"><p class="p"><span class="code">/expressions/bytes</span></p></li><li class="p"><p class="p"><span class="code">/continuous/{continuousId}/bytes</span></p></li><li class="p"><p class="p"><span class="code">/continuous/bytes</span></p></li></ul><p class="p">Requests to ticket vs. bytes differ only in the overall API flow needed to download the matrix, not the matrix content itself. For example, the following requests will yield the exact same matrix:</p><ul><li class="p"><p class="p"><span class="code">/expressions/ac3e9279efd02f1c98de4ed3d335b98e/ticket</span></p></li><li class="p"><p class="p"><span class="code">/expressions/ac3e9279efd02f1c98de4ed3d335b98e/bytes</span></p></li></ul></ol>
+                </li>
+              </div>
 
                 <div class="section">
                   <li id="_paths" class="heading tier1 doc-counter avoid-navbar">
@@ -1478,7 +1471,7 @@ specification by using our <a href="https://github.com/ga4gh-rnaseq/rnaget-compl
                           <ol class="doc-counter">
                                 <li id="_paths_expressions_get_specific_expression_data_ticket" class="heading tier3 doc-counter avoid-navbar">
                                   <span>Get specific expression data ticket</span>
-                                  <p class="p"><span class="code">GET /expressions/{expressionId}/tickets</span></p>
+                                  <p class="p"><span class="code">GET /expressions/{expressionId}/ticket</span></p>
 
                                   <ol class="doc-counter">
                                     <li id="_paths_expressions_get_specific_expression_data_ticket_description" class="heading tier4 doc-counter avoid-navbar">
@@ -1837,7 +1830,7 @@ specification by using our <a href="https://github.com/ga4gh-rnaseq/rnaget-compl
                                 </li>
                                 <li id="_paths_expressions_get_a_ticket_to_download_expression_data" class="heading tier3 doc-counter avoid-navbar">
                                   <span>Get a ticket to download expression data</span>
-                                  <p class="p"><span class="code">GET /expressions/tickets</span></p>
+                                  <p class="p"><span class="code">GET /expressions/ticket</span></p>
 
                                   <ol class="doc-counter">
                                     <li id="_paths_expressions_get_a_ticket_to_download_expression_data_description" class="heading tier4 doc-counter avoid-navbar">
@@ -2466,7 +2459,7 @@ ENSG00000000003 TSPAN6  12.4  15.6
                           <ol class="doc-counter">
                                 <li id="_paths_continuous_get_specific_continuous_data_ticket" class="heading tier3 doc-counter avoid-navbar">
                                   <span>Get specific continuous data ticket</span>
-                                  <p class="p"><span class="code">GET /continuous/{continuousId}/tickets</span></p>
+                                  <p class="p"><span class="code">GET /continuous/{continuousId}/ticket</span></p>
 
                                   <ol class="doc-counter">
                                     <li id="_paths_continuous_get_specific_continuous_data_ticket_description" class="heading tier4 doc-counter avoid-navbar">
@@ -2819,7 +2812,7 @@ ENSG00000000003 TSPAN6  12.4  15.6
                                 </li>
                                 <li id="_paths_continuous_get_a_ticket_to_download_continuous_data" class="heading tier3 doc-counter avoid-navbar">
                                   <span>Get a ticket to download continuous data</span>
-                                  <p class="p"><span class="code">GET /continuous/tickets</span></p>
+                                  <p class="p"><span class="code">GET /continuous/ticket</span></p>
 
                                   <ol class="doc-counter">
                                     <li id="_paths_continuous_get_a_ticket_to_download_continuous_data_description" class="heading tier4 doc-counter avoid-navbar">
