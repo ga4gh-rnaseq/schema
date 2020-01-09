@@ -12,8 +12,8 @@ For the software developer, these common endpoints and patterns make it easier t
 
 ## API Definition
 
-| Branch            | Reference        | OpenAPI YAML description | Swagger Validation
-|-------------------|------------------|--------------------------|-------------------|
+| Branch | Reference Documentation | OpenAPI YAML description | Swagger Validation
+|--------|-------------------------|--------------------------|-------------------|
 | **master**: the current release | [HTML](https://ga4gh-rnaseq.github.io/schema/releases/1.0.0/) | [ReDoc](https://ga4gh-rnaseq.github.io/schema/releases/1.0.0/redoc-ui.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/master/rnaget-openapi.yaml" /> |
 
 ### Testing and Compliance
