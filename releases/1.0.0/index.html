@@ -790,6 +790,14 @@ specification by using our <a href="https://github.com/ga4gh-rnaseq/rnaget-compl
                     <ol class="doc-counter">
                         <li id="_paths_projects" class="heading tier2 doc-counter avoid-navbar">
                           <span>projects</span>
+
+                            <p class="p">
+                              <p class="p">The project is the top level of the model hierarchy and contains a set of related studies.  Example projects include:</p><ul><li class="p"><p class="p">all data submitted by contributor X</p></li><li class="p"><p class="p">the local mirror of the European Nucleotide Archive data</p></li></ul>
+                            </p>
+                            <p class="p">
+                              <a href="https://github.com/ga4gh-rnaseq/schema">Find out more</a>
+                            </p>
+
                           <ol class="doc-counter">
                                 <li id="_paths_projects_get_a_single_project_by_id" class="heading tier3 doc-counter avoid-navbar">
                                   <span>Get a single project by ID</span>
@@ -1129,6 +1137,14 @@ specification by using our <a href="https://github.com/ga4gh-rnaseq/rnaget-compl
                         </li>
                         <li id="_paths_studies" class="heading tier2 doc-counter avoid-navbar">
                           <span>studies</span>
+
+                            <p class="p">
+                              <p class="p">The study is a set of related RNA expression values.  It is assumed all samples in a study have been processed uniformly.  Example studies include:</p><ul><li class="p"><p class="p">multiple tissues from all patients enrolled in clinical trial X</p></li><li class="p"><p class="p">a collection of liver samples from several sources which have been uniformly reprocessed for differential analysis</p></li></ul>
+                            </p>
+                            <p class="p">
+                              <a href="https://github.com/ga4gh-rnaseq/schema">Find out more</a>
+                            </p>
+
                           <ol class="doc-counter">
                                 <li id="_paths_studies_get_a_single_study_by_id" class="heading tier3 doc-counter avoid-navbar">
                                   <span>Get a single study by ID</span>
@@ -1468,6 +1484,14 @@ specification by using our <a href="https://github.com/ga4gh-rnaseq/rnaget-compl
                         </li>
                         <li id="_paths_expressions" class="heading tier2 doc-counter avoid-navbar">
                           <span>expressions</span>
+
+                            <p class="p">
+                              <p class="p">The expression is a matrix of calculated expression values.</p><span>Expression metadata</span><p class="p">This describes a set of minimal metadata appropriate for several types of RNA experiments.  The purpose is to define a common naming scheme for metadata to enable client software to have some expectation of data fields for improved interoperability.  These definitions are not intended to be a comprehensive set of metadata and defining such a universal set is beyond the scope of this effort.</p><p class="p">Where possible details are incorporated by reference.  This is to reduce the final size of matrix files, support existing metadata standards and support server-defined metadata fields.</p><p class="p">All field names are presented here in camel case.  Parsers should treat field names as case-insensitive and any white space contained in the field names should be ignored:</p><p class="p">sampleID == sampleid == Sample ID != sample_id</p><p class="p">All fields are optional. Fields that utilize an ontology term assume both an id and a label. Later implementations will utilize schemablocks and/or Phenopackets as referenced entities.</p><table class="tbl"><thead><tr><th class="tbl-cell tbl-header">Metadata Field</th><th class="tbl-cell tbl-header">Description</th></tr></thead><tbody><tr><td class="tbl-cell">sampleID</td><td class="tbl-cell">an identifier for the biological specimen the experiment was conducted on.  This id MUST uniquely identify the sample within the scope of the server</td></tr><tr><td class="tbl-cell">assayType</td><td class="tbl-cell">the type of experiment performed (ex. RNA-seq, ATAC-seq, ChIP-seq, DNase-Hypersensitivity, methylation profiling, histone profiling, microRNA profiling, transcription profiling, WGS)</td></tr><tr><td class="tbl-cell">samplePrepProtocol</td><td class="tbl-cell">reference to a resource or webpage describing the protocol used to obtain and prepare the sample</td></tr><tr><td class="tbl-cell">libraryPrepProtocol</td><td class="tbl-cell">reference to a resource or webpage describing the protocol used to prepare the library for sequencing</td></tr><tr><td class="tbl-cell">annotation</td><td class="tbl-cell">a reference to the specific annotation used for quantifying the reads</td></tr><tr><td class="tbl-cell">analysisPipeline</td><td class="tbl-cell">reference to a resource or webpage describing the analysis protocol.  This description should include a full listing of all software used including the exact version and command line options used.  If containerized software is used a reference to the specific containers should be included. The GA4GH <a href="https://github.com/ga4gh/tool-registry-service-schemas">Tool Registry Service</a> is a resource for discovering and registering genomic tools and workflows.</td></tr><tr><td class="tbl-cell">cellTypeID</td><td class="tbl-cell">a cell type term ID</td></tr><tr><td class="tbl-cell">cellTypeLabel</td><td class="tbl-cell">a cell type term label from the <a href="http://www.ontobee.org/ontology/CL">CL ontology</a></td></tr><tr><td class="tbl-cell">phenotypeID</td><td class="tbl-cell">phenotype ID applicable to the sample</td></tr><tr><td class="tbl-cell">phenotypeLabel</td><td class="tbl-cell">phenotype term (recommended ontologies: <a href="http://www.human-phenotype-ontology.org/">Human Phenotype Ontology</a>, <a href="http://www.obofoundry.org/ontology/ncit.html">NCIT</a>, or <a href="https://www.icd10data.com/">ICD</a>)</td></tr><tr><td class="tbl-cell">sexID</td><td class="tbl-cell">sex ID of the organism providing the sample</td></tr><tr><td class="tbl-cell">sexTerm</td><td class="tbl-cell">sex label of the organism providing the sample <a href="http://purl.obolibrary.org/obo/PATO_0000047">PATO 47 term</a></td></tr><tr><td class="tbl-cell">organismID</td><td class="tbl-cell">organism ID for the sample origin</td></tr><tr><td class="tbl-cell">organismlabel</td><td class="tbl-cell">organism label for the sample origin <a href="http://www.obofoundry.org/ontology/ncbitaxon.html">NCBITaxon</a></td></tr><tr><td class="tbl-cell">tissueID</td><td class="tbl-cell">tissue ID of origin or organism part of origin</td></tr><tr><td class="tbl-cell">tissueLabel</td><td class="tbl-cell">tissue Label of origin or organism part of origin (recommended to use <a href="http://www.obofoundry.org/ontology/uberon.html">Uberon</a></td></tr><tr><td class="tbl-cell">cellLineID</td><td class="tbl-cell">ID of cell line</td></tr><tr><td class="tbl-cell">cellLineLabel</td><td class="tbl-cell">Label of <a href="http://www.ontobee.org/ontology/CLO">cell line</a></td></tr></tbody></table><p class="p">For metadata ID values it is recommended that implementors use the <span class="code">id:label</span> CURIE notation as described in <a href="https://schemablocks.org/standards/identifiers-curies.html">Identifiers and CURIEs</a></p><span>Example metadata using CURIE</span><table class="tbl"><thead><tr><th class="tbl-cell tbl-header">Metadata Field</th><th class="tbl-cell tbl-header">Value</th></tr></thead><tbody><tr><td class="tbl-cell"><span class="code">organismID</span></td><td class="tbl-cell"><span class="code">NCBITaxon:9606</span></td></tr><tr><td class="tbl-cell"><span class="code">organismLabel</span></td><td class="tbl-cell"><span class="code">human</span></td></tr></tbody></table><span>The meaning of zero</span><p class="p">Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes which may not have 100% coverage of the annotation reference.  The consequence is that some features which show zero expression may not necessarily have a truly zero expression.  This idea can be extended further in the context of submitted data as well as potentially access restricted data.  The result is that a zero value can indicate one of several states:</p><ol><li class="p"><p class="p">_Not measured_ – not measured at all and value is not available</p></li><li class="p"><p class="p">_Not supplied_ – measured but not provided to the data repository</p></li><li class="p"><p class="p">_Restricted access_ – measured but require further authentication to view</p></li><li class="p"><p class="p">_Not applicable_ – measurement does not apply to the sample</p></li></ol><p class="p">If applicable, the <span class="code">NaN</span> value MUST be used to indicate these states.</p>
+                            </p>
+                            <p class="p">
+                              <a href="https://github.com/ga4gh-rnaseq/schema">Find out more</a>
+                            </p>
+
                           <ol class="doc-counter">
                                 <li id="_paths_expressions_get_specific_expression_data_ticket" class="heading tier3 doc-counter avoid-navbar">
                                   <span>Get specific expression data ticket</span>
@@ -2456,6 +2480,14 @@ ENSG00000000003 TSPAN6  12.4  15.6
                         </li>
                         <li id="_paths_continuous" class="heading tier2 doc-counter avoid-navbar">
                           <span>continuous</span>
+
+                            <p class="p">
+                              <p class="p">Continuous is a matrix of coordinate range based signal data</p>
+                            </p>
+                            <p class="p">
+                              <a href="https://github.com/ga4gh-rnaseq/schema">Find out more</a>
+                            </p>
+
                           <ol class="doc-counter">
                                 <li id="_paths_continuous_get_specific_continuous_data_ticket" class="heading tier3 doc-counter avoid-navbar">
                                   <span>Get specific continuous data ticket</span>
