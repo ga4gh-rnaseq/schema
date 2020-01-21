@@ -184,10 +184,10 @@ tags:
 
       Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on probes which may not have 100% coverage of the annotation reference.  The consequence is that some features which show zero expression may not necessarily have a truly zero expression.  This idea can be extended further in the context of submitted data as well as potentially access restricted data.  The result is that a zero value can indicate one of several states:
 
-      1. _Not measured_ – not measured at all and value is not available
-      2. _Not supplied_ – measured but not provided to the data repository
-      3. _Restricted access_ – measured but require further authentication to view
-      4. _Not applicable_ – measurement does not apply to the sample
+      1. _Not measured_ - not measured at all and value is not available
+      2. _Not supplied_ - measured but not provided to the data repository
+      3. _Restricted access_ - measured but require further authentication to view
+      4. _Not applicable_ - measurement does not apply to the sample
 
       If applicable, the `NaN` value MUST be used to indicate these states.
       
