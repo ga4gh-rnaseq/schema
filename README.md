@@ -14,7 +14,9 @@ For the software developer, these common endpoints and patterns make it easier t
 
 | Branch | Reference Documentation | OpenAPI YAML description | Swagger Validation
 |--------|-------------------------|--------------------------|-------------------|
-| **master**: the current release | [HTML](https://ga4gh-rnaseq.github.io/schema/releases/1.0.0/) | [ReDoc](https://ga4gh-rnaseq.github.io/schema/releases/1.0.0/redoc-ui.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/master/rnaget-openapi.yaml" /> |
+| **master**: the current release | [HTML](https://ga4gh-rnaseq.github.io/schema/master/) | [ReDoc](https://ga4gh-rnaseq.github.io/schema/master/redoc-ui.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/master/rnaget-openapi.yaml" /> |
+| **develop**: stable development branch | [HTML](https://ga4gh-rnaseq.github.io/schema/develop/) | [ReDoc](https://ga4gh-rnaseq.github.io/schema/develop/redoc-ui.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/develop/rnaget-openapi.yaml" /> |
+| **release/1.0.0**: RNAget version 1.0.0 | [HTML](https://ga4gh-rnaseq.github.io/schema/release/1.0.0/) | [ReDoc](https://ga4gh-rnaseq.github.io/schema/release/1.0.0/redoc-ui.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/release/1.0.0/rnaget-openapi.yaml" /> |
 
 ### Testing and Compliance
 
