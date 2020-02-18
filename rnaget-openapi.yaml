@@ -1103,17 +1103,17 @@ paths:
   /service-info:
     /service-info:
     get:
-      summary: 'Show information about this RNAget instance'
+      summary: "Show information about this RNAget instance"
       operationId: getServiceInfo
       tags:
         - service-info
       responses:
-        '200':
-          description: 'Use `type: org.ga4gh:RNAget:1.1.0` when implementing this specification.'
+        "200":
+          description: "Use `type: org.ga4gh:RNAget:1.1.0` when implementing this specification."
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Service'
+                $ref: "#/components/schemas/Service"
 components:
   securitySchemes:
     rnaget_auth:
@@ -1255,9 +1255,9 @@ components:
           type: string
           description: Error message details
 
-  Service:
-    # Links to the latest version of service-info.
-    $ref: 'https://raw.githubusercontent.com/ga4gh-discovery/ga4gh-service-info/v1.0.0/service-info.yaml#/components/schemas/Service'
+    Service:
+      # Links to the latest version of service-info.
+      $ref: 'https://raw.githubusercontent.com/ga4gh-discovery/ga4gh-service-info/v1.0.0/service-info.yaml#/components/schemas/Service'
   parameters:
     versionParam:
       name: version
