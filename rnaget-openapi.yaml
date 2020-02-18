@@ -1101,7 +1101,6 @@ paths:
         - rnaget_auth:
             - read:continuous
   /service-info:
-    /service-info:
     get:
       summary: "Show information about this RNAget instance"
       operationId: getServiceInfo
