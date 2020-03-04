@@ -1255,8 +1255,24 @@ components:
           type: string
           description: Error message details
     Service:
-      # Links to the latest version of service-info.
-      $ref: 'https://raw.githubusercontent.com/ga4gh-discovery/ga4gh-service-info/v1.0.0/service-info.yaml#/components/schemas/Service'
+      allOf:
+        - $ref: "https://raw.githubusercontent.com/ga4gh-discovery/ga4gh-service-info/v1.0.0/service-info.yaml#/components/schemas/Service"
+        - type: object
+          properties:
+            supported:
+              $ref: "#/components/schemas/Supported"
+    Supported:
+      type: object
+      description: A true value indicates that the corresponding route is implemented by the service.  A non-implemented route should have a false value and return a 501 error to any requests.  If any boolean property is not provided, it is assumed to be implemented. If the entire supported object is not provided, all endpoints are assumed to be implemented.
+      properties:
+          projects:
+            type: boolean
+          studies:
+            type: boolean
+          expressions:
+            type: boolean
+          continuous
+            type: boolean
   parameters:
     versionParam:
       name: version
