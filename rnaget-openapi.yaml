@@ -1271,7 +1271,7 @@ components:
             type: boolean
           expressions:
             type: boolean
-          continuous
+          continuous:
             type: boolean
   parameters:
     versionParam:
