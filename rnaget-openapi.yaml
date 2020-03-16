@@ -27,7 +27,7 @@ info:
 
     ## OpenAPI Description
 
-    An OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget-openapi.yaml). OpenAPI is an independent API description format for describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
+    An OpenAPI description of this specification is available and [describes the 1.1.0 version](rnaget-openapi.yaml). OpenAPI is an independent API description format for describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
 
     ## Compliance
 
@@ -45,7 +45,7 @@ info:
     Responses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version.  Unless negotiated with the client and allowed by the server, the default encoding is:
 
     ```
-    Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
+    Content-Type: application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii
     ```
 
     All response objects from the server are expected to be in JSON format, regardless of the response status code, unless otherwise negotiated with the client and allowed by the server.
@@ -60,8 +60,8 @@ info:
 
     When responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so
 
-      - `application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii`
-      - `application/vnd.ga4gh.rnaget.v1.0.0+json`
+      - `application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii`
+      - `application/vnd.ga4gh.rnaget.v1.1.0+json`
       - `application/json`    
 
     ## Errors
@@ -103,9 +103,10 @@ info:
 
     ## API specification change log
 
+    1.1.0    Adds /service-info endpoint
     1.0.0    Initial release version
 
-  version: 1.0.0
+  version: 1.1.0
   contact:
     name: GA4GH RNA-seq Working Group
     email: ga4gh-rnaseq@ga4gh.org
@@ -1100,6 +1101,19 @@ paths:
       security:
         - rnaget_auth:
             - read:continuous
+  /service-info:
+    get:
+      summary: "Show information about this RNAget instance"
+      operationId: getServiceInfo
+      tags:
+        - service-info
+      responses:
+        "200":
+          description: "Use `type: org.ga4gh:RNAget:1.1.0` when implementing this specification."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
 components:
   securitySchemes:
     rnaget_auth:
@@ -1240,6 +1254,25 @@ components:
         message:
           type: string
           description: Error message details
+    Service:
+      allOf:
+        - $ref: "https://raw.githubusercontent.com/ga4gh-discovery/ga4gh-service-info/v1.0.0/service-info.yaml#/components/schemas/Service"
+        - type: object
+          properties:
+            supported:
+              $ref: "#/components/schemas/Supported"
+    Supported:
+      type: object
+      description: A true value indicates that the corresponding route is implemented by the service.  A non-implemented route should have a false value and return a 501 error to any requests.  If any boolean property is not provided, it is assumed to be implemented. If the entire supported object is not provided, all endpoints are assumed to be implemented.
+      properties:
+          projects:
+            type: boolean
+          studies:
+            type: boolean
+          expressions:
+            type: boolean
+          continuous:
+            type: boolean
   parameters:
     versionParam:
       name: version
