@@ -200,6 +200,30 @@ tags:
     externalDocs:
       description: Find out more
       url: https://github.com/ga4gh-rnaseq/schema
+  - name: Service Info
+    description: |
+      The GA4GH Service Info specification provides a GA4GH-wide, structured format
+      for describing web services implementing GA4GH API specifications. RNAget
+      implements service info through the standard `/service-info` API endpoint,
+      and also extends the base model with additional attributes.
+
+      RNAget services MUST indicate that they support the RNAget protocol by
+      using an `artifact` value of `rnaget` in the service info `type` property.
+
+      ```
+      {
+        ...
+        "type": {
+          "group": "org.ga4gh",
+          "artifact": "rnaget",
+          "version": "1.1.0" 
+        }
+        ...
+      }
+      ```
+    externalDocs:
+      description: View the Service Info specification
+      url: https://github.com/ga4gh-discovery/ga4gh-service-info
   - name: projectModel
     x-displayName: The Project Model
     description: |
@@ -223,6 +247,7 @@ x-tagGroups:
       - studies
       - expressions
       - continuous
+      - Service Info
   - name: Models
     tags:
       - projectModel
@@ -1106,10 +1131,10 @@ paths:
       summary: "Show information about this RNAget instance"
       operationId: getServiceInfo
       tags:
-        - service-info
+        - Service Info
       responses:
         "200":
-          description: "Use `type: org.ga4gh:RNAget:1.1.0` when implementing this specification."
+          description: successful operation
           content:
             application/json:
               schema:
@@ -1259,6 +1284,12 @@ components:
         - $ref: "https://raw.githubusercontent.com/ga4gh-discovery/ga4gh-service-info/v1.0.0/service-info.yaml#/components/schemas/Service"
         - type: object
           properties:
+            type:
+                properties:
+                    artifact:
+                        example: rnaget
+                    version:
+                        example: 1.1.0
             supported:
               $ref: "#/components/schemas/Supported"
     Supported:
