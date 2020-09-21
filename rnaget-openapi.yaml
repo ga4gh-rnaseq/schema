@@ -727,8 +727,9 @@ paths:
       description: |
         The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  A data provider may use any internal storage format that they wish with no restrictions from this API.  To support development of interoperable clients, it is recommended that data providers MUST support at least 1 of the following common output formats:
 
-        * Tab delimited text (.tsv)
-        * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
+        * Tab delimited text (tsv)
+        * [Loom](https://linnarssonlab.org/loompy/format/index.html) (loom)
+        * [anndata](https://anndata.readthedocs.io/en/latest/) (anndata)
 
         A Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  There should be one header row following the comments.  Feature (genes/transcripts) names and/or ID fields should be the first columns of the header row and have the `string` type.  All following columns are for the samples and will have 32-bit `float` values in each row.
 
@@ -740,7 +741,9 @@ paths:
         ENSG00000000003 TSPAN6  12.4  15.6
         ```
 
-        A Loom format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by loom specification.
+        A Loom format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by the loom specification.
+
+        An anndata format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by the anndata specification.
       operationId: getExpressionFormats
       responses:
         "200":
