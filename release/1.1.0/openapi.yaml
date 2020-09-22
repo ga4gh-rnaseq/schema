@@ -1,0 +1,1847 @@
+openapi: 3.0.0
+servers:
+  - url: /rnaget
+info:
+  title: RNAget API
+  x-logo:
+    url: >-
+      https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg
+  description: >
+    ## Design principles
+
+
+    This API provides a means of retrieving data from several types of RNA
+    experiments including:
+
+
+    * Feature-level expression data from RNA-seq type measurements
+
+    * Coordinate-based signal/intensity data similar to a bigwig representation
+
+
+    via a client/server model.
+
+
+    Features of this API include:
+
+
+    * Support for a hierarchical data model which provides the option for
+    servers to associate expression data for discovery and retrieval
+
+    * Support for accessing subsets of expression data through slicing
+    operations on the expression matrix and/or query filters to specify features
+    to be included
+
+    * Support for accessing signal/intensity data by specifying a range of
+    genomic coordinates to be included
+
+
+    Out of the scope of this API are:
+
+
+    * A means of retrieving primary (raw) read sequence data. Input samples are
+    identified in expression output and data servers should implement additional
+    API(s) to allow for search and retrieval of raw reads. The [htsget
+    API](https://samtools.github.io/hts-specs/htsget.html) is designed for
+    retrieval of read data.
+
+    * A means of retrieving reference sequences. Servers should implement
+    additional API(s) to allow for search and retrieval of reference base
+    sequences. The [refget
+    API](https://samtools.github.io/hts-specs/refget.html) is designed for
+    retrieval of references sequences.
+
+    * A means of retrieving feature annotation details. Expression matrices
+    provide the identity of each mapped feature. Servers should implement
+    additional API(s) to allow for search and retrieval of genomic feature
+    annotation details.
+
+
+    ## OpenAPI Description
+
+
+    An OpenAPI description of this specification is available and [describes the
+    1.1.0 version](rnaget-openapi.yaml). OpenAPI is an independent API
+    description format for describing REST services and is compatible with a
+    number of [third party tools](http://openapi.tools/).
+
+
+    ## Compliance
+
+
+    Implementors can check if their RNAget implementations conform to the
+
+    specification by using our [compliance
+    suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).
+
+
+    ## Protocol essentials
+
+
+    All API invocations are made to a configurable HTTPS endpoint, receive
+    URL-encoded query string parameters and HTTP headers, and return text or
+    other allowed formatting as requested by the user. Queries containing
+    [unsafe or reserved](https://www.ietf.org/rfc/rfc1738.txt) characters in the
+    URL, including but not limited to "&", "/", "#", MUST encode all such
+    characters.  Successful requests result with HTTP status code 200 and have
+    the appropriate text encoding in the response body as defined for each
+    endpoint. The server may provide responses with chunked transfer encoding.
+    The client and server may mutually negotiate HTTP/2 upgrade using the
+    standard mechanism.
+
+
+    HTTP responses may be compressed using [RFC
+    2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html)
+    transfer-coding, not content-coding.
+
+
+    HTTP response may include a 3XX response code and Location header
+    redirecting the client to retrieve expression data from an alternate
+    location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231),
+    clients SHOULD be configured to follow redirects. `302`, `303` and `307` are
+    all valid response codes to use.
+
+
+    Responses from the server MUST include a Content-Type header containing the
+    encoding for the invoked method and protocol version.  Unless negotiated
+    with the client and allowed by the server, the default encoding is:
+
+
+    ```
+
+    Content-Type: application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii
+
+    ```
+
+
+    All response objects from the server are expected to be in JSON format,
+    regardless of the response status code, unless otherwise negotiated with the
+    client and allowed by the server.
+
+
+    Object IDs are intended for persistent retrieval of their respective
+    objects.  An object ID MUST uniquely identify an object within the scope of
+    a single data server.  It is beyond the scope of this API to enforce
+    uniqueness of ID among different data servers.  IDs are strings made up of
+    uppercase and lowercase letters, decimal digits, hypen, period, underscore
+    and tilde [A-Za-z0-9.-_~]. See [RFC 3986 §
+    2.3](https://tools.ietf.org/html/rfc3986#section-2.3).
+
+
+    Endpoints are described as HTTPS GET methods which will be sufficient for
+    most queries.  Queries containing multiple metadata filters may approach or
+    exceed the URL length limits.  To handle these types of queries it is
+    recommended that servers SHOULD implement parallel HTTPS POST endpoints
+    accepting the same URL parameters as a UTF8-encoded JSON key-value
+    dictionary.
+
+
+    When processing requests containing multiple filters and filters with lists
+    of items, the data provider MUST use a logical `AND` for selecting the
+    results to return.
+
+
+    ## Internet Media Types Handling
+
+
+    When responding to a request a server MUST use the fully specified media
+    type for that endpoint. When determining if a request is well-formed, a
+    server MUST allow a internet type to degrade like so
+
+      - `application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii`
+      - `application/vnd.ga4gh.rnaget.v1.1.0+json`
+      - `application/json`    
+
+    ## Errors
+
+
+    The server MUST respond with an appropriate HTTP status code (4xx or 5xx)
+    when an error condition is detected. In the case of transient server errors
+    (e.g., 503 and other 5xx status codes), the client SHOULD implement
+    appropriate retry logic. For example, if a client sends an alphanumeric
+    string for a parameter that is specified as unsigned integer the server MUST
+    reply with `Bad Request`.
+
+
+    | Error type        | HTTP status code | Description
+
+    |-------------------|------------------|-------------|
+
+    | `Bad Request`     | 400 | Cannot process due to malformed request, the
+    requested parameters do not adhere to the specification |
+
+    | `Unauthorized`    | 401 | Authorization provided is invalid |
+
+    | `Not Found`       | 404 | The resource requested was not found |
+
+    | `Not Acceptable`  | 406 | The requested formatting is not supported by the
+    server |
+
+    | `Not Implemented` | 501 | The specified request is not supported by the
+    server |
+
+
+    ## Security
+
+
+    The RNAget API can be used to retrieve potentially sensitive genomic data
+    and is dependent on the implementation.  Effective security measures are
+    essential to protect the integrity and confidentiality of these data.
+
+
+    Sensitive information transmitted on public networks, such as access tokens
+    and human genomic data, MUST be protected using Transport Level Security
+    (TLS) version 1.2 or later, as specified in [RFC
+    5246](https://tools.ietf.org/html/rfc5246).
+
+
+    If the data holder requires client authentication and/or authorization, then
+    the client's HTTPS API request MUST present an OAuth 2.0 bearer access token
+    as specified in [RFC 6750](https://tools.ietf.org/html/rfc6750), in the
+    Authorization request header field with the Bearer authentication scheme:
+
+
+    ```
+
+    Authorization: Bearer [access_token]
+
+    ```
+
+
+    Data providers SHOULD verify user identity and credentials.  The policies
+    and processes used to perform user authentication and authorization, and the
+    means through which access tokens are issued, are beyond the scope of this
+    API specification. GA4GH recommends the use of the OAuth 2.0 framework ([RFC
+    6749](https://tools.ietf.org/html/rfc6749)) for authentication and
+    authorization.  It is also recommended that implementations of this standard
+    also implement and follow the GA4GH [Authentication and Authorization
+    Infrastructure (AAI)
+    standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).
+
+
+    ## CORS
+
+    Cross-origin resource sharing (CORS) is an essential technique used to
+    overcome the same origin content policy seen in browsers. This policy
+    restricts a webpage from making a request to another website and leaking
+    potentially sensitive information. However the same origin policy is a
+    barrier to using open APIs. GA4GH open API implementers should enable CORS
+    to an acceptable level as defined by their internal policy. For any public
+    API implementations should allow requests from any server.
+
+
+    GA4GH is publishing a [CORS best practices
+    document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing),
+    which implementers should refer to for guidance when enabling CORS on public
+    API instances.
+
+
+    ## Possible Future API Enhancements
+
+
+    - Allow OR for search filters
+
+    - Report size of download file
+
+    - Matrix slicing with bool array or list of indices
+
+
+    ## API specification change log
+
+
+    1.1.0    Adds /service-info endpoint
+
+    1.0.0    Initial release version
+  version: 1.1.0
+  contact:
+    name: GA4GH RNA-seq Working Group
+    email: ga4gh-rnaseq@ga4gh.org
+  license:
+    name: Apache 2.0
+    url: 'https://github.com/ga4gh-rnaseq/schema/blob/master/LICENSE'
+externalDocs:
+  description: Find out more about GA4GH
+  url: 'http://ga4gh.org'
+tags:
+  - name: projects
+    description: >
+      The project is the top level of the model hierarchy and contains a set of
+      related studies.  Example projects include:
+
+
+      * all data submitted by contributor X
+
+      * the local mirror of the European Nucleotide Archive data
+    externalDocs:
+      description: Find out more
+      url: 'https://github.com/ga4gh-rnaseq/schema'
+  - name: studies
+    description: >
+      The study is a set of related RNA expression values.  It is assumed all
+      samples in a study have been processed uniformly.  Example studies
+      include:
+
+
+      * multiple tissues from all patients enrolled in clinical trial X
+
+      * a collection of liver samples from several sources which have been
+      uniformly reprocessed for differential analysis
+    externalDocs:
+      description: Find out more
+      url: 'https://github.com/ga4gh-rnaseq/schema'
+  - name: expressions
+    description: >
+      The expression is a matrix of calculated expression values.
+
+
+      ##### Expression metadata
+
+
+      This describes a set of minimal metadata appropriate for several types of
+      RNA experiments.  The purpose is to define a common naming scheme for
+      metadata to enable client software to have some expectation of data fields
+      for improved interoperability.  These definitions are not intended to be a
+      comprehensive set of metadata and defining such a universal set is beyond
+      the scope of this effort. 
+
+
+      Where possible details are incorporated by reference.  This is to reduce
+      the final size of matrix files, support existing metadata standards and
+      support server-defined metadata fields.
+
+
+      All field names are presented here in camel case.  Parsers should treat
+      field names as case-insensitive and any white space contained in the field
+      names should be ignored:
+
+
+      sampleID == sampleid == Sample ID != sample_id
+
+
+      All fields are optional. Fields that utilize an ontology term assume both
+      an id and a label. Later implementations will utilize schemablocks and/or
+      Phenopackets as referenced entities. 
+
+
+      | Metadata Field   | Description
+
+      |------------------|-------------|
+
+      | sampleID         | an identifier for the biological specimen the
+      experiment was conducted on.  This id MUST uniquely identify the sample
+      within the scope of the server |
+
+      | assayType        | the type of experiment performed (ex. RNA-seq,
+      ATAC-seq, ChIP-seq, DNase-Hypersensitivity, methylation profiling, histone
+      profiling, microRNA profiling, transcription profiling, WGS) |
+
+      | samplePrepProtocol | reference to a resource or webpage describing the
+      protocol used to obtain and prepare the sample |
+
+      | libraryPrepProtocol | reference to a resource or webpage describing the
+      protocol used to prepare the library for sequencing |
+
+      | annotation       | a reference to the specific annotation used for
+      quantifying the reads |
+
+      | analysisPipeline | reference to a resource or webpage describing the
+      analysis protocol.  This description should include a full listing of all
+      software used including the exact version and command line options used. 
+      If containerized software is used a reference to the specific containers
+      should be included. The GA4GH [Tool Registry
+      Service](https://github.com/ga4gh/tool-registry-service-schemas) is a
+      resource for discovering and registering genomic tools and workflows. |
+
+      | cellTypeID         | a cell type term ID |
+
+      | cellTypeLabel         | a cell type term label from the [CL
+      ontology](http://www.ontobee.org/ontology/CL) |
+
+      | phenotypeID        | phenotype ID applicable to the sample |
+
+      | phenotypeLabel  | phenotype term (recommended ontologies: [Human
+      Phenotype Ontology](http://www.human-phenotype-ontology.org/),
+      [NCIT](http://www.obofoundry.org/ontology/ncit.html), or
+      [ICD](https://www.icd10data.com/)) |
+
+      | sexID              | sex ID of the organism providing the sample |
+
+      | sexTerm              | sex label of the organism providing the sample
+      [PATO 47 term](http://purl.obolibrary.org/obo/PATO_0000047) |
+
+      | organismID         | organism ID for the sample origin |
+
+      | organismlabel         | organism label for the sample origin
+      [NCBITaxon](http://www.obofoundry.org/ontology/ncbitaxon.html) |
+
+      | tissueID           | tissue ID of origin or organism part of origin |
+
+      | tissueLabel           | tissue Label of origin or organism part of
+      origin (recommended to use
+      [Uberon](http://www.obofoundry.org/ontology/uberon.html) |
+
+      | cellLineID         | ID of cell line |
+
+      | cellLineLabel         | Label of [cell
+      line](http://www.ontobee.org/ontology/CLO) |
+
+
+      For metadata ID values it is recommended that implementors use the
+      `id:label` CURIE notation as described in [Identifiers and
+      CURIEs](https://schemablocks.org/standards/identifiers-curies.html)
+
+
+      #### Example metadata using CURIE
+
+
+      | Metadata Field   | Value
+
+      |------------------|------------------|
+
+      | `organismID`     | `NCBITaxon:9606` |
+
+      | `organismLabel`  | `human`          |
+
+
+      ##### The meaning of zero
+
+
+      Microarray and image-based RNA-seq (Seq-FISH etc.) have a dependency on
+      probes which may not have 100% coverage of the annotation reference.  The
+      consequence is that some features which show zero expression may not
+      necessarily have a truly zero expression.  This idea can be extended
+      further in the context of submitted data as well as potentially access
+      restricted data.  The result is that a zero value can indicate one of
+      several states:
+
+
+      1. _Not measured_ - not measured at all and value is not available
+
+      2. _Not supplied_ - measured but not provided to the data repository
+
+      3. _Restricted access_ - measured but require further authentication to
+      view
+
+      4. _Not applicable_ - measurement does not apply to the sample
+
+
+      If applicable, the `NaN` value MUST be used to indicate these states.
+    externalDocs:
+      description: Find out more
+      url: 'https://github.com/ga4gh-rnaseq/schema'
+  - name: continuous
+    description: Continuous is a matrix of coordinate range based signal data
+    externalDocs:
+      description: Find out more
+      url: 'https://github.com/ga4gh-rnaseq/schema'
+  - name: Service Info
+    description: >
+      The GA4GH Service Info specification provides a GA4GH-wide, structured
+      format
+
+      for describing web services implementing GA4GH API specifications. RNAget
+
+      implements service info through the standard `/service-info` API endpoint,
+
+      and also extends the base model with additional attributes.
+
+
+      RNAget services MUST indicate that they support the RNAget protocol by
+
+      using an `artifact` value of `rnaget` in the service info `type` property.
+
+
+      ```
+
+      {
+        ...
+        "type": {
+          "group": "org.ga4gh",
+          "artifact": "rnaget",
+          "version": "1.1.0" 
+        }
+        ...
+      }
+
+      ```
+    externalDocs:
+      description: View the Service Info specification
+      url: 'https://github.com/ga4gh-discovery/ga4gh-service-info'
+  - name: projectModel
+    x-displayName: The Project Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/project" />
+  - name: studyModel
+    x-displayName: The Study Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/study" />
+  - name: filterModel
+    x-displayName: The Filter Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/filter" />
+  - name: ticketModel
+    x-displayName: The Ticket Model
+    description: |
+      <SchemaDefinition schemaRef="#/components/schemas/ticket" />
+x-tagGroups:
+  - name: Interface
+    tags:
+      - projects
+      - studies
+      - expressions
+      - continuous
+      - Service Info
+  - name: Models
+    tags:
+      - projectModel
+      - studyModel
+      - filterModel
+      - ticketModel
+paths:
+  '/projects/{projectId}':
+    get:
+      tags:
+        - projects
+      summary: Get a single project by ID
+      description: Returns the project matching the provided ID
+      operationId: getProjectById
+      parameters:
+        - name: projectId
+          in: path
+          description: ID of project to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:project'
+  /projects:
+    get:
+      tags:
+        - projects
+      summary: Returns a list of projects matching filters
+      description: Get a list of projects matching filters
+      operationId: getProjects
+      parameters:
+        - $ref: '#/components/parameters/versionParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/project'
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:project'
+  /projects/filters:
+    get:
+      tags:
+        - projects
+      summary: Returns filters for project searches
+      description: >-
+        To support flexible search this provides a means of discovering the
+        search filters supported by the data provider.
+      operationId: getProjectFilters
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/filter'
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:project'
+  '/studies/{studyId}':
+    get:
+      tags:
+        - studies
+      summary: Get a single study by ID
+      description: Returns the study matching the provided ID
+      operationId: getStudyById
+      parameters:
+        - name: studyId
+          in: path
+          description: ID of study to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/study'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Study not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:study'
+  /studies:
+    get:
+      tags:
+        - studies
+      summary: Returns a list of studies matching filters
+      description: Get a list of studies matching filters
+      operationId: getStudies
+      parameters:
+        - $ref: '#/components/parameters/versionParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/study'
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:study'
+  /studies/filters:
+    get:
+      tags:
+        - studies
+      summary: Returns filters for study searches
+      description: >-
+        To support flexible search this provides a means of discovering the
+        search filters supported by the data provider.
+      operationId: getStudyFilters
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/filter'
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:study'
+  '/expressions/{expressionId}/ticket':
+    get:
+      tags:
+        - expressions
+      summary: Get specific expression data ticket
+      description: Returns a ticket to download a single specified expression matrix
+      operationId: getExpressionTicketById
+      parameters:
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/sampleIDListParam'
+        - $ref: '#/components/parameters/featureIDListParam'
+        - $ref: '#/components/parameters/featureNameListParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ticket'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Expression not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:expression'
+  '/expressions/{expressionId}/bytes':
+    get:
+      tags:
+        - expressions
+      summary: Get specific expression data file
+      description: Returns a single specified expression matrix
+      operationId: getExpressionFileById
+      parameters:
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/sampleIDListParam'
+        - $ref: '#/components/parameters/featureIDListParam'
+        - $ref: '#/components/parameters/featureNameListParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Expression not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:expression'
+  /expressions/ticket:
+    get:
+      tags:
+        - expressions
+      summary: Get a ticket to download expression data
+      description: Returns a download ticket for expression data matching filters
+      operationId: getExpressionTicket
+      parameters:
+        - name: format
+          in: query
+          description: Data format to return
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/projectIDParam'
+        - $ref: '#/components/parameters/studyIDParam'
+        - $ref: '#/components/parameters/versionParam'
+        - $ref: '#/components/parameters/sampleIDListParam'
+        - $ref: '#/components/parameters/featureIDListParam'
+        - $ref: '#/components/parameters/featureNameListParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ticket'
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:expression'
+  /expressions/bytes:
+    get:
+      tags:
+        - expressions
+      summary: Download expression data matching filters
+      description: Returns an expression data file matching filters
+      operationId: getExpressionFile
+      parameters:
+        - name: format
+          in: query
+          description: Data format to return
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/projectIDParam'
+        - $ref: '#/components/parameters/studyIDParam'
+        - $ref: '#/components/parameters/versionParam'
+        - $ref: '#/components/parameters/sampleIDListParam'
+        - $ref: '#/components/parameters/featureIDListParam'
+        - $ref: '#/components/parameters/featureNameListParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:expression'
+  /expressions/formats:
+    get:
+      tags:
+        - expressions
+      summary: Get output formats
+      description: >
+        The response is a list of the supported data formats as a JSON formatted
+        object unless an alternative formatting supported by the server is
+        requested.  A data provider may use any internal storage format that
+        they wish with no restrictions from this API.  To support development of
+        interoperable clients, it is recommended that data providers MUST
+        support at least 1 of the following common output formats:
+
+
+        * Tab delimited text (tsv)
+
+        * [Loom](https://linnarssonlab.org/loompy/format/index.html) (loom)
+
+        * [anndata](https://anndata.readthedocs.io/en/latest/) (anndata)
+
+
+        A Tab delimited file can have any number of comment lines beginning with
+        `#` for storing metadata.  There should be one header row following the
+        comments.  Feature (genes/transcripts) names and/or ID fields should be
+        the first columns of the header row and have the `string` type.  All
+        following columns are for the samples and will have 32-bit `float`
+        values in each row.
+
+
+        ##### Example .tsv file
+
+
+        ```
+
+        # Example tsv file
+
+        geneID  geneName  sample1 sample2
+
+        ENSG00000000003 TSPAN6  12.4  15.6
+
+        ```
+
+
+        A Loom format file will have a 32-bit `float` matrix for the expression
+        values with samples on the column axis and features on the row axis. 
+        Associated metadata can be stored as row and column attributes as
+        described by the loom specification.
+
+
+        An anndata format file will have a 32-bit `float` matrix for the
+        expression values with samples on the column axis and features on the
+        row axis.  Associated metadata can be stored as row and column
+        attributes as described by the anndata specification.
+      operationId: getExpressionFormats
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Format list not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:expression'
+  /expressions/filters:
+    get:
+      tags:
+        - expressions
+      summary: Returns filters for expression searches
+      description: >-
+        To support flexible search this provides a means of discovering the
+        search filters supported by the data provider.
+      operationId: getExpressionFilters
+      parameters:
+        - name: type
+          in: query
+          description: >-
+            one of `feature` or `sample` reflecting which axis to request
+            filters for.  If blank, both will be returned
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/filter'
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:expression'
+  '/continuous/{continuousId}/ticket':
+    get:
+      tags:
+        - continuous
+      summary: Get specific continuous data ticket
+      description: Returns a ticket to download a single specified continuous matrix
+      operationId: getContinuousTicketById
+      parameters:
+        - name: continuousId
+          in: path
+          description: ID of continuous matrix to return
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/chrParam'
+        - $ref: '#/components/parameters/startParam'
+        - $ref: '#/components/parameters/endParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ticket'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Continuous matrix not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:continuous'
+  '/continuous/{continuousId}/bytes':
+    get:
+      tags:
+        - continuous
+      summary: Get specific continuous data file
+      description: Returns a single specified continuous matrix
+      operationId: getContinuousFileById
+      parameters:
+        - name: continuousId
+          in: path
+          description: ID of continuous matrix to return
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/chrParam'
+        - $ref: '#/components/parameters/startParam'
+        - $ref: '#/components/parameters/endParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Continuous matrix not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:continuous'
+  /continuous/ticket:
+    get:
+      tags:
+        - continuous
+      summary: Get a ticket to download continuous data
+      description: Returns a download ticket for continuous data  matching filters
+      operationId: getContinuousTicket
+      parameters:
+        - name: format
+          in: query
+          description: Data format to return
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/projectIDParam'
+        - $ref: '#/components/parameters/studyIDParam'
+        - $ref: '#/components/parameters/versionParam'
+        - $ref: '#/components/parameters/sampleIDListParam'
+        - $ref: '#/components/parameters/chrParam'
+        - $ref: '#/components/parameters/startParam'
+        - $ref: '#/components/parameters/endParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ticket'
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:continuous'
+  /continuous/bytes:
+    get:
+      tags:
+        - continuous
+      summary: Download continuous data matching filters
+      description: Returns a continuous data file matching filters
+      operationId: getContinuousFile
+      parameters:
+        - name: format
+          in: query
+          description: Data format to return
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/projectIDParam'
+        - $ref: '#/components/parameters/studyIDParam'
+        - $ref: '#/components/parameters/versionParam'
+        - $ref: '#/components/parameters/sampleIDListParam'
+        - $ref: '#/components/parameters/chrParam'
+        - $ref: '#/components/parameters/startParam'
+        - $ref: '#/components/parameters/endParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:continuous'
+  /continuous/formats:
+    get:
+      tags:
+        - continuous
+      summary: Get output formats
+      description: >
+        The response is a list of the supported data formats as a JSON formatted
+        object unless an alternative formatting supported by the server is
+        requested.  A data provider may use any internal storage format that
+        they wish with no restrictions from this API.  To support development of
+        interoperable clients, it is recommended that data providers MUST
+        support at least 1 of the following common output formats:
+
+
+        * Tab delimited text (.tsv)
+
+        * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
+
+
+        A Tab delimited file can have any number of comment lines beginning with
+        `#` for storing metadata.  The first line of the tsv file will be a
+        tab-delimited list beginning with `#labels` and containing the labels
+        for text fields in the main matrix.  The second line of the tsv file
+        will be a tab-delimited list containing 2 items: `#range` and the range
+        in the form chr?:start-stop where the start coordinate is zero-based,
+        inclusive and the stop coordinate is zero-based, exclusive.  Any
+        additional comments may follow these 2 lines.  The data matrix follows
+        the comment block.  Sample names and/or ID fields should be the first
+        columns of the header row, be in the same order as listed in the
+        `#labels` comment and have the `string` type.  All coordinates in the
+        continuous range described in the `#range` comment will be in the
+        following columns with each base position in its own column.  The
+        coordinate columns will contain 32-bit `float` values in each row
+        corresponding to the measured signal value at that coordinante for the
+        sample corresponding to that row.
+
+
+        ##### Example .tsv file
+
+
+        ```
+
+        #labels sampleID  sampleName
+
+        #range  chr1:1000000-1000002
+
+        # assembly  GRCh38-V29-male
+
+        12003-L1  12003-human-liver-4 12.4  15.6
+
+        ```
+
+
+        A Loom format file will have a 32-bit `float` matrix for the signal
+        values with coordinates on the column axis and samples on the row axis. 
+        Associated metadata can be stored as row and column attributes as
+        described by the loom specification.
+      operationId: getContinuousFormats
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Format list not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:continuous'
+  /continuous/filters:
+    get:
+      tags:
+        - continuous
+      summary: Returns filters for continuous searches
+      description: >-
+        To support flexible search this provides a means of discovering the
+        search filters supported by the data provider.
+      operationId: getContinuousFilters
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/filter'
+        '400':
+          description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:continuous'
+  /service-info:
+    get:
+      summary: Show information about this RNAget instance
+      operationId: getServiceInfo
+      tags:
+        - Service Info
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+components:
+  securitySchemes:
+    rnaget_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://ga4gh.org/oauth/dialog'
+          scopes:
+            'read:expression': read expression data
+            'read:continuous': read continuous data
+            'read:project': read information about projects
+            'read:study': read information about studies
+            'read:info': read general info
+  schemas:
+    project:
+      type: object
+      description: >-
+        The project is the top level of the model hierarchy and contains one or
+        more studies.
+      properties:
+        id:
+          type: string
+          description: A unique identifier assigned to this object
+          example: c2fe2aa6ad3043108bd88a30fc0303da
+        version:
+          type: string
+          description: Version number of the object
+          example: 1
+        name:
+          type: string
+          description: 'Short, readable name'
+          example: Demo Project
+        description:
+          type: string
+          description: Detailed description of the object
+          example: This is a small project to demo API funtions
+      required:
+        - id
+      externalDocs:
+        description: Find out more
+        url: 'https://github.com/ga4gh-rnaseq/schema'
+    study:
+      type: object
+      description: >-
+        The study is a container for one or more related RNA expression
+        matrices.
+      properties:
+        id:
+          type: string
+          description: A unique identifier assigned to this object
+          example: c4cf910c9ae54832902c954cb439e30c
+        version:
+          type: string
+          description: Version number of the object
+          example: 1
+        name:
+          type: string
+          description: 'Short, readable name'
+          example: Demo Study
+        description:
+          type: string
+          description: Detailed description of the object
+          example: This study is part of the demo project
+        parentProjectID:
+          type: string
+          description: ID of the project containing the study
+          example: c2fe2aa6ad3043108bd88a30fc0303da
+        genome:
+          type: string
+          description: >-
+            Name of the reference genome build used for aligning samples in the
+            study
+          example: human GRCh38
+      required:
+        - id
+      externalDocs:
+        description: Find out more
+        url: 'https://github.com/ga4gh-rnaseq/schema'
+    filter:
+      type: object
+      description: Implementation defined parameter to use for filtering collections
+      properties:
+        filter:
+          type: string
+          description: A unique name for the filter for use in query URLs
+          example: tissue
+        fieldType:
+          type: string
+          description: 'The dataType (string, float, etc.) of the filter'
+          example: string
+        description:
+          type: string
+          description: Detailed description of the filter
+          example: tissue of origin
+        values:
+          type: array
+          items:
+            type: string
+            example: liver
+          description: List of supported values for the filter
+      required:
+        - filter
+      externalDocs:
+        description: Find out more
+        url: 'https://github.com/ga4gh-rnaseq/schema'
+    ticket:
+      type: object
+      description: URL and type for data files
+      properties:
+        version:
+          type: string
+          description: Version number of the object
+          example: 1
+        fileType:
+          type: string
+          description: 'Type of file. Examples include: loom, tsv'
+          example: loom
+        studyID:
+          type: string
+          description: ID of containing study
+          example: c4cf910c9ae54832902c954cb439e30c
+        url:
+          type: string
+          description: 'An `https:` URL to download file'
+        units:
+          type: string
+          description: 'Units for the values. Examples include: TPM, FPKM, counts'
+        headers:
+          type: object
+          description: >-
+            For HTTPS URLs, the server may supply a JSON object containing one
+            or more string key-value pairs which the client MUST supply verbatim
+            as headers with any request to the URL. For example, if headers is
+            `{"Authorization": "Bearer xxxx"}`, then the client must supply the
+            header `Authorization: Bearer xxxx` with the HTTPS request to the
+            URL.
+        md5:
+          type: string
+          description: MD5 digest of the file
+      required:
+        - url
+        - units
+      externalDocs:
+        description: Find out more
+        url: 'https://github.com/ga4gh-rnaseq/schema'
+    error:
+      type: object
+      description: General API error model
+      properties:
+        message:
+          type: string
+          description: Error message details
+    Service:
+      allOf:
+        - $ref: '#/components/schemas/service-info_Service'
+        - type: object
+          properties:
+            type:
+              properties:
+                artifact:
+                  example: rnaget
+                version:
+                  example: 1.1.0
+            supported:
+              $ref: '#/components/schemas/Supported'
+    Supported:
+      type: object
+      description: >-
+        A true value indicates that the corresponding route is implemented by
+        the service.  A non-implemented route should have a false value and
+        return a 501 error to any requests.  If any boolean property is not
+        provided, it is assumed to be implemented. If the entire supported
+        object is not provided, all endpoints are assumed to be implemented.
+      properties:
+        projects:
+          type: boolean
+        studies:
+          type: boolean
+        expressions:
+          type: boolean
+        continuous:
+          type: boolean
+    ServiceType:
+      description: Type of a GA4GH service
+      type: object
+      required:
+        - group
+        - artifact
+        - version
+      properties:
+        group:
+          type: string
+          description: >-
+            Namespace in reverse domain name format. Use `org.ga4gh` for
+            implementations compliant with official GA4GH specifications. For
+            services with custom APIs not standardized by GA4GH, or
+            implementations diverging from official GA4GH specifications, use a
+            different namespace (e.g. your organization's reverse domain name).
+          example: org.ga4gh
+        artifact:
+          type: string
+          description: >-
+            Name of the API or GA4GH specification implemented. Official GA4GH
+            types should be assigned as part of standards approval process.
+            Custom artifacts are supported.
+          example: beacon
+        version:
+          type: string
+          description: >-
+            Version of the API or specification. GA4GH specifications use
+            semantic versioning.
+          example: 1.0.0
+    service-info_Service:
+      description: GA4GH service
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - organization
+        - version
+      properties:
+        id:
+          type: string
+          description: >-
+            Unique ID of this service. Reverse domain name notation is
+            recommended, though not required. The identifier should attempt to
+            be globally unique so it can be used in downstream aggregator
+            services e.g. Service Registry.
+          example: org.ga4gh.myservice
+        name:
+          type: string
+          description: Name of this service. Should be human readable.
+          example: My project
+        type:
+          $ref: '#/components/schemas/ServiceType'
+        description:
+          type: string
+          description: >-
+            Description of the service. Should be human readable and provide
+            information about the service.
+          example: This service provides...
+        organization:
+          type: object
+          description: Organization providing the service
+          required:
+            - name
+            - url
+          properties:
+            name:
+              type: string
+              description: Name of the organization responsible for the service
+              example: My organization
+            url:
+              type: string
+              format: uri
+              description: URL of the website of the organization (RFC 3986 format)
+              example: 'https://example.com'
+        contactUrl:
+          type: string
+          format: uri
+          description: >-
+            URL of the contact for the provider of this service, e.g. a link to
+            a contact form (RFC 3986 format), or an email (RFC 2368 format).
+          example: 'mailto:support@example.com'
+        documentationUrl:
+          type: string
+          format: uri
+          description: >-
+            URL of the documentation of this service (RFC 3986 format). This
+            should help someone learn how to use your service, including any
+            specifics required to access data, e.g. authentication.
+          example: 'https://docs.myservice.example.com'
+        createdAt:
+          type: string
+          format: date-time
+          description: >-
+            Timestamp describing when the service was first deployed and
+            available (RFC 3339 format)
+          example: '2019-06-04T12:58:19Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: >-
+            Timestamp describing when the service was last updated (RFC 3339
+            format)
+          example: '2019-06-04T12:58:19Z'
+        environment:
+          type: string
+          description: >-
+            Environment the service is running in. Use this to distinguish
+            between production, development and testing/staging deployments.
+            Suggested values are prod, test, dev, staging. However this is
+            advised and not enforced.
+          example: test
+        version:
+          type: string
+          description: >-
+            Version of the service being described. Semantic versioning is
+            recommended, but other identifiers, such as dates or commit hashes,
+            are also allowed. The version should be changed whenever the service
+            is updated.
+          example: 1.0.0
+  parameters:
+    versionParam:
+      name: version
+      in: query
+      description: version to filter by
+      required: false
+      schema:
+        type: string
+      example: 1
+    projectIDParam:
+      name: projectID
+      in: query
+      description: project to filter by
+      required: false
+      schema:
+        type: string
+      example: 9c0eba51095d3939437e220db196e27b
+    studyIDParam:
+      name: studyID
+      in: query
+      description: study to filter by
+      required: false
+      schema:
+        type: string
+      example: c4cf910c9ae54832902c954cb439e30c
+    sampleIDListParam:
+      name: sampleIDList
+      in: query
+      description: return only values for listed sampleIDs
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+    featureIDListParam:
+      name: featureIDList
+      in: query
+      description: return only values for listed feature IDs
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+    featureNameListParam:
+      name: featureNameList
+      in: query
+      description: return only values for listed features
+      required: false
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+    chrParam:
+      name: chr
+      in: query
+      description: >-
+        The refererence to which start and end apply in the form chr? where ? is
+        the specific ID of the chromosome (ex. chr1, chrX).
+      required: false
+      schema:
+        type: string
+      example: chr10
+    startParam:
+      name: start
+      in: query
+      description: 'The start position of the range on the sequence, 0-based, inclusive.'
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+    endParam:
+      name: end
+      in: query
+      description: 'The end position of the range on the sequence, 0-based, exclusive.'
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
