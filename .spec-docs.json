@@ -6,7 +6,6 @@
   "enabledBranchPatterns": [
     "^master$",
     "^develop$",
-    "^release/.+",
-    "^feature/.+"
+    "^release/.+"
   ]
 }
