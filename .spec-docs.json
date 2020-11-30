@@ -1,0 +1,11 @@
+{
+  "apiSpecPath": "rnaget-openapi.yaml",
+  "docsRoot": "docs",
+  "defaultBranch": "master",
+  "branchPathBase": "preview",
+  "enabledBranchPatterns": [
+    "^master$",
+    "^develop$",
+    "^release/.+"
+  ]
+}
