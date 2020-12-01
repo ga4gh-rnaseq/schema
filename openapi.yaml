@@ -58,7 +58,7 @@ info:
 
 
     An OpenAPI description of this specification is available and [describes the
-    1.0.0 version](rnaget-openapi.yaml). OpenAPI is an independent API
+    1.1.0 version](rnaget-openapi.yaml). OpenAPI is an independent API
     description format for describing REST services and is compatible with a
     number of [third party tools](http://openapi.tools/).
 
@@ -106,7 +106,7 @@ info:
 
     ```
 
-    Content-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii
+    Content-Type: application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii
 
     ```
 
@@ -145,8 +145,8 @@ info:
     type for that endpoint. When determining if a request is well-formed, a
     server MUST allow a internet type to degrade like so
 
-      - `application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii`
-      - `application/vnd.ga4gh.rnaget.v1.0.0+json`
+      - `application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii`
+      - `application/vnd.ga4gh.rnaget.v1.1.0+json`
       - `application/json`    
 
     ## Errors
@@ -246,8 +246,10 @@ info:
     ## API specification change log
 
 
+    1.1.0    Adds /service-info endpoint
+
     1.0.0    Initial release version
-  version: 1.0.0
+  version: 1.1.0
   contact:
     name: GA4GH RNA-seq Working Group
     email: ga4gh-rnaseq@ga4gh.org
@@ -429,6 +431,39 @@ tags:
     externalDocs:
       description: Find out more
       url: 'https://github.com/ga4gh-rnaseq/schema'
+  - name: Service Info
+    description: >
+      The GA4GH Service Info specification provides a GA4GH-wide, structured
+      format
+
+      for describing web services implementing GA4GH API specifications. RNAget
+
+      implements service info through the standard `/service-info` API endpoint,
+
+      and also extends the base model with additional attributes.
+
+
+      RNAget services MUST indicate that they support the RNAget protocol by
+
+      using an `artifact` value of `rnaget` in the service info `type` property.
+
+
+      ```
+
+      {
+        ...
+        "type": {
+          "group": "org.ga4gh",
+          "artifact": "rnaget",
+          "version": "1.1.0" 
+        }
+        ...
+      }
+
+      ```
+    externalDocs:
+      description: View the Service Info specification
+      url: 'https://github.com/ga4gh-discovery/ga4gh-service-info'
   - name: projectModel
     x-displayName: The Project Model
     description: |
@@ -452,6 +487,7 @@ x-tagGroups:
       - studies
       - expressions
       - continuous
+      - Service Info
   - name: Models
     tags:
       - projectModel
@@ -941,9 +977,11 @@ paths:
         support at least 1 of the following common output formats:
 
 
-        * Tab delimited text (.tsv)
+        * Tab delimited text (tsv)
 
-        * [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)
+        * [Loom](https://linnarssonlab.org/loompy/format/index.html) (loom)
+
+        * [anndata](https://anndata.readthedocs.io/en/latest/) (anndata)
 
 
         A Tab delimited file can have any number of comment lines beginning with
@@ -971,7 +1009,13 @@ paths:
         A Loom format file will have a 32-bit `float` matrix for the expression
         values with samples on the column axis and features on the row axis. 
         Associated metadata can be stored as row and column attributes as
-        described by loom specification.
+        described by the loom specification.
+
+
+        An anndata format file will have a 32-bit `float` matrix for the
+        expression values with samples on the column axis and features on the
+        row axis.  Associated metadata can be stored as row and column
+        attributes as described by the anndata specification.
       operationId: getExpressionFormats
       responses:
         '200':
@@ -1396,6 +1440,19 @@ paths:
       security:
         - rnaget_auth:
             - 'read:continuous'
+  /service-info:
+    get:
+      summary: Show information about this RNAget instance
+      operationId: getServiceInfo
+      tags:
+        - Service Info
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
 components:
   securitySchemes:
     rnaget_auth:
@@ -1548,6 +1605,157 @@ components:
         message:
           type: string
           description: Error message details
+    Service:
+      allOf:
+        - $ref: '#/components/schemas/schemas-Service'
+        - type: object
+          properties:
+            type:
+              properties:
+                artifact:
+                  example: rnaget
+                version:
+                  example: 1.1.0
+            supported:
+              $ref: '#/components/schemas/Supported'
+    Supported:
+      type: object
+      description: >-
+        A true value indicates that the corresponding route is implemented by
+        the service.  A non-implemented route should have a false value and
+        return a 501 error to any requests.  If any boolean property is not
+        provided, it is assumed to be implemented. If the entire supported
+        object is not provided, all endpoints are assumed to be implemented.
+      properties:
+        projects:
+          type: boolean
+        studies:
+          type: boolean
+        expressions:
+          type: boolean
+        continuous:
+          type: boolean
+    ServiceType:
+      description: Type of a GA4GH service
+      type: object
+      required:
+        - group
+        - artifact
+        - version
+      properties:
+        group:
+          type: string
+          description: >-
+            Namespace in reverse domain name format. Use `org.ga4gh` for
+            implementations compliant with official GA4GH specifications. For
+            services with custom APIs not standardized by GA4GH, or
+            implementations diverging from official GA4GH specifications, use a
+            different namespace (e.g. your organization's reverse domain name).
+          example: org.ga4gh
+        artifact:
+          type: string
+          description: >-
+            Name of the API or GA4GH specification implemented. Official GA4GH
+            types should be assigned as part of standards approval process.
+            Custom artifacts are supported.
+          example: beacon
+        version:
+          type: string
+          description: >-
+            Version of the API or specification. GA4GH specifications use
+            semantic versioning.
+          example: 1.0.0
+    schemas-Service:
+      description: GA4GH service
+      type: object
+      required:
+        - id
+        - name
+        - type
+        - organization
+        - version
+      properties:
+        id:
+          type: string
+          description: >-
+            Unique ID of this service. Reverse domain name notation is
+            recommended, though not required. The identifier should attempt to
+            be globally unique so it can be used in downstream aggregator
+            services e.g. Service Registry.
+          example: org.ga4gh.myservice
+        name:
+          type: string
+          description: Name of this service. Should be human readable.
+          example: My project
+        type:
+          $ref: '#/components/schemas/ServiceType'
+        description:
+          type: string
+          description: >-
+            Description of the service. Should be human readable and provide
+            information about the service.
+          example: This service provides...
+        organization:
+          type: object
+          description: Organization providing the service
+          required:
+            - name
+            - url
+          properties:
+            name:
+              type: string
+              description: Name of the organization responsible for the service
+              example: My organization
+            url:
+              type: string
+              format: uri
+              description: URL of the website of the organization (RFC 3986 format)
+              example: 'https://example.com'
+        contactUrl:
+          type: string
+          format: uri
+          description: >-
+            URL of the contact for the provider of this service, e.g. a link to
+            a contact form (RFC 3986 format), or an email (RFC 2368 format).
+          example: 'mailto:support@example.com'
+        documentationUrl:
+          type: string
+          format: uri
+          description: >-
+            URL of the documentation of this service (RFC 3986 format). This
+            should help someone learn how to use your service, including any
+            specifics required to access data, e.g. authentication.
+          example: 'https://docs.myservice.example.com'
+        createdAt:
+          type: string
+          format: date-time
+          description: >-
+            Timestamp describing when the service was first deployed and
+            available (RFC 3339 format)
+          example: '2019-06-04T12:58:19Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: >-
+            Timestamp describing when the service was last updated (RFC 3339
+            format)
+          example: '2019-06-04T12:58:19Z'
+        environment:
+          type: string
+          description: >-
+            Environment the service is running in. Use this to distinguish
+            between production, development and testing/staging deployments.
+            Suggested values are prod, test, dev, staging. However this is
+            advised and not enforced.
+          example: test
+        version:
+          type: string
+          description: >-
+            Version of the service being described. Semantic versioning is
+            recommended, but other identifiers, such as dates or commit hashes,
+            are also allowed. The version should be changed whenever the service
+            is updated.
+          example: 1.0.0
   parameters:
     versionParam:
       name: version

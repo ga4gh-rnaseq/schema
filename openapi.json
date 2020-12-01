@@ -7,8 +7,8 @@
   ],
   "info": {
     "title": "RNAget API",
-    "description": "## Design principles\n\nThis API provides a means of retrieving data from several types of RNA experiments including:\n\n* Feature-level expression data from RNA-seq type measurements\n* Coordinate-based signal/intensity data similar to a bigwig representation\n\nvia a client/server model.\n\nFeatures of this API include:\n\n* Support for a hierarchical data model which provides the option for servers to associate expression data for discovery and retrieval\n* Support for accessing subsets of expression data through slicing operations on the expression matrix and/or query filters to specify features to be included\n* Support for accessing signal/intensity data by specifying a range of genomic coordinates to be included\n\nOut of the scope of this API are:\n\n* A means of retrieving primary (raw) read sequence data. Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads. The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.\n* A means of retrieving reference sequences. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The [refget API](https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.\n* A means of retrieving feature annotation details. Expression matrices provide the identity of each mapped feature. Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.\n\n## OpenAPI Description\n\nAn OpenAPI description of this specification is available and [describes the 1.0.0 version](rnaget-openapi.yaml). OpenAPI is an independent API description format for describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).\n\n## Compliance\n\nImplementors can check if their RNAget implementations conform to the\nspecification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).\n\n## Protocol essentials\n\nAll API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Queries containing [unsafe or reserved](https://www.ietf.org/rfc/rfc1738.txt) characters in the URL, including but not limited to \"&\", \"/\", \"#\", MUST encode all such characters.  Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.\n\nHTTP responses may be compressed using [RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html) transfer-coding, not content-coding.\n\nHTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured to follow redirects. `302`, `303` and `307` are all valid response codes to use.\n\nResponses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version.  Unless negotiated with the client and allowed by the server, the default encoding is:\n\n```\nContent-Type: application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii\n```\n\nAll response objects from the server are expected to be in JSON format, regardless of the response status code, unless otherwise negotiated with the client and allowed by the server.\n\nObject IDs are intended for persistent retrieval of their respective objects.  An object ID MUST uniquely identify an object within the scope of a single data server.  It is beyond the scope of this API to enforce uniqueness of ID among different data servers.  IDs are strings made up of uppercase and lowercase letters, decimal digits, hypen, period, underscore and tilde [A-Za-z0-9.-_~]. See [RFC 3986 § 2.3](https://tools.ietf.org/html/rfc3986#section-2.3).\n\nEndpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as a UTF8-encoded JSON key-value dictionary.\n\nWhen processing requests containing multiple filters and filters with lists of items, the data provider MUST use a logical `AND` for selecting the results to return.\n\n## Internet Media Types Handling\n\nWhen responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so\n\n  - `application/vnd.ga4gh.rnaget.v1.0.0+json; charset=us-ascii`\n  - `application/vnd.ga4gh.rnaget.v1.0.0+json`\n  - `application/json`    \n\n## Errors\n\nThe server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected. In the case of transient server errors (e.g., 503 and other 5xx status codes), the client SHOULD implement appropriate retry logic. For example, if a client sends an alphanumeric string for a parameter that is specified as unsigned integer the server MUST reply with `Bad Request`.\n\n| Error type        | HTTP status code | Description\n|-------------------|------------------|-------------|\n| `Bad Request`     | 400 | Cannot process due to malformed request, the requested parameters do not adhere to the specification |\n| `Unauthorized`    | 401 | Authorization provided is invalid |\n| `Not Found`       | 404 | The resource requested was not found |\n| `Not Acceptable`  | 406 | The requested formatting is not supported by the server |\n| `Not Implemented` | 501 | The specified request is not supported by the server |\n\n## Security\n\nThe RNAget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.\n\nSensitive information transmitted on public networks, such as access tokens and human genomic data, MUST be protected using Transport Level Security (TLS) version 1.2 or later, as specified in [RFC 5246](https://tools.ietf.org/html/rfc5246).\n\nIf the data holder requires client authentication and/or authorization, then the client's HTTPS API request MUST present an OAuth 2.0 bearer access token as specified in [RFC 6750](https://tools.ietf.org/html/rfc6750), in the Authorization request header field with the Bearer authentication scheme:\n\n```\nAuthorization: Bearer [access_token]\n```\n\nData providers SHOULD verify user identity and credentials.  The policies and processes used to perform user authentication and authorization, and the means through which access tokens are issued, are beyond the scope of this API specification. GA4GH recommends the use of the OAuth 2.0 framework ([RFC 6749](https://tools.ietf.org/html/rfc6749)) for authentication and authorization.  It is also recommended that implementations of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).\n\n## CORS\nCross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.\n\nGA4GH is publishing a [CORS best practices document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing), which implementers should refer to for guidance when enabling CORS on public API instances.\n\n## Possible Future API Enhancements\n\n- Allow OR for search filters\n- Report size of download file\n- Matrix slicing with bool array or list of indices\n\n## API specification change log\n\n1.0.0    Initial release version\n",
-    "version": "1.0.0",
+    "description": "## Design principles\n\nThis API provides a means of retrieving data from several types of RNA experiments including:\n\n* Feature-level expression data from RNA-seq type measurements\n* Coordinate-based signal/intensity data similar to a bigwig representation\n\nvia a client/server model.\n\nFeatures of this API include:\n\n* Support for a hierarchical data model which provides the option for servers to associate expression data for discovery and retrieval\n* Support for accessing subsets of expression data through slicing operations on the expression matrix and/or query filters to specify features to be included\n* Support for accessing signal/intensity data by specifying a range of genomic coordinates to be included\n\nOut of the scope of this API are:\n\n* A means of retrieving primary (raw) read sequence data. Input samples are identified in expression output and data servers should implement additional API(s) to allow for search and retrieval of raw reads. The [htsget API](https://samtools.github.io/hts-specs/htsget.html) is designed for retrieval of read data.\n* A means of retrieving reference sequences. Servers should implement additional API(s) to allow for search and retrieval of reference base sequences. The [refget API](https://samtools.github.io/hts-specs/refget.html) is designed for retrieval of references sequences.\n* A means of retrieving feature annotation details. Expression matrices provide the identity of each mapped feature. Servers should implement additional API(s) to allow for search and retrieval of genomic feature annotation details.\n\n## OpenAPI Description\n\nAn OpenAPI description of this specification is available and [describes the 1.1.0 version](rnaget-openapi.yaml). OpenAPI is an independent API description format for describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).\n\n## Compliance\n\nImplementors can check if their RNAget implementations conform to the\nspecification by using our [compliance suite](https://github.com/ga4gh-rnaseq/rnaget-compliance-suite).\n\n## Protocol essentials\n\nAll API invocations are made to a configurable HTTPS endpoint, receive URL-encoded query string parameters and HTTP headers, and return text or other allowed formatting as requested by the user. Queries containing [unsafe or reserved](https://www.ietf.org/rfc/rfc1738.txt) characters in the URL, including but not limited to \"&\", \"/\", \"#\", MUST encode all such characters.  Successful requests result with HTTP status code 200 and have the appropriate text encoding in the response body as defined for each endpoint. The server may provide responses with chunked transfer encoding. The client and server may mutually negotiate HTTP/2 upgrade using the standard mechanism.\n\nHTTP responses may be compressed using [RFC 2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html) transfer-coding, not content-coding.\n\nHTTP response may include a 3XX response code and Location header redirecting the client to retrieve expression data from an alternate location as specified by [RFC 7231](https://tools.ietf.org/html/rfc7231), clients SHOULD be configured to follow redirects. `302`, `303` and `307` are all valid response codes to use.\n\nResponses from the server MUST include a Content-Type header containing the encoding for the invoked method and protocol version.  Unless negotiated with the client and allowed by the server, the default encoding is:\n\n```\nContent-Type: application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii\n```\n\nAll response objects from the server are expected to be in JSON format, regardless of the response status code, unless otherwise negotiated with the client and allowed by the server.\n\nObject IDs are intended for persistent retrieval of their respective objects.  An object ID MUST uniquely identify an object within the scope of a single data server.  It is beyond the scope of this API to enforce uniqueness of ID among different data servers.  IDs are strings made up of uppercase and lowercase letters, decimal digits, hypen, period, underscore and tilde [A-Za-z0-9.-_~]. See [RFC 3986 § 2.3](https://tools.ietf.org/html/rfc3986#section-2.3).\n\nEndpoints are described as HTTPS GET methods which will be sufficient for most queries.  Queries containing multiple metadata filters may approach or exceed the URL length limits.  To handle these types of queries it is recommended that servers SHOULD implement parallel HTTPS POST endpoints accepting the same URL parameters as a UTF8-encoded JSON key-value dictionary.\n\nWhen processing requests containing multiple filters and filters with lists of items, the data provider MUST use a logical `AND` for selecting the results to return.\n\n## Internet Media Types Handling\n\nWhen responding to a request a server MUST use the fully specified media type for that endpoint. When determining if a request is well-formed, a server MUST allow a internet type to degrade like so\n\n  - `application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii`\n  - `application/vnd.ga4gh.rnaget.v1.1.0+json`\n  - `application/json`    \n\n## Errors\n\nThe server MUST respond with an appropriate HTTP status code (4xx or 5xx) when an error condition is detected. In the case of transient server errors (e.g., 503 and other 5xx status codes), the client SHOULD implement appropriate retry logic. For example, if a client sends an alphanumeric string for a parameter that is specified as unsigned integer the server MUST reply with `Bad Request`.\n\n| Error type        | HTTP status code | Description\n|-------------------|------------------|-------------|\n| `Bad Request`     | 400 | Cannot process due to malformed request, the requested parameters do not adhere to the specification |\n| `Unauthorized`    | 401 | Authorization provided is invalid |\n| `Not Found`       | 404 | The resource requested was not found |\n| `Not Acceptable`  | 406 | The requested formatting is not supported by the server |\n| `Not Implemented` | 501 | The specified request is not supported by the server |\n\n## Security\n\nThe RNAget API can be used to retrieve potentially sensitive genomic data and is dependent on the implementation.  Effective security measures are essential to protect the integrity and confidentiality of these data.\n\nSensitive information transmitted on public networks, such as access tokens and human genomic data, MUST be protected using Transport Level Security (TLS) version 1.2 or later, as specified in [RFC 5246](https://tools.ietf.org/html/rfc5246).\n\nIf the data holder requires client authentication and/or authorization, then the client's HTTPS API request MUST present an OAuth 2.0 bearer access token as specified in [RFC 6750](https://tools.ietf.org/html/rfc6750), in the Authorization request header field with the Bearer authentication scheme:\n\n```\nAuthorization: Bearer [access_token]\n```\n\nData providers SHOULD verify user identity and credentials.  The policies and processes used to perform user authentication and authorization, and the means through which access tokens are issued, are beyond the scope of this API specification. GA4GH recommends the use of the OAuth 2.0 framework ([RFC 6749](https://tools.ietf.org/html/rfc6749)) for authentication and authorization.  It is also recommended that implementations of this standard also implement and follow the GA4GH [Authentication and Authorization Infrastructure (AAI) standard](https://docs.google.com/document/d/1zzsuNtbNY7agPRjfTe6gbWJ3BU6eX19JjWRKvkFg1ow).\n\n## CORS\nCross-origin resource sharing (CORS) is an essential technique used to overcome the same origin content policy seen in browsers. This policy restricts a webpage from making a request to another website and leaking potentially sensitive information. However the same origin policy is a barrier to using open APIs. GA4GH open API implementers should enable CORS to an acceptable level as defined by their internal policy. For any public API implementations should allow requests from any server.\n\nGA4GH is publishing a [CORS best practices document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing), which implementers should refer to for guidance when enabling CORS on public API instances.\n\n## Possible Future API Enhancements\n\n- Allow OR for search filters\n- Report size of download file\n- Matrix slicing with bool array or list of indices\n\n## API specification change log\n\n1.1.0    Adds /service-info endpoint\n1.0.0    Initial release version\n",
+    "version": "1.1.0",
     "contact": {
       "name": "GA4GH RNA-seq Working Group",
       "email": "ga4gh-rnaseq@ga4gh.org"
@@ -56,6 +56,14 @@
       }
     },
     {
+      "name": "Service Info",
+      "description": "The GA4GH Service Info specification provides a GA4GH-wide, structured format\nfor describing web services implementing GA4GH API specifications. RNAget\nimplements service info through the standard `/service-info` API endpoint,\nand also extends the base model with additional attributes.\n\nRNAget services MUST indicate that they support the RNAget protocol by\nusing an `artifact` value of `rnaget` in the service info `type` property.\n\n```\n{\n  ...\n  \"type\": {\n    \"group\": \"org.ga4gh\",\n    \"artifact\": \"rnaget\",\n    \"version\": \"1.1.0\" \n  }\n  ...\n}\n```\n",
+      "externalDocs": {
+        "description": "View the Service Info specification",
+        "url": "https://github.com/ga4gh-discovery/ga4gh-service-info"
+      }
+    },
+    {
       "name": "projectModel",
       "x-displayName": "The Project Model",
       "description": "<SchemaDefinition schemaRef=\"#/components/schemas/project\" />\n"
@@ -83,7 +91,8 @@
         "projects",
         "studies",
         "expressions",
-        "continuous"
+        "continuous",
+        "Service Info"
       ]
     },
     {
@@ -901,7 +910,7 @@
           "expressions"
         ],
         "summary": "Get output formats",
-        "description": "The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  A data provider may use any internal storage format that they wish with no restrictions from this API.  To support development of interoperable clients, it is recommended that data providers MUST support at least 1 of the following common output formats:\n\n* Tab delimited text (.tsv)\n* [Loom](https://linnarssonlab.org/loompy/format/index.html) (.loom)\n\nA Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  There should be one header row following the comments.  Feature (genes/transcripts) names and/or ID fields should be the first columns of the header row and have the `string` type.  All following columns are for the samples and will have 32-bit `float` values in each row.\n\n##### Example .tsv file\n\n```\n# Example tsv file\ngeneID  geneName  sample1 sample2\nENSG00000000003 TSPAN6  12.4  15.6\n```\n\nA Loom format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by loom specification.\n",
+        "description": "The response is a list of the supported data formats as a JSON formatted object unless an alternative formatting supported by the server is requested.  A data provider may use any internal storage format that they wish with no restrictions from this API.  To support development of interoperable clients, it is recommended that data providers MUST support at least 1 of the following common output formats:\n\n* Tab delimited text (tsv)\n* [Loom](https://linnarssonlab.org/loompy/format/index.html) (loom)\n* [anndata](https://anndata.readthedocs.io/en/latest/) (anndata)\n\nA Tab delimited file can have any number of comment lines beginning with `#` for storing metadata.  There should be one header row following the comments.  Feature (genes/transcripts) names and/or ID fields should be the first columns of the header row and have the `string` type.  All following columns are for the samples and will have 32-bit `float` values in each row.\n\n##### Example .tsv file\n\n```\n# Example tsv file\ngeneID  geneName  sample1 sample2\nENSG00000000003 TSPAN6  12.4  15.6\n```\n\nA Loom format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by the loom specification.\n\nAn anndata format file will have a 32-bit `float` matrix for the expression values with samples on the column axis and features on the row axis.  Associated metadata can be stored as row and column attributes as described by the anndata specification.\n",
         "operationId": "getExpressionFormats",
         "responses": {
           "200": {
@@ -1539,6 +1548,27 @@
           }
         ]
       }
+    },
+    "/service-info": {
+      "get": {
+        "summary": "Show information about this RNAget instance",
+        "operationId": "getServiceInfo",
+        "tags": [
+          "Service Info"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Service"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1724,6 +1754,161 @@
           "message": {
             "type": "string",
             "description": "Error message details"
+          }
+        }
+      },
+      "Service": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/schemas-Service"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "properties": {
+                  "artifact": {
+                    "example": "rnaget"
+                  },
+                  "version": {
+                    "example": "1.1.0"
+                  }
+                }
+              },
+              "supported": {
+                "$ref": "#/components/schemas/Supported"
+              }
+            }
+          }
+        ]
+      },
+      "Supported": {
+        "type": "object",
+        "description": "A true value indicates that the corresponding route is implemented by the service.  A non-implemented route should have a false value and return a 501 error to any requests.  If any boolean property is not provided, it is assumed to be implemented. If the entire supported object is not provided, all endpoints are assumed to be implemented.",
+        "properties": {
+          "projects": {
+            "type": "boolean"
+          },
+          "studies": {
+            "type": "boolean"
+          },
+          "expressions": {
+            "type": "boolean"
+          },
+          "continuous": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ServiceType": {
+        "description": "Type of a GA4GH service",
+        "type": "object",
+        "required": [
+          "group",
+          "artifact",
+          "version"
+        ],
+        "properties": {
+          "group": {
+            "type": "string",
+            "description": "Namespace in reverse domain name format. Use `org.ga4gh` for implementations compliant with official GA4GH specifications. For services with custom APIs not standardized by GA4GH, or implementations diverging from official GA4GH specifications, use a different namespace (e.g. your organization's reverse domain name).",
+            "example": "org.ga4gh"
+          },
+          "artifact": {
+            "type": "string",
+            "description": "Name of the API or GA4GH specification implemented. Official GA4GH types should be assigned as part of standards approval process. Custom artifacts are supported.",
+            "example": "beacon"
+          },
+          "version": {
+            "type": "string",
+            "description": "Version of the API or specification. GA4GH specifications use semantic versioning.",
+            "example": "1.0.0"
+          }
+        }
+      },
+      "schemas-Service": {
+        "description": "GA4GH service",
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "organization",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique ID of this service. Reverse domain name notation is recommended, though not required. The identifier should attempt to be globally unique so it can be used in downstream aggregator services e.g. Service Registry.",
+            "example": "org.ga4gh.myservice"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of this service. Should be human readable.",
+            "example": "My project"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ServiceType"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the service. Should be human readable and provide information about the service.",
+            "example": "This service provides..."
+          },
+          "organization": {
+            "type": "object",
+            "description": "Organization providing the service",
+            "required": [
+              "name",
+              "url"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the organization responsible for the service",
+                "example": "My organization"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL of the website of the organization (RFC 3986 format)",
+                "example": "https://example.com"
+              }
+            }
+          },
+          "contactUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the contact for the provider of this service, e.g. a link to a contact form (RFC 3986 format), or an email (RFC 2368 format).",
+            "example": "mailto:support@example.com"
+          },
+          "documentationUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the documentation of this service (RFC 3986 format). This should help someone learn how to use your service, including any specifics required to access data, e.g. authentication.",
+            "example": "https://docs.myservice.example.com"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp describing when the service was first deployed and available (RFC 3339 format)",
+            "example": "2019-06-04T12:58:19Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp describing when the service was last updated (RFC 3339 format)",
+            "example": "2019-06-04T12:58:19Z"
+          },
+          "environment": {
+            "type": "string",
+            "description": "Environment the service is running in. Use this to distinguish between production, development and testing/staging deployments. Suggested values are prod, test, dev, staging. However this is advised and not enforced.",
+            "example": "test"
+          },
+          "version": {
+            "type": "string",
+            "description": "Version of the service being described. Semantic versioning is recommended, but other identifiers, such as dates or commit hashes, are also allowed. The version should be changed whenever the service is updated.",
+            "example": "1.0.0"
           }
         }
       }
