@@ -520,6 +520,8 @@ paths:
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
         - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/featureMinParam"
+        - $ref: "#/components/parameters/featureMaxParam"
       responses:
         "200":
           description: successful operation
@@ -571,6 +573,8 @@ paths:
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
         - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/featureMinParam"
+        - $ref: "#/components/parameters/featureMaxParam"
       responses:
         "200":
           description: successful operation
@@ -634,6 +638,8 @@ paths:
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
         - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/featureMinParam"
+        - $ref: "#/components/parameters/featureMaxParam"
       responses:
         "200":
           description: Successful operation
@@ -682,6 +688,8 @@ paths:
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
         - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/featureMinParam"
+        - $ref: "#/components/parameters/featureMaxParam"
       responses:
         "200":
           description: Successful operation
@@ -1395,3 +1403,21 @@ components:
         type: integer
         format: int32
         minimum: 0
+    featureMinParam:
+      name: feature_min_value
+      in: query
+      description: Sets a minimum expression value for features.  If set the resulting matrix will not contain any features with a value less than or equal to the provided threshold in any sample in the matrix.  The resulting matrix should have values > the supplied threshold in every cell.  For example, specifying a feature_min_value of 0 will remove zeros from the matrix by removing any feature that has a zero value in 1 or more samples.  Using this with feature_max_value will result in matrix values in the half open interval (feature_min_value, feature_max_value].
+      required: false
+      schema:
+        type: number
+        format: float
+        minimum: 0.0
+    featureMaxParam:
+      in: query
+      name: feature_max_value
+      description: Sets a maximum expression value for features.  If set the resulting matrix will not contain any features with a value greater than the provided threshold in any sample in the matrix.  The resulting matrix should have values <= the supplied threshold in every cell.  Using this with feature_min_value will result in matrix values in the half open interval (feature_min_value, feature_max_value].
+      required: false
+      schema:
+        type: number
+        format: float
+        minimum: 0.0
