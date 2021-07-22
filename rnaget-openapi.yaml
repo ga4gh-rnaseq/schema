@@ -523,6 +523,7 @@ paths:
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
         - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/unitsParam"
       responses:
         "200":
           description: successful operation
@@ -574,6 +575,7 @@ paths:
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
         - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/unitsParam"
       responses:
         "200":
           description: successful operation
@@ -637,6 +639,7 @@ paths:
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
         - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/unitsParam"
       responses:
         "200":
           description: Successful operation
@@ -685,6 +688,7 @@ paths:
         - $ref: "#/components/parameters/sampleIDListParam"
         - $ref: "#/components/parameters/featureIDListParam"
         - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/unitsParam"
       responses:
         "200":
           description: Successful operation
@@ -804,6 +808,43 @@ paths:
                   $ref: "#/components/schemas/filter"
         "400":
           description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+  /expressions/units:
+    get:
+      tags:
+        - expressions
+      summary: Get output units
+      description: The response is a list of the supported expression units as a JSON formatted object unless an alternative formatting supported by the server is requested.  This request is intended to be implemented by data providers who wish to support delivery of expression data in multiple units such as TPM, FPKM and/or counts.
+      operationId: getExpressionUnits
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Unit list not found
           content:
             application/json:
               schema:
@@ -1398,3 +1439,12 @@ components:
         type: integer
         format: int32
         minimum: 0
+    unitsParam:
+      name: units
+      in: query
+      description: The values in the matrix will be those corresponding to the requested units.  If present the value provided MUST match an item in the list returned by a request to /expressions/units.
+      required: false
+      schema:
+        type: string
+      example:
+        TPM
