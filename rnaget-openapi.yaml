@@ -1406,7 +1406,7 @@ components:
     featureMinParam:
       name: feature_min_value
       in: query
-      description: Sets a minimum expression value for features.  If set the resulting matrix will not contain any features with a value less than the provided threshold in any sample in the matrix.  The resulting matrix should have values >= the supplied threshold in every cell.  Using this with feature_max_value will result in matrix values in the half closed interval [feature_min_value, feature_max_value].
+      description: Sets a minimum expression value for features.  If set the resulting matrix will not contain any features with a value less than the provided threshold in any sample in the matrix.  The resulting matrix should have values >= the supplied threshold in every cell.  Using this with feature_max_value will result in matrix values in the closed interval [feature_min_value, feature_max_value].
       required: false
       schema:
         type: number
