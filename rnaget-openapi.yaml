@@ -95,6 +95,9 @@ info:
 
     GA4GH is publishing a [CORS best practices document](https://docs.google.com/document/d/1Ifiik9afTO-CEpWGKEZ5TlixQ6tiKcvug4XLd9GNcqo/edit?usp=sharing), which implementers should refer to for guidance when enabling CORS on public API instances.
 
+    ## Filtering Results
+    Some endpoints describe optional filters to select and limit the results returned.  Requests supplying none of the filters may return large amounts of data and expose the data provider to the risk of Distributed Denial of Service (DDoS) attacks.  Implementors SHOULD limit the size of return matrices to an appropriate value which their server can support.
+
     ## Possible Future API Enhancements
 
     - Allow OR for search filters
@@ -522,6 +525,7 @@ paths:
         - $ref: "#/components/parameters/featureNameListParam"
         - $ref: "#/components/parameters/featureMinParam"
         - $ref: "#/components/parameters/featureMaxParam"
+        - $ref: "#/components/parameters/unitsParam"
       responses:
         "200":
           description: successful operation
@@ -575,6 +579,7 @@ paths:
         - $ref: "#/components/parameters/featureNameListParam"
         - $ref: "#/components/parameters/featureMinParam"
         - $ref: "#/components/parameters/featureMaxParam"
+        - $ref: "#/components/parameters/unitsParam"
       responses:
         "200":
           description: successful operation
@@ -640,6 +645,7 @@ paths:
         - $ref: "#/components/parameters/featureNameListParam"
         - $ref: "#/components/parameters/featureMinParam"
         - $ref: "#/components/parameters/featureMaxParam"
+        - $ref: "#/components/parameters/unitsParam"
       responses:
         "200":
           description: Successful operation
@@ -690,6 +696,7 @@ paths:
         - $ref: "#/components/parameters/featureNameListParam"
         - $ref: "#/components/parameters/featureMinParam"
         - $ref: "#/components/parameters/featureMaxParam"
+        - $ref: "#/components/parameters/unitsParam"
       responses:
         "200":
           description: Successful operation
@@ -809,6 +816,43 @@ paths:
                   $ref: "#/components/schemas/filter"
         "400":
           description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+  /expressions/units:
+    get:
+      tags:
+        - expressions
+      summary: Get output units
+      description: The response is a list of the supported expression units as a JSON formatted object unless an alternative formatting supported by the server is requested.  This request is intended to be implemented by data providers who wish to support delivery of expression data in multiple units such as TPM, FPKM and/or counts.
+      operationId: getExpressionUnits
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "404":
+          description: Unit list not found
           content:
             application/json:
               schema:
@@ -1421,3 +1465,12 @@ components:
         type: number
         format: float
         minimum: 0.0
+    unitsParam:
+      name: units
+      in: query
+      description: The values in the matrix will be those corresponding to the requested units.  If present the value provided MUST match an item in the list returned by a request to /expressions/units.
+      required: false
+      schema:
+        type: string
+      example:
+        TPM
