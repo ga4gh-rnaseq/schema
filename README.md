@@ -16,6 +16,7 @@ For the software developer, these common endpoints and patterns make it easier t
 |--------|--------------|--------------------|
 | **master**: the current release | [OpenAPI](https://ga4gh-rnaseq.github.io/schema/docs/index.html) | <img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/master/rnaget-openapi.yaml" /> |
 | **develop**: stable development branch | [OpenAPI](https://ga4gh-rnaseq.github.io/schema/preview/develop/docs/index.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/develop/rnaget-openapi.yaml" /> |
+| **release/1.2.0**: RNAget version 1.2.0 | [OpenAPI](https://ga4gh-rnaseq.github.io/schema/preview/release/1.2.0/docs/index.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/RNAget-1.2.0/rnaget-openapi.yaml" /> |
 | **release/1.1.0**: RNAget version 1.1.0 | [OpenAPI](https://ga4gh-rnaseq.github.io/schema/preview/release/1.1.0/docs/index.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/RNAget-1.1.0/rnaget-openapi.yaml" /> |
 | **release/1.0.0**: RNAget version 1.0.0 | [OpenAPI](https://ga4gh-rnaseq.github.io/schema/preview/release/1.0.0/docs/index.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/RNAget-1.0.0/rnaget-openapi.yaml" /> |
 
