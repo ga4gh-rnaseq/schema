@@ -1,3 +1,9 @@
+env:
+  global:
+    - GH_URL=https://raw.githubusercontent.com
+    - FILE_TO_VALIDATE=rnaget-openapi.yaml
+    - URL_TO_VALIDATE=$GH_URL/${TRAVIS_PULL_REQUEST_SLUG:-$TRAVIS_REPO_SLUG}/${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}/$FILE_TO_VALIDATE
+
 branches:
   only:
     - master
@@ -10,11 +16,6 @@ jobs:
     - stage: validate_spec
       jdk:
         - openjdk11
-      env:
-        global:
-          - GH_URL=https://raw.githubusercontent.com
-          - FILE_TO_VALIDATE=rnaget-openapi.yaml
-          - URL_TO_VALIDATE=$GH_URL/${TRAVIS_PULL_REQUEST_SLUG:-$TRAVIS_REPO_SLUG}/${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}/$FILE_TO_VALIDATE
       before_install:
         - git clone --branch=v1.1.0 https://github.com/mcupak/oas-validator.git
       script:
