@@ -1,0 +1,39 @@
+env:
+  global:
+    - GH_URL=https://raw.githubusercontent.com
+    - FILE_TO_VALIDATE=rnaget-openapi.yaml
+    - URL_TO_VALIDATE=$GH_URL/${TRAVIS_PULL_REQUEST_SLUG:-$TRAVIS_REPO_SLUG}/${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}/$FILE_TO_VALIDATE
+
+branches:
+  only:
+    - master
+    - develop
+    - /^feature\/issue-\d+(-\S*)?$/
+    - "/^release\\/\\d+\\.\\d+(\\.\\d+)?$/"
+
+jobs:
+  include:
+    - stage: validate_spec
+      jdk:
+        - openjdk11
+      before_install:
+        - git clone --branch=v1.1.0 https://github.com/mcupak/oas-validator.git
+      script:
+        - ./oas-validator/validate.sh "$URL_TO_VALIDATE"
+
+    - stage: build_docs
+      language: node_js
+      node_js:
+        - "12"
+      before_script:
+        - npm install -g @redocly/openapi-cli && npm install -g redoc-cli
+        - npm install -g @ga4gh/gh-openapi-docs@0.2.2-rc3
+      script:
+        - gh-openapi-docs
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        keep_history: true
+        github-token: $GITHUB_TOKEN
+        on:
+          all_branches: true

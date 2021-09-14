@@ -3,9 +3,6 @@ servers:
   - url: /rnaget
 info:
   title: RNAget API
-  x-logo:
-    url: >-
-      https://www.ga4gh.org/wp-content/themes/ga4gh-theme/gfx/GA-logo-horizontal-tag-RGB.svg
   description: >
     ## Design principles
 
@@ -61,7 +58,7 @@ info:
 
 
     An OpenAPI description of this specification is available and [describes the
-    1.1.0 version](rnaget-openapi.yaml). OpenAPI is an independent API
+    1.2.0 version](rnaget-openapi.yaml). OpenAPI is an independent API
     description format for describing REST services and is compatible with a
     number of [third party tools](http://openapi.tools/).
 
@@ -109,7 +106,7 @@ info:
 
     ```
 
-    Content-Type: application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii
+    Content-Type: application/vnd.ga4gh.rnaget.v1.2.0+json; charset=us-ascii
 
     ```
 
@@ -148,8 +145,8 @@ info:
     type for that endpoint. When determining if a request is well-formed, a
     server MUST allow a internet type to degrade like so
 
-      - `application/vnd.ga4gh.rnaget.v1.1.0+json; charset=us-ascii`
-      - `application/vnd.ga4gh.rnaget.v1.1.0+json`
+      - `application/vnd.ga4gh.rnaget.v1.2.0+json; charset=us-ascii`
+      - `application/vnd.ga4gh.rnaget.v1.2.0+json`
       - `application/json`    
 
     ## Errors
@@ -236,6 +233,15 @@ info:
     API instances.
 
 
+    ## Filtering Results
+
+    Some endpoints describe optional filters to select and limit the results
+    returned.  Requests supplying none of the filters may return large amounts
+    of data and expose the data provider to the risk of Distributed Denial of
+    Service (DDoS) attacks.  Implementors SHOULD limit the size of return
+    matrices to an appropriate value which their server can support.
+
+
     ## Possible Future API Enhancements
 
 
@@ -249,10 +255,12 @@ info:
     ## API specification change log
 
 
+    1.2.0    Adds parameters and endpoint to specify matrix units
+             Add sample filtering by min and/or max values
     1.1.0    Adds /service-info endpoint
 
     1.0.0    Initial release version
-  version: 1.1.0
+  version: 1.2.0
   contact:
     name: GA4GH RNA-seq Working Group
     email: ga4gh-rnaseq@ga4gh.org
@@ -458,7 +466,7 @@ tags:
         "type": {
           "group": "org.ga4gh",
           "artifact": "rnaget",
-          "version": "1.1.0" 
+          "version": "1.2.0" 
         }
         ...
       }
@@ -767,6 +775,9 @@ paths:
         - $ref: '#/components/parameters/sampleIDListParam'
         - $ref: '#/components/parameters/featureIDListParam'
         - $ref: '#/components/parameters/featureNameListParam'
+        - $ref: '#/components/parameters/featureMinParam'
+        - $ref: '#/components/parameters/featureMaxParam'
+        - $ref: '#/components/parameters/unitsParam'
       responses:
         '200':
           description: successful operation
@@ -818,6 +829,9 @@ paths:
         - $ref: '#/components/parameters/sampleIDListParam'
         - $ref: '#/components/parameters/featureIDListParam'
         - $ref: '#/components/parameters/featureNameListParam'
+        - $ref: '#/components/parameters/featureMinParam'
+        - $ref: '#/components/parameters/featureMaxParam'
+        - $ref: '#/components/parameters/unitsParam'
       responses:
         '200':
           description: successful operation
@@ -881,6 +895,9 @@ paths:
         - $ref: '#/components/parameters/sampleIDListParam'
         - $ref: '#/components/parameters/featureIDListParam'
         - $ref: '#/components/parameters/featureNameListParam'
+        - $ref: '#/components/parameters/featureMinParam'
+        - $ref: '#/components/parameters/featureMaxParam'
+        - $ref: '#/components/parameters/unitsParam'
       responses:
         '200':
           description: Successful operation
@@ -929,6 +946,9 @@ paths:
         - $ref: '#/components/parameters/sampleIDListParam'
         - $ref: '#/components/parameters/featureIDListParam'
         - $ref: '#/components/parameters/featureNameListParam'
+        - $ref: '#/components/parameters/featureMinParam'
+        - $ref: '#/components/parameters/featureMaxParam'
+        - $ref: '#/components/parameters/unitsParam'
       responses:
         '200':
           description: Successful operation
@@ -1079,6 +1099,48 @@ paths:
                   $ref: '#/components/schemas/filter'
         '400':
           description: The requested data format is not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '406':
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '501':
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - rnaget_auth:
+            - 'read:expression'
+  /expressions/units:
+    get:
+      tags:
+        - expressions
+      summary: Get output units
+      description: >-
+        The response is a list of the supported expression units as a JSON
+        formatted object unless an alternative formatting supported by the
+        server is requested.  This request is intended to be implemented by data
+        providers who wish to support delivery of expression data in multiple
+        units such as TPM, FPKM and/or counts.
+      operationId: getExpressionUnits
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Unit list not found
           content:
             application/json:
               schema:
@@ -1610,7 +1672,7 @@ components:
           description: Error message details
     Service:
       allOf:
-        - $ref: '#/components/schemas/service-info_Service'
+        - $ref: '#/components/schemas/schemas-Service'
         - type: object
           properties:
             type:
@@ -1618,7 +1680,7 @@ components:
                 artifact:
                   example: rnaget
                 version:
-                  example: 1.1.0
+                  example: 1.2.0
             supported:
               $ref: '#/components/schemas/Supported'
     Supported:
@@ -1668,7 +1730,7 @@ components:
             Version of the API or specification. GA4GH specifications use
             semantic versioning.
           example: 1.0.0
-    service-info_Service:
+    schemas-Service:
       description: GA4GH service
       type: object
       required:
@@ -1845,3 +1907,44 @@ components:
         type: integer
         format: int32
         minimum: 0
+    featureMinParam:
+      name: feature_min_value
+      in: query
+      description: >-
+        Sets a minimum expression value for features. If set the resulting
+        matrix will not contain any features with a value less than the provided
+        threshold in any sample in the matrix. The resulting matrix should have
+        values >= the supplied threshold in every cell. Using this with
+        feature_max_value will result in matrix values in the closed interval
+        [feature_min_value, feature_max_value].
+      required: false
+      schema:
+        type: number
+        format: float
+        minimum: 0
+    featureMaxParam:
+      in: query
+      name: feature_max_value
+      description: >-
+        Sets a maximum expression value for features. If set the resulting
+        matrix will not contain any features with a value greater than the
+        provided threshold in any sample in the matrix. The resulting matrix
+        should have values <= the supplied threshold in every cell. Using this
+        with feature_min_value will result in matrix values in the closed
+        interval [feature_min_value, feature_max_value].
+      required: false
+      schema:
+        type: number
+        format: float
+        minimum: 0
+    unitsParam:
+      name: units
+      in: query
+      description: >-
+        The values in the matrix will be those corresponding to the requested
+        units.  If present the value provided MUST match an item in the list
+        returned by a request to /expressions/units.
+      required: false
+      schema:
+        type: string
+      example: TPM

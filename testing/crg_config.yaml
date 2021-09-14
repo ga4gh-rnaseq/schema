@@ -1,0 +1,34 @@
+servers:
+  - server_name: Centre for Genomic Regulation
+    base_url: https://genome.crg.cat/rnaget/
+    token: abcdefuvwxyz
+    implemented:
+        projects: true
+        studies: true
+        expressions: true
+        continuous: true
+    
+    projects:
+      - id: E-MTAB-5200
+        filters:
+          name: Pancancer Analysis of Whole Genomes
+      - id: E-GEOD-81547
+        filters:
+          name: Single cell transcriptome analysis of human pancreas
+    
+    studies:
+      - id: E-MTAB-5200-ST0
+        filters:
+          name: Pancancer Analysis of Whole Genomes
+    
+    expressions:
+      - id: 8beada7b93d5e55aa557138b39c6f930
+        filters:
+          format: tsv
+          tags: cancer
+    
+    continuous:
+      - id: 482580efab4afe180dd0f3caa7b3394c
+        filters:
+          format: tsv
+          tags: cancer
