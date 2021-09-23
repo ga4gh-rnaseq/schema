@@ -13,14 +13,6 @@ branches:
 
 jobs:
   include:
-    - stage: validate_spec
-      jdk:
-        - openjdk11
-      before_install:
-        - git clone --branch=v1.1.0 https://github.com/mcupak/oas-validator.git
-      script:
-        - ./oas-validator/validate.sh "$URL_TO_VALIDATE"
-
     - stage: build_docs
       language: node_js
       node_js:
@@ -37,3 +29,16 @@ jobs:
         github-token: $GITHUB_TOKEN
         on:
           all_branches: true
+
+    - stage: validate_spec
+      jdk:
+        - openjdk11
+      env:
+        - URL_START=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/gh-pages/
+        - URL_END=openapi.yaml
+        - URL_BRANCH=$(if ["$TRAVIS_BRANCH" = "master"]; then echo ""; else echo "preview/${TRAVIS_BRANCH}/"; fi)
+      before_install:
+        - git clone --branch=v1.1.0 https://github.com/mcupak/oas-validator.git
+      script:
+        - echo "${URL_START}${URL_BRANCH}${URL_END}"
+        - ./oas-validator/validate.sh "${URL_START}${URL_BRANCH}${URL_END}"
