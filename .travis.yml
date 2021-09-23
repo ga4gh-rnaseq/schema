@@ -1,9 +1,3 @@
-env:
-  global:
-    - GH_URL=https://raw.githubusercontent.com
-    - FILE_TO_VALIDATE=rnaget-openapi.yaml
-    - URL_TO_VALIDATE=$GH_URL/${TRAVIS_PULL_REQUEST_SLUG:-$TRAVIS_REPO_SLUG}/${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}/$FILE_TO_VALIDATE
-
 branches:
   only:
     - master
