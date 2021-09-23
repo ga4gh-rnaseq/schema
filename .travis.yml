@@ -27,12 +27,9 @@ jobs:
     - stage: validate_spec
       jdk:
         - openjdk11
-      env:
-        - URL_START=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/gh-pages/
-        - URL_END=openapi.yaml
       before_install:
         - git clone --branch=v1.1.0 https://github.com/mcupak/oas-validator.git
       script:
-        - source ci/set-url.sh
-        - echo "${URL_START}${URL_BRANCH}${URL_END}"
-        - ./oas-validator/validate.sh "${URL_START}${URL_BRANCH}${URL_END}"
+        - source ci/set-url-to-validate.sh
+        - echo "${URL_TO_VALIDATE}"
+        - ./oas-validator/validate.sh "${URL_TO_VALIDATE}"
