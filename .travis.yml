@@ -30,9 +30,9 @@ jobs:
       env:
         - URL_START=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/gh-pages/
         - URL_END=openapi.yaml
-        - URL_BRANCH=$( if ["$TRAVIS_PULL_REQUEST" = "false"]; then if ["$TRAVIS_BRANCH" = "master"]; then echo ""; else echo "preview/${TRAVIS_BRANCH}/"; fi; else echo "preview/${TRAVIS_PULL_REQUEST_BRANCH}/" ; fi)
       before_install:
         - git clone --branch=v1.1.0 https://github.com/mcupak/oas-validator.git
       script:
+        - source ci/set-url.sh
         - echo "${URL_START}${URL_BRANCH}${URL_END}"
         - ./oas-validator/validate.sh "${URL_START}${URL_BRANCH}${URL_END}"
