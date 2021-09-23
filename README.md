@@ -20,7 +20,7 @@ For the software developer, these common endpoints and patterns make it easier t
 | **release/1.1.0**: RNAget version 1.1.0 | [OpenAPI](https://ga4gh-rnaseq.github.io/schema/preview/release/1.1.0/docs/index.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/RNAget-1.1.0/rnaget-openapi.yaml" /> |
 | **release/1.0.0**: RNAget version 1.0.0 | [OpenAPI](https://ga4gh-rnaseq.github.io/schema/preview/release/1.0.0/docs/index.html) |<img src="http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/ga4gh-rnaseq/schema/RNAget-1.0.0/rnaget-openapi.yaml" /> |
 
-### Testing and Compliance
+## Testing and Compliance
 
 * Introduction to accessing and [testing implementations](testing/README.md) for compliance
 * The automated build of the compliance report is [here](https://ga4gh-rnaseq.github.io/rnaget-compliance-suite/report/)
@@ -43,6 +43,12 @@ A group or organization can use the RNAget API to make their data available to u
 ### For client software developers
 
 The API specification describes a common data retrieval interface.  The purpose is to make it easy to retrieve data from any compatible server for use in downstream local analyses.  The RNAget API does not contain analytical tools.  It describes the format of the requests that should be sent to servers to search, slice and retrieve RNA data as well as the format of the responses.  Client software compatible with these specifications can access data from any compliant server without having to rewrite the interface.
+
+# How to Contribute Changes
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md)
+
+If a security issue is identified with the specification, please send an email to security-notification@ga4gh.org detailing your concerns.
 
 # License
 
