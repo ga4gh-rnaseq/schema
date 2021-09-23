@@ -242,6 +242,11 @@ tags:
     x-displayName: Ticket
     description: |
       <SchemaDefinition schemaRef="#/components/schemas/ticket" />
+
+  # Appendices
+  - name: RNAseq Design Notes
+    description:
+      $ref: './rna_seq_design_notes.md'
 x-tagGroups:
   - name: Overview
     tags:
@@ -269,6 +274,10 @@ x-tagGroups:
       - studyModel
       - filterModel
       - ticketModel
+
+  - name: Appendices
+    tags:
+      - RNAseq Design Notes
 paths:
   "/projects/{projectId}":
     get:
