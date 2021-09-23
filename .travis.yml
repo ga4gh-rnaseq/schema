@@ -1,20 +1,35 @@
-git:
-  depth: false
-language: java
-dist: bionic
-sudo: false
-jdk:
-  - openjdk11
-services:
-  - docker
-env:
-  global:
-    - GH_URL=https://raw.githubusercontent.com
-    - FILE_TO_VALIDATE=rnaget-openapi.yaml
-    - URL_TO_VALIDATE=$GH_URL/${TRAVIS_PULL_REQUEST_SLUG:-$TRAVIS_REPO_SLUG}/${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}/$FILE_TO_VALIDATE
-before_install:
-  - git clone --branch=v1.1.0 https://github.com/mcupak/oas-validator.git
-script:
-  - ./oas-validator/validate.sh "$URL_TO_VALIDATE"
-after_success:
-  - docker image pull ga4gh/gh-openapi-docs:0.2.1 && docker run -v `pwd`:/usr/src/repo --env PR_BUILD=${TRAVIS_PULL_REQUEST} --env TRAVIS_BRANCH=${TRAVIS_BRANCH} --env GH_PAGES_NAME=${GH_PAGES_NAME} --env GH_PAGES_EMAIL=${GH_PAGES_EMAIL} --env GH_PAGES_TOKEN=${GH_PAGES_TOKEN} ga4gh/gh-openapi-docs:0.2.1
+branches:
+  only:
+    - master
+    - develop
+    - /^feature\/issue-\d+(-\S*)?$/
+    - "/^release\\/\\d+\\.\\d+(\\.\\d+)?$/"
+
+jobs:
+  include:
+    - stage: build_docs
+      language: node_js
+      node_js:
+        - "12"
+      before_script:
+        - npm install -g @redocly/openapi-cli && npm install -g redoc-cli
+        - npm install -g @ga4gh/gh-openapi-docs@0.2.2-rc3
+      script:
+        - gh-openapi-docs
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        keep_history: true
+        github-token: $GITHUB_TOKEN
+        on:
+          all_branches: true
+
+    - stage: validate_spec
+      jdk:
+        - openjdk11
+      before_install:
+        - git clone --branch=v1.1.0 https://github.com/mcupak/oas-validator.git
+      script:
+        - source ci/set-url-to-validate.sh
+        - echo "${URL_TO_VALIDATE}"
+        - ./oas-validator/validate.sh "${URL_TO_VALIDATE}"

@@ -1,11 +1,14 @@
 {
-  "apiSpecPath": "rnaget-openapi.yaml",
   "docsRoot": "docs",
   "defaultBranch": "master",
   "branchPathBase": "preview",
-  "enabledBranchPatterns": [
-    "^master$",
-    "^develop$",
-    "^release/.+"
+  "redocTheme": "ga4gh",
+  "buildPages": [
+      {
+          "apiSpecPath": "./rnaget-openapi.yaml",
+          "htmlOutfile": "index.html",
+          "yamlOutfile": "openapi.yaml",
+          "jsonOutfile": "openapi.json"
+      }
   ]
 }
