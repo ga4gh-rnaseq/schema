@@ -508,6 +508,342 @@ paths:
       security:
         - rnaget_auth:
             - read:study
+
+  /expressions/info:
+    get:
+      tags:
+        - expressions
+      summary: paginated list of expressions infos
+      description: returns a paginated list of expression infos
+      operationId: getExpressionsInfo
+      parameters:
+        - $ref: "#/components/parameters/offsetParam"
+        - $ref: "#/components/parameters/limitParam"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/expressionInfo"
+                  count:
+                    type: number
+                    format: integer
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+
+  "/expressions/{expressionId}":
+    get:
+      tags:
+        - expressions
+      summary: Get specific expression matrix
+      description: Returns an expression matrix, default is json. Use POST for queries that pass the URL size limit
+      operationId: getExpressionById
+      parameters:
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/sampleIDListParam"
+        - $ref: "#/components/parameters/featureIDListParam"
+        - $ref: "#/components/parameters/featureNameListParam"
+        - $ref: "#/components/parameters/featureMinParam"
+        - $ref: "#/components/parameters/featureMaxParam"
+        - $ref: "#/components/parameters/downloadParam"
+        - $ref: "#/components/parameters/formatParam"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/expression"
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Expression not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+    post:
+      tags:
+        - expressions
+      summary: Get specific expression matrix via POST
+      description: Returns an expression matrix, default is JSON
+      operationId: getExpressionByIdPost
+      parameters:
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/downloadParam"
+        - $ref: "#/components/parameters/formatParam"
+      requestBody:
+        $ref: '#/components/requestBodies/ExpressionIDBody'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/expression"
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            application/vnd.loom:
+              schema:
+                type: string
+                format: binary
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
+
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Expression not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+            
+  "/expressions/{expressionId}/info":
+    get:
+      tags:
+        - expressions
+      summary: get matrix info
+      operationId: getExpressionIdInfo
+      parameters:
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/expressionInfo"
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Expression not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+  "/expressions/{expressionId}/features":
+    get:
+      tags:
+        - expressions
+      summary: Get list of features contained in the matrix
+      description: Returns a paginated list of features
+      operationId: getExpressionIDFeatures
+      parameters:
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/offsetParam"
+        - $ref: "#/components/parameters/limitParam"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: 
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/featureInfo"
+                  total:
+                    type: number
+                  
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Expression not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+            
+  "/expressions/{expressionId}/samples":
+    get:
+      tags:
+        - expressions
+      summary: Get list of samples contained in the matrix
+      description: Returns a paginated list of samples
+      operationId: getExpressionIDSamples
+      parameters:
+        - name: expressionId
+          in: path
+          description: ID of expression to return
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/offsetParam"
+        - $ref: "#/components/parameters/limitParam"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: 
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/sampleInfo"
+                  total:
+                    type: number
+        "400":
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "404":
+          description: Expression not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "406":
+          description: Requested formatting not supported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+        "501":
+          description: The specified request is not supported by the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+      security:
+        - rnaget_auth:
+            - read:expression
+            
   "/expressions/{expressionId}/ticket":
     get:
       tags:
@@ -1268,6 +1604,98 @@ components:
       externalDocs:
         description: Find out more
         url: https://github.com/ga4gh-rnaseq/schema
+
+    sample:
+      type: object
+      description: sample json object
+      properties:
+        sampleID:
+          type: string
+        count:
+          type: number
+          format: float
+          minimum: 0.0
+        countType:
+          type: string
+          example: TPM
+        metadata:
+          type: object
+          description: metadata sample object server specific
+    
+    sampleInfo:
+      type: object
+      description: sample json object
+      properties:
+        sampleID:
+          type: string
+        metadata:
+          type: object
+          description: metadata sample object server specific
+      
+    featureInfo:
+      type: object
+      description: feature json object
+      properties:
+        featureID: 
+          type: string
+        featureMetadata:
+          type: object
+          
+    expressionInfo:
+      type: object
+      description: expression info json object
+      properties:
+        expressionID:
+          type: string
+        featuresNumber:
+          type: number
+          format: integer
+        samplesNumber:
+          type: number
+          format: number
+        countType:
+          type: string
+        featureMetadataModel:
+          type: object
+        sampleMetadataModel:
+          type: object
+          
+    expression:
+      type: object
+      description: expression json object
+      properties:
+        featureID:
+          type: string
+        samples:
+          type: array
+          items:
+            $ref: "#/components/schemas/sample"
+
+    expressionIDForm:
+      type: object
+      description: Expression payload to filter/slice the matrix, optional metadata values can be added in the request body
+      properties:
+        sampleIDList:
+          type: array
+          items: 
+            type: string
+        featureIDList:
+          type: array
+          items: 
+            type: string
+        featureNameList:
+          type: array
+          items: 
+            type: string
+        featureMin:
+          type: number
+          format: float
+          minimum: 0.0
+        featureMax:
+          type: number
+          format: float
+          minimum: 0.0
+                    
     filter:
       type: object
       description: Implementation defined parameter to use for filtering collections
@@ -1361,6 +1789,23 @@ components:
             type: boolean
           continuous:
             type: boolean
+  requestBodies:
+    ExpressionIDBody:
+      description: Payload to filter matix
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/expressionIDForm'
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              payload:     # <--- form field that contains the JSON message
+                $ref: '#/components/schemas/expressionIDForm'
+          encoding:
+            payload:
+              contentType: application/json
   parameters:
     versionParam:
       name: version
@@ -1476,3 +1921,41 @@ components:
         type: string
       example:
         TPM
+    downloadParam:
+      name: download
+      in: query
+      required: false
+      style: form
+      schema:
+        type: boolean
+        default: false
+    formatParam:
+      name: format
+      in: query
+      description: response format
+      required: false
+      schema: 
+        type: string
+        default: json
+      example:
+        json
+    offsetParam:
+      in: query
+      name: offset
+      description: How many records to skip from the beginning in the results. Default value is 0
+      required: false
+      schema:
+        type: number
+        format: integer
+        default: 0
+        minimum: 0
+    limitParam:
+      in: query
+      name: limit
+      description: The maximum number of records to retrieve. Default value is 100. If the full result set is to be fetched, the limit should be set to 0.
+      required: false
+      schema:
+        type: number
+        format: integer
+        default: 100
+        minimum: 0  
