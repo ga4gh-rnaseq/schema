@@ -44,6 +44,15 @@ A group or organization can use the RNAget API to make their data available to u
 
 The API specification describes a common data retrieval interface.  The purpose is to make it easy to retrieve data from any compatible server for use in downstream local analyses.  The RNAget API does not contain analytical tools.  It describes the format of the requests that should be sent to servers to search, slice and retrieve RNA data as well as the format of the responses.  Client software compatible with these specifications can access data from any compliant server without having to rewrite the interface.
 
+#### Client examples
+
+The client implementations below are provided by their respective developers as examples of using the API. GA4GH does not have a client testing suite as each client is an individual effort. Links to clients are presented as an "as is" resource for developers.
+
+| Developer | Client |
+|-----------|--------|
+| [@saupchurch](https://github.com/saupchurch) | an iPython notebook example designed to demonstrate basic navigation and operations on the demo PCAWG dataset.  It is available [here](https://github.com/saupchurch/bioinformatics-tools/blob/main/GA4GH-rnaget-API-examples.ipynb). An interactive version is accessible via [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/saupchurch/bioinformatics-tools/main?labpath=GA4GH-rnaget-API-examples.ipynb)|
+| [@emi80](https://github.com/emi80) | a Go command line application covering the basic functionalities of the API. It is available at: https://github.com/guigolab/rnaget-client |
+
 # License
 
 See the [LICENSE](LICENSE).
