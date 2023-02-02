@@ -17,17 +17,12 @@ The compliance and testing suite generates an HTML report for every tested serve
 
 * CanDIG - The Canadian Distributed Infrastructure for Genomics (CanDIG) project has a proof of concept code [implementation](https://github.com/CanDIG/rnaget_service) available
 
+* ENCODE - The ENCODE project incorporated a custom implementation of the API into their Genomic Data Services. The code is available [here](https://github.com/ENCODE-DCC/genomic-data-service/tree/dev/genomic_data_service/rnaseq/rnaget)
+
 ### Server Instances
 
-* caltech.edu server - A demo server is available at http://felcat.caltech.edu/rnaget/ serving the Pan-Cancer Analysis of Whole Genomes (PCAWG) dataset.
+* crg.cat server - A demo server is available at https://genome.crg.cat/rnaget/ serving the Pan-Cancer Analysis of Whole Genomes (PCAWG) dataset.  To access this server a request must have `Authorization` `Bearer abcdefuvwxyz` in the headers
 
-* crg.cat server - A demo server is available at https://genome.crg.cat/rnaget/ serving the Pan-Cancer Analysis of Whole Genomes (PCAWG) dataset.  To access this server a request must have `Authorization` `Bearer abcdefuvwxyz` in the headers.
+* GTEx server - A public server from the GTEx project is available at https://gtexportal.org/rnaget
 
-
-### Client Examples
-
-These client implementations are provided by their respective developers as examples of using the API.  GA4GH does not have a client testing suite as each client is an individual effort.  Links to clients are presented as an "as is" resource for developers.
-
-* saupchurch client - This is an iPython notebook example designed to demonstrate basic navigation and operations on the demo PCAWG dataset.  It is available [here](https://github.com/saupchurch/bioinformatics-tools/blob/master/GA4GH-rnaget-API-examples.ipynb).  An [interactive version](https://gke.mybinder.org/v2/gh/saupchurch/bioinformatics-tools/master) is accessible via [Binder](https://gke.mybinder.org).
-
-* emi80 client - This is a Go command line application covering the basic functionalities of the API. It is available at: https://github.com/guigolab/rnaget-client
+* ENCODE server - A public server with the ENCODE project implementation (see #server-implementations) is available at https://rnaget.encodeproject.org
