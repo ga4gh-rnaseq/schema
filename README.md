@@ -50,7 +50,7 @@ The client implementations below are provided by their respective developers as 
 
 | Developer | Client |
 |-----------|--------|
-| [@saupchurch](https://github.com/saupchurch) | an iPython notebook example designed to demonstrate basic navigation and operations on the demo PCAWG dataset.  It is available [here](https://github.com/saupchurch/bioinformatics-tools/blob/main/GA4GH-rnaget-API-examples.ipynb). An interactive version is accessible via [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/saupchurch/bioinformatics-tools/main?labpath=GA4GH-rnaget-API-examples.ipynb)|
+| [@saupchurch](https://github.com/saupchurch) | an iPython notebook example designed to demonstrate basic navigation and operations on expression data from the GTEx project.  It is available [here](https://github.com/saupchurch/bioinformatics-tools/blob/main/GA4GH-rnaget-API-examples.ipynb). An interactive version is accessible via [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/saupchurch/bioinformatics-tools/main?labpath=GA4GH-rnaget-API-examples.ipynb)|
 | [@emi80](https://github.com/emi80) | a Go command line application covering the basic functionalities of the API. It is available at: https://github.com/guigolab/rnaget-client |
 
 # License
