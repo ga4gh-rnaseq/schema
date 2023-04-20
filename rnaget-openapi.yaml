@@ -27,7 +27,7 @@ info:
 
     ## OpenAPI Description
 
-    An OpenAPI description of this specification is available and [describes the 1.2.0 version](rnaget-openapi.yaml). OpenAPI is an independent API description format for describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
+    An OpenAPI description of this specification is available and [describes the 1.2.0 version](https://github.com/ga4gh-rnaseq/schema/blob/master/rnaget-openapi.yaml). OpenAPI is an independent API description format for describing REST services and is compatible with a number of [third party tools](http://openapi.tools/).
 
     ## Compliance
 
